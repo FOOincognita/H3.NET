@@ -1,0 +1,5 @@
+<!-- SPDX-License-Identifier: Apache-2.0 -->
+<Solution>
+  <Project Path="src/H3NET.Native/H3NET.Native.csproj" />
+  <!-- Test, benchmark, and sample projects are added in PR3. -->
+</Solution>

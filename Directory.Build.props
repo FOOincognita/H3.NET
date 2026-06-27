@@ -1,0 +1,46 @@
+<!-- SPDX-License-Identifier: Apache-2.0 -->
+<Project>
+
+  <!-- Language and compiler behavior -->
+  <PropertyGroup>
+    <Nullable>enable</Nullable>
+    <ImplicitUsings>disable</ImplicitUsings>
+    <LangVersion>latest</LangVersion>
+    <TreatWarningsAsErrors>true</TreatWarningsAsErrors>
+    <AnalysisLevel>latest-recommended</AnalysisLevel>
+    <EnforceCodeStyleInBuild>true</EnforceCodeStyleInBuild>
+    <Deterministic>true</Deterministic>
+    <ContinuousIntegrationBuild Condition="'$(GITHUB_ACTIONS)' == 'true'">true</ContinuousIntegrationBuild>
+  </PropertyGroup>
+
+  <!-- Documentation, symbols, and Source Link (in-SDK for .NET 8+) -->
+  <PropertyGroup>
+    <GenerateDocumentationFile>true</GenerateDocumentationFile>
+    <PublishRepositoryUrl>true</PublishRepositoryUrl>
+    <EmbedUntrackedSources>true</EmbedUntrackedSources>
+    <IncludeSymbols>true</IncludeSymbols>
+    <SymbolPackageFormat>snupkg</SymbolPackageFormat>
+  </PropertyGroup>
+
+  <!-- Reproducible restore -->
+  <PropertyGroup>
+    <RestorePackagesWithLockFile>true</RestorePackagesWithLockFile>
+  </PropertyGroup>
+
+  <!-- Versioning via MinVer (Git-tag driven, prefix "v") -->
+  <PropertyGroup>
+    <MinVerTagPrefix>v</MinVerTagPrefix>
+  </PropertyGroup>
+
+  <!-- Shared authorship and repository metadata (package-id set per project) -->
+  <PropertyGroup>
+    <Authors>FOOincognita</Authors>
+    <Company>FOOincognita</Company>
+    <Product>H3NET.Native</Product>
+    <Copyright>Copyright 2026 FOOincognita</Copyright>
+    <RepositoryUrl>https://github.com/FOOincognita/H3.NET</RepositoryUrl>
+    <RepositoryType>git</RepositoryType>
+    <PackageProjectUrl>https://github.com/FOOincognita/H3.NET</PackageProjectUrl>
+  </PropertyGroup>
+
+</Project>
