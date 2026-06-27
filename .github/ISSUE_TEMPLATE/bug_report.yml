@@ -1,0 +1,85 @@
+name: Bug report
+description: Report incorrect behavior, a crash, or a binding that does not match upstream H3.
+title: "[bug]: "
+labels: ["bug", "triage"]
+body:
+  - type: markdown
+    attributes:
+      value: |
+        Thanks for filing a bug. H3NET.Native is an early-stage scaffold: a
+        small vertical slice exists and the full H3 API is being filled in over
+        subsequent PRs. Please confirm the function you are calling is actually
+        implemented before reporting it as broken.
+
+        For questions about the H3 algorithm itself (resolutions, cells,
+        traversal semantics), see the upstream docs at https://h3geo.org.
+  - type: textarea
+    id: description
+    attributes:
+      label: Description
+      description: A clear and concise description of the bug.
+    validations:
+      required: true
+  - type: textarea
+    id: repro
+    attributes:
+      label: Reproduction
+      description: Minimal, self-contained C# that triggers the issue. Include input values (lat/lng are in degrees).
+      render: csharp
+    validations:
+      required: true
+  - type: textarea
+    id: expected
+    attributes:
+      label: Expected behavior
+      description: What did you expect to happen? If upstream H3 (h3-py/h3-go/CLI) returns something different, note it.
+    validations:
+      required: true
+  - type: textarea
+    id: actual
+    attributes:
+      label: Actual behavior
+      description: What actually happened? Include exception messages and stack traces verbatim.
+    validations:
+      required: true
+  - type: input
+    id: package-version
+    attributes:
+      label: H3NET.Native version
+      description: NuGet package version (PackageId is "H3NET.Native"; the repo is named "H3.NET"). No releases exist yet during the scaffold phase; enter "unreleased / local build" if applicable.
+      placeholder: "0.1.0 (or: unreleased / local build)"
+    validations:
+      required: false
+  - type: dropdown
+    id: tfm
+    attributes:
+      label: Target framework (TFM)
+      options:
+        - net10.0
+        - net8.0
+        - other (specify in description)
+    validations:
+      required: true
+  - type: input
+    id: rid-os
+    attributes:
+      label: RID / OS
+      description: Runtime identifier and OS details.
+      placeholder: "osx-arm64 / macOS 15.5; or linux-x64 / Ubuntu 24.04"
+    validations:
+      required: true
+  - type: input
+    id: h3-version
+    attributes:
+      label: libh3 / upstream H3 version
+      description: The bundled native H3 version this build links against.
+      placeholder: "v4.5.0"
+    validations:
+      required: true
+  - type: textarea
+    id: context
+    attributes:
+      label: Additional context
+      description: Anything else relevant (custom native build, self-built RID, etc.).
+    validations:
+      required: false

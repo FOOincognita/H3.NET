@@ -1,0 +1,49 @@
+name: Feature request
+description: Request a new binding or an API improvement.
+title: "[feature]: "
+labels: ["enhancement", "triage"]
+body:
+  - type: markdown
+    attributes:
+      value: |
+        H3NET.Native aims to be a thin, idiomatic binding over Uber H3 v4.5.0.
+        Most feature requests should map to a specific upstream H3 function.
+        If you are requesting an existing-but-not-yet-bound function, name it
+        below so it can be prioritized in the API fill-in work.
+  - type: textarea
+    id: problem
+    attributes:
+      label: Problem / use case
+      description: What are you trying to do, and what is missing today?
+    validations:
+      required: true
+  - type: textarea
+    id: proposed-api
+    attributes:
+      label: Proposed API
+      description: Sketch the C# surface you would like (signatures, types). Remember public lat/lng are in degrees.
+      render: csharp
+    validations:
+      required: false
+  - type: input
+    id: upstream-fn
+    attributes:
+      label: Upstream H3 function name(s)
+      description: The corresponding h3 C API function(s), if applicable.
+      placeholder: "latLngToCell, cellToBoundary, gridDisk"
+    validations:
+      required: false
+  - type: textarea
+    id: alternatives
+    attributes:
+      label: Alternatives considered
+      description: Workarounds you have tried, or other API shapes you weighed.
+    validations:
+      required: false
+  - type: textarea
+    id: context
+    attributes:
+      label: Additional context
+      description: Links to h3geo.org docs, prior art in h3-py/h3-go, etc.
+    validations:
+      required: false
