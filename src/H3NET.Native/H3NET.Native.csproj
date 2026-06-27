@@ -6,6 +6,11 @@
     <AllowUnsafeBlocks>true</AllowUnsafeBlocks>
   </PropertyGroup>
 
+  <!-- Expose internal interop types (e.g. CellBoundary) to the test assembly for the marshalling golden tests. -->
+  <ItemGroup>
+    <InternalsVisibleTo Include="H3NET.Native.Tests" />
+  </ItemGroup>
+
   <!--
     Package metadata. Versioning, authorship, repository, license file packaging,
     and analyzers/MinVer are supplied by the repo-root Directory.Build.props and

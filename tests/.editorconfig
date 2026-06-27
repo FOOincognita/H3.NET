@@ -1,0 +1,8 @@
+# SPDX-License-Identifier: Apache-2.0
+# Test-tree analyzer overrides. These projects are non-shipping (IsPackable=false)
+# and follow the xUnit Method_Scenario_Expectation naming convention, which the
+# default CA1707 rule (no underscores in member names) flags. Underscores in test
+# names encode intent and are the established convention here, so CA1707 is disabled
+# for the test tree only. The root .editorconfig (and src/ enforcement) is unaffected.
+[*.cs]
+dotnet_diagnostic.CA1707.severity = none

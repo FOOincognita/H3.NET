@@ -4,7 +4,7 @@
 [![License: Apache 2.0](https://img.shields.io/badge/License-Apache_2.0-blue.svg)](LICENSE)
 <!-- CI build-status badge intentionally omitted until the CI workflow lands in a later PR. -->
 
-A thin, idiomatic P/Invoke binding over [Uber H3](https://h3geo.org) v4.5.0 for .NET 10+. H3NET.Native exposes the H3 hexagonal hierarchical geospatial indexing system through a clean, managed .NET API. The native `libh3` is built from a pinned upstream source revision and bundled directly in the NuGet package, so consumers need no C compiler, CMake, or other native toolchain to use it.
+A thin, idiomatic P/Invoke binding over [Uber H3](https://h3geo.org) v4.5.0 for .NET 8 and .NET 10 (`net8.0` / `net10.0`). H3NET.Native exposes the H3 hexagonal hierarchical geospatial indexing system through a clean, managed .NET API. The native `libh3` is built from a pinned upstream source revision and bundled directly in the NuGet package, so consumers need no C compiler, CMake, or other native toolchain to use it.
 
 ## Package and repository naming
 
@@ -50,6 +50,21 @@ foreach (var neighbor in cell.GridDisk(1))
 ## Versioning
 
 The library follows [Semantic Versioning](https://semver.org). Versions are derived from annotated git tags prefixed with `v` (for example `v0.1.0`) via [MinVer](https://github.com/adamralph/minver). The library version is **independent of** the bundled Uber H3 version but tracks it: the binding currently bundles and targets Uber H3 **v4.5.0**.
+
+## Correctness and benchmarks
+
+**Correctness** is validated against the reference implementation, not against other managed ports: the differential test corpus is generated from the official **Uber H3 C library** (via `h3-py` ≥ 4, pinned to the bundled v4.5.0), with **h3-go** available as a tiebreaker and a pure-C `valgrind` harness guarding native memory usage.
+
+**Performance** is measured with [BenchmarkDotNet](https://benchmarkdotnet.org). Consistent with the early-preview status, the benchmark project today wires a single comparison:
+
+- **[pocketken.H3](https://github.com/pocketken/H3.net)** — the managed (NetTopologySuite-based) port; answers the practical "how does this compare to the managed library many teams run today?" question. The pocketken side is currently a clearly-marked placeholder so the project compiles; its bodies must be replaced with the real pocketken.H3 calls before the numbers mean anything.
+
+Two further baselines are **planned** to place this binding on the full spectrum:
+
+- **Raw libh3 C** — direct P/Invoke into native libh3 with no idiomatic layer; the speed ceiling, isolating this library's own marshalling overhead.
+- **[H3.Standard](https://github.com/entrepreneur-interet-general/H3.Standard)** — the other native P/Invoke binding (v4.0.1); an apples-to-apples binding comparison.
+
+Benchmarks are informational, never gate CI, and their shapes may change while the binding is in preview.
 
 ## Links
 

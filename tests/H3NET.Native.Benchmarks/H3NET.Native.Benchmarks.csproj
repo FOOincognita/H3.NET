@@ -1,0 +1,37 @@
+<!-- SPDX-License-Identifier: Apache-2.0 -->
+<Project Sdk="Microsoft.NET.Sdk">
+
+  <PropertyGroup>
+    <OutputType>Exe</OutputType>
+    <!-- Single TFM is sufficient for benchmarks. -->
+    <TargetFramework>net10.0</TargetFramework>
+    <IsPackable>false</IsPackable>
+    <AllowUnsafeBlocks>true</AllowUnsafeBlocks>
+
+    <!--
+      Non-shipping benchmark project: do not require XML doc comments. The doc file
+      stays enabled (Directory.Build.props) because IDE0005 (remove unnecessary usings)
+      only runs on build when GenerateDocumentationFile=true; we instead suppress the
+      "missing XML comment" warning CS1591 for benchmark code.
+    -->
+    <NoWarn>$(NoWarn);CS1591</NoWarn>
+  </PropertyGroup>
+
+  <ItemGroup>
+    <ProjectReference Include="../../src/H3NET.Native/H3NET.Native.csproj" />
+  </ItemGroup>
+
+  <!-- Central Package Management is ON: omit Version attributes. -->
+  <ItemGroup>
+    <PackageReference Include="BenchmarkDotNet" />
+    <PackageReference Include="pocketken.H3" />
+  </ItemGroup>
+
+  <!--
+    ProjectReference consumers do not receive the bundled native libh3 from the
+    SDK; this shared target copies the host-RID libh3 into OutDir after Build so
+    the binding can load it when the benchmark executable runs.
+  -->
+  <Import Project="../../eng/H3NET.Native.targets" />
+
+</Project>
