@@ -1,0 +1,48 @@
+<!-- SPDX-License-Identifier: Apache-2.0 -->
+<Project Sdk="Microsoft.NET.Sdk">
+
+  <PropertyGroup>
+    <TargetFrameworks>net10.0;net8.0</TargetFrameworks>
+    <IsPackable>false</IsPackable>
+    <AllowUnsafeBlocks>true</AllowUnsafeBlocks>
+
+    <!--
+      xUnit v3 (3.2.2) runs on Microsoft.Testing.Platform. The test project is an
+      executable; MTP requires OutputType=Exe and its own entry point, which the
+      xunit.v3 package supplies. The runner is enabled via UseMicrosoftTestingPlatformRunner.
+    -->
+    <OutputType>Exe</OutputType>
+    <UseMicrosoftTestingPlatformRunner>true</UseMicrosoftTestingPlatformRunner>
+    <TestingPlatformDotnetTestSupport>true</TestingPlatformDotnetTestSupport>
+
+    <!--
+      Non-shipping test project: do not require XML doc comments. The doc file stays
+      enabled (Directory.Build.props) because IDE0005 (remove unnecessary usings) only
+      runs on build when GenerateDocumentationFile=true; we instead suppress the
+      "missing XML comment" warning CS1591 for test code.
+    -->
+    <NoWarn>$(NoWarn);CS1591</NoWarn>
+  </PropertyGroup>
+
+  <!-- CPM supplies versions; do NOT add Version attributes here. -->
+  <ItemGroup>
+    <PackageReference Include="Microsoft.NET.Test.Sdk" />
+    <PackageReference Include="xunit.v3" />
+    <PackageReference Include="xunit.runner.visualstudio" />
+    <PackageReference Include="CsCheck" />
+    <PackageReference Include="coverlet.collector" />
+  </ItemGroup>
+
+  <ItemGroup>
+    <ProjectReference Include="../../src/H3NET.Native/H3NET.Native.csproj" />
+  </ItemGroup>
+
+  <!-- Copy host-RID libh3 next to the test output for ProjectReference consumers. -->
+  <Import Project="../../eng/H3NET.Native.targets" />
+
+  <!-- Ship the committed oracle corpus next to the test binary. -->
+  <ItemGroup>
+    <Content Include="Fixtures/data/**" CopyToOutputDirectory="PreserveNewest" />
+  </ItemGroup>
+
+</Project>

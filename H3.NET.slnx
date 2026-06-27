@@ -1,5 +1,8 @@
 <!-- SPDX-License-Identifier: Apache-2.0 -->
 <Solution>
   <Project Path="src/H3NET.Native/H3NET.Native.csproj" />
-  <!-- Test, benchmark, and sample projects are added in PR3. -->
+  <Project Path="tests/H3NET.Native.Tests/H3NET.Native.Tests.csproj" />
+  <Project Path="tests/H3NET.Native.MemoryTests/H3NET.Native.MemoryTests.csproj" />
+  <Project Path="tests/H3NET.Native.Benchmarks/H3NET.Native.Benchmarks.csproj" />
+  <!-- samples/H3NET.Native.QuickStart is intentionally excluded: it consumes the packed nupkg from the local feed (PackageReference consumer path), not a ProjectReference. -->
 </Solution>
