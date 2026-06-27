@@ -1,0 +1,5 @@
+blank_issues_enabled: false
+contact_links:
+  - name: H3 algorithm documentation (upstream)
+    url: https://h3geo.org
+    about: Questions about the H3 grid system itself (resolutions, cells, indexing, traversal) are answered by the upstream Uber H3 docs, not this binding.

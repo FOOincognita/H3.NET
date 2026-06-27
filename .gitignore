@@ -1,0 +1,65 @@
+# H3NET.Native .gitignore
+# Keep committed: packages.lock.json, *.csproj, *.props, *.targets, global.json, nuget.config
+
+# --- Agent tooling ---
+.claude/
+.omc/
+
+# --- Build output ---
+artifacts/
+[Bb]in/
+[Oo]bj/
+[Oo]ut/
+
+# Built native libraries are produced by CI and bundled into the package;
+# they are not committed. The directory layout is, so keep .gitkeep files.
+runtimes/**/native/*
+!runtimes/**/native/.gitkeep
+
+# Vendored H3 out-of-source build tree (submodule sources stay; build artifacts do not)
+external/h3/build/
+
+# --- Python venv (build/codegen helper scripts) ---
+.venv/
+__pycache__/
+*.pyc
+
+# --- Visual Studio / Rider / VS Code ---
+.vs/
+.vscode/*
+!.vscode/extensions.json
+.idea/
+*.user
+*.suo
+*.userprefs
+*.sln.docstates
+*_i.c
+*_p.c
+*.ncb
+*.cache
+
+# --- Test + coverage output ---
+[Tt]est[Rr]esults/
+*.coverage
+*.coverlet.json
+coverage.*.xml
+coverage.*.json
+*.opencover.xml
+*.cobertura.xml
+*.trx
+
+# --- Benchmarks ---
+BenchmarkDotNet.Artifacts/
+
+# --- Packages produced locally ---
+*.nupkg
+*.snupkg
+
+# --- MSBuild logs ---
+msbuild.log
+msbuild.binlog
+*.binlog
+
+# --- OS noise ---
+.DS_Store
+Thumbs.db

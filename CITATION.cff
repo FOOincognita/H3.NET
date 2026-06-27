@@ -1,0 +1,24 @@
+cff-version: 1.2.0
+message: "If you use this software, please cite it as below."
+type: software
+title: H3NET.Native
+authors:
+  - name: FOOincognita
+license: Apache-2.0
+repository-code: https://github.com/FOOincognita/H3.NET
+url: https://github.com/FOOincognita/H3.NET
+keywords:
+  - h3
+  - geospatial
+  - hexagon
+  - dotnet
+  - pinvoke
+  - dggs
+references:
+  - type: software
+    title: "H3: Hexagonal hierarchical geospatial indexing system"
+    authors:
+      - name: "Uber Technologies, Inc."
+    repository-code: https://github.com/uber/h3
+    license: Apache-2.0
+    version: v4.5.0

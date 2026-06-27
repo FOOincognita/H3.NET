@@ -1,0 +1,36 @@
+# Dependabot configuration for H3NET.Native.
+# Note: the upstream H3 git submodule (external/h3 @ v4.5.0) is pinned and
+# upgraded manually, so the gitsubmodule ecosystem is intentionally omitted.
+version: 2
+updates:
+  - package-ecosystem: "nuget"
+    directory: "/"
+    schedule:
+      interval: "weekly"
+      day: "monday"
+    open-pull-requests-limit: 5
+    labels:
+      - "dependencies"
+      - "nuget"
+    groups:
+      nuget-minor-and-patch:
+        applies-to: version-updates
+        update-types:
+          - "minor"
+          - "patch"
+
+  - package-ecosystem: "github-actions"
+    directory: "/"
+    schedule:
+      interval: "weekly"
+      day: "monday"
+    open-pull-requests-limit: 5
+    labels:
+      - "dependencies"
+      - "github-actions"
+    groups:
+      github-actions:
+        applies-to: version-updates
+        update-types:
+          - "minor"
+          - "patch"

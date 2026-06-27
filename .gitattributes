@@ -1,0 +1,32 @@
+# Normalize line endings on commit; let Git infer text vs binary by default.
+* text=auto
+
+# Force LF for source, project, config, and docs (cross-platform reproducibility).
+*.cs            text eol=lf
+*.csproj        text eol=lf
+*.props         text eol=lf
+*.targets       text eol=lf
+*.sln           text eol=lf
+*.json          text eol=lf
+*.jsonc         text eol=lf
+*.yml           text eol=lf
+*.yaml          text eol=lf
+*.md            text eol=lf
+*.cff           text eol=lf
+*.editorconfig  text eol=lf
+*.sh            text eol=lf
+*.ps1           text eol=lf
+*.cmake         text eol=lf
+CMakeLists.txt  text eol=lf
+
+# Native build/link artifacts and signing material: binary, never normalized.
+*.so    binary
+*.dylib binary
+*.a     binary
+*.lib   binary
+*.dll   binary
+*.pdb   binary
+*.snk   binary
+
+# Vendored upstream H3 sources: exclude from language stats and diffs.
+external/h3/** linguist-vendored
