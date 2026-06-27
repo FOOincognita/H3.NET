@@ -1,0 +1,75 @@
+# SPDX-License-Identifier: Apache-2.0
+#
+# Dockerfile.alpine — Build libh3 for the linux-musl-x64 RID against musl libc
+# (Alpine). Produces a shared library suitable for musl-based .NET runtimes
+# (e.g. mcr.microsoft.com/dotnet/runtime:*-alpine).
+#
+# Build context: the repository root (so external/h3 is available).
+#   docker build -f build/docker/Dockerfile.alpine -t h3net-build-musl-x64 .
+#
+# Extract the staged library (CI):
+#   id=$(docker create h3net-build-musl-x64)
+#   docker cp "$id":/out/libh3.so runtimes/linux-musl-x64/native/libh3.so
+#   docker rm "$id"
+#
+# OUTPUT PATH (inside the image): /out/libh3.so  (unversioned, dereferenced)
+
+ARG ALPINE_IMAGE=alpine:3.20
+FROM ${ALPINE_IMAGE} AS build
+
+ARG EXPECTED_H3_TAG=v4.5.0
+
+# build-base => gcc/g++/make/musl-dev; cmake + git for configure/build + tag check.
+RUN set -eux; \
+    apk add --no-cache build-base cmake git binutils; \
+    cmake --version; \
+    gcc --version
+
+WORKDIR /src
+
+# Copy the full repo context; external/h3 (the pinned submodule) is what we need.
+COPY . /src
+
+# Sanity-check the submodule presence and (best-effort) its tag.
+RUN set -eux; \
+    test -f /src/external/h3/CMakeLists.txt \
+        || { echo "external/h3 submodule missing in build context" >&2; exit 1; }; \
+    if command -v git >/dev/null 2>&1; then \
+        tag="$(git -C /src/external/h3 describe --tags 2>/dev/null || true)"; \
+        [ "$tag" = "${EXPECTED_H3_TAG}" ] \
+            || echo "warning: external/h3 at '${tag:-<unknown>}', expected ${EXPECTED_H3_TAG}" >&2; \
+    fi
+
+# Configure + build only the 'h3' shared-library target with the exact flags.
+RUN set -eux; \
+    cmake -S /src/external/h3 -B /src/external/h3/build \
+        -DCMAKE_BUILD_TYPE=Release \
+        -DBUILD_SHARED_LIBS=ON \
+        -DCMAKE_POSITION_INDEPENDENT_CODE=ON \
+        -DBUILD_TESTING=OFF \
+        -DBUILD_BENCHMARKS=OFF \
+        -DBUILD_FUZZERS=OFF \
+        -DBUILD_FILTERS=OFF \
+        -DBUILD_GENERATORS=OFF \
+        -DENABLE_DOCS=OFF \
+        -DENABLE_FORMAT=OFF \
+        -DENABLE_LINTING=OFF; \
+    cmake --build /src/external/h3/build --target h3 --config Release -j"$(nproc)"
+
+# Locate the real shared library, dereference it to the unversioned name, and
+# stage it at /out/libh3.so. With SOVERSION=1 CMake emits libh3.so.1 (real) plus
+# a libh3.so symlink; cp -L copies the actual binary, never a symlink.
+RUN set -eux; \
+    mkdir -p /out; \
+    src="$(find /src/external/h3/build \( -type f -o -type l \) -name 'libh3.so*' | sort | head -n1)"; \
+    test -n "$src" || { echo "built libh3.so not found" >&2; exit 1; }; \
+    cp -L "$src" /out/libh3.so
+
+# Verify the public export is present (bare name on ELF).
+RUN set -eux; \
+    nm -D /out/libh3.so | grep -w latLngToCell \
+        || { echo "export 'latLngToCell' missing from /out/libh3.so" >&2; exit 1; }
+
+# Final minimal stage so the artifact is trivially extractable via docker cp.
+FROM scratch AS export
+COPY --from=build /out/libh3.so /libh3.so

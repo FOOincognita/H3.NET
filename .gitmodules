@@ -1,0 +1,3 @@
+[submodule "external/h3"]
+	path = external/h3
+	url = https://github.com/uber/h3.git

@@ -1,0 +1,27 @@
+<!-- SPDX-License-Identifier: Apache-2.0 -->
+<!--
+  Shared LOCAL-DEV target. Imported by the binding project (and, in PR3, the test
+  project). Native assets under runtimes/{rid}/native/ propagate to PackageReference
+  consumers via the SDK, but NOT to ProjectReference consumers. To make local
+  dev/test work without a packaged dependency, copy the host-RID native lib into the
+  build output directory after Build so the dynamic loader finds it.
+
+  Path resolution: this file lives in eng/ at the repo root, so the runtimes tree is
+  at $(MSBuildThisFileDirectory)../runtimes/. $(NETCoreSdkRuntimeIdentifier) is the
+  RID of the running SDK, i.e. the host RID.
+-->
+<Project>
+
+  <Target Name="CopyH3NativeForHost"
+          AfterTargets="Build"
+          Condition="'$(NETCoreSdkRuntimeIdentifier)' != ''">
+    <ItemGroup>
+      <_H3HostNative Include="$(MSBuildThisFileDirectory)../runtimes/$(NETCoreSdkRuntimeIdentifier)/native/libh3.*" />
+    </ItemGroup>
+    <Copy SourceFiles="@(_H3HostNative)"
+          DestinationFolder="$(OutDir)"
+          SkipUnchangedFiles="true"
+          Condition="'@(_H3HostNative)' != '' And '$(OutDir)' != ''" />
+  </Target>
+
+</Project>
