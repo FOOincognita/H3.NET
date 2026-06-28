@@ -12,7 +12,7 @@
 dotnet add package H3.NET.Native
 ```
 
-The package id is `H3.NET.Native`; the repository is `H3.NET`.
+The package id is `H3.NET.Native`; the repository is `H3.NET.Native`.
 
 ## First program
 

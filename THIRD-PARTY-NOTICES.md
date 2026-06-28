@@ -1,6 +1,6 @@
 # Third-Party Notices
 
-H3.NET.Native (NuGet PackageId: `H3.NET.Native`; repository: `H3.NET`) incorporates
+H3.NET.Native (NuGet PackageId: `H3.NET.Native`; repository: `H3.NET.Native`) incorporates
 and acknowledges third-party material. This document distinguishes two distinct
 categories that must not be conflated:
 

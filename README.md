@@ -6,9 +6,9 @@
 
 A thin, idiomatic P/Invoke binding over [Uber H3](https://h3geo.org) v4.5.0 for .NET 8 and .NET 10 (`net8.0` / `net10.0`). H3.NET.Native exposes the H3 hexagonal hierarchical geospatial indexing system through a clean, managed .NET API. The native `libh3` is built from a pinned upstream source revision and bundled directly in the NuGet package, so consumers need no C compiler, CMake, or other native toolchain to use it.
 
-## Package and repository naming
+## NuGet package id
 
-The repository is named **H3.NET**, but the published NuGet **PackageId is `H3.NET.Native`**. The id `H3.NET` was already taken on nuget.org by an unrelated package, so the binding is distributed as `H3.NET.Native`. Use `H3.NET.Native` in all `dotnet add package` and `PackageReference` declarations.
+The published NuGet **PackageId is `H3.NET.Native`**. The shorter id `H3.NET` was already taken on nuget.org by an unrelated package, so the binding is distributed as `H3.NET.Native`. Use `H3.NET.Native` in all `dotnet add package` and `PackageReference` declarations.
 
 ## Status
 

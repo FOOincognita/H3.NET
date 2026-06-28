@@ -46,7 +46,7 @@ body:
     id: package-version
     attributes:
       label: H3.NET.Native version
-      description: NuGet package version (PackageId is "H3.NET.Native"; the repo is named "H3.NET"). No releases exist yet during the scaffold phase; enter "unreleased / local build" if applicable.
+      description: NuGet package version (PackageId is "H3.NET.Native"; the repo is named "H3.NET.Native"). No releases exist yet during the scaffold phase; enter "unreleased / local build" if applicable.
       placeholder: "0.1.0 (or: unreleased / local build)"
     validations:
       required: false

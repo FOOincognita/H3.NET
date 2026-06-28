@@ -6,7 +6,7 @@ name: Release
 #
 # Maintainer prerequisites (one-time, outside this repo):
 #   - nuget.org OIDC trusted-publisher policy:
-#       Owner=FOOincognita, Repo=H3.NET, Workflow=release.yml, Environment=release.
+#       Owner=FOOincognita, Repo=H3.NET.Native, Workflow=release.yml, Environment=release.
 #       The first publish must occur within 7 days of creating the policy.
 #   - Repo variable NUGET_USER set to the nuget.org account/user for the policy.
 #   - A GitHub environment named `release` (the publish job is bound to it).

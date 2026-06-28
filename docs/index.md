@@ -4,7 +4,7 @@ An idiomatic P/Invoke binding over [Uber H3](https://h3geo.org) v4.5.0 for .NET.
 bundles the native `libh3` for the supported runtimes, so consumers do not build or ship the
 native library themselves.
 
-The NuGet package id is **`H3.NET.Native`** (the GitHub repository is `H3.NET`).
+The NuGet package id is **`H3.NET.Native`** (the GitHub repository is `H3.NET.Native`).
 
 ## Install
 
