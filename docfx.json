@@ -3,9 +3,9 @@
     {
       "src": [
         {
-          "src": "src/H3NET.Native",
+          "src": "src/H3.NET.Native",
           "files": [
-            "H3NET.Native.csproj"
+            "H3.NET.Native.csproj"
           ]
         }
       ],
@@ -51,12 +51,12 @@
       }
     ],
     "globalMetadata": {
-      "_appName": "H3NET.Native",
-      "_appTitle": "H3NET.Native",
+      "_appName": "H3.NET.Native",
+      "_appTitle": "H3.NET.Native",
       "_enableSearch": true,
       "_disableContribution": false,
       "_gitContribute": {
-        "repo": "https://github.com/FOOincognita/H3.NET",
+        "repo": "https://github.com/FOOincognita/H3.NET.Native",
         "branch": "main"
       }
     },

@@ -1,15 +1,15 @@
-# H3NET.Native
+# H3.NET.Native
 
 An idiomatic P/Invoke binding over [Uber H3](https://h3geo.org) v4.5.0 for .NET. The package
 bundles the native `libh3` for the supported runtimes, so consumers do not build or ship the
 native library themselves.
 
-The NuGet package id is **`H3NET.Native`** (the GitHub repository is `H3.NET`).
+The NuGet package id is **`H3.NET.Native`** (the GitHub repository is `H3.NET`).
 
 ## Install
 
 ```bash
-dotnet add package H3NET.Native
+dotnet add package H3.NET.Native
 ```
 
 ## At a glance
@@ -17,13 +17,13 @@ dotnet add package H3NET.Native
 - **Target frameworks:** `net10.0`, `net8.0`.
 - **Bundled native runtimes (RIDs):** `linux-x64`, `linux-musl-x64`, `osx-arm64`.
 - **Angular units:** all latitude/longitude values are in **degrees** (not radians).
-- **API surface:** the public `H3NET.Native` namespace. The internal `H3NET.Native.Interop`
+- **API surface:** the public `H3.NET.Native` namespace. The internal `H3.NET.Native.Interop`
   marshalling layer is intentionally not documented.
 
 ## Quickstart
 
 ```csharp
-using H3NET.Native;
+using H3.NET.Native;
 
 // Index a coordinate (near the Ferry Building, San Francisco) at resolution 9.
 var sanFrancisco = new LatLng(LatitudeDegrees: 37.7752, LongitudeDegrees: -122.4188);
@@ -34,4 +34,4 @@ Console.WriteLine(cell.Resolution); // 9
 ```
 
 See [Getting started](articles/getting-started.md) for more, and the
-[API reference](api/H3NET.Native.html) for the full type list.
+[API reference](api/H3.NET.Native.html) for the full type list.

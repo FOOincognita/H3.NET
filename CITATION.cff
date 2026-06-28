@@ -1,12 +1,12 @@
 cff-version: 1.2.0
 message: "If you use this software, please cite it as below."
 type: software
-title: H3NET.Native
+title: H3.NET.Native
 authors:
   - name: FOOincognita
 license: Apache-2.0
-repository-code: https://github.com/FOOincognita/H3.NET
-url: https://github.com/FOOincognita/H3.NET
+repository-code: https://github.com/FOOincognita/H3.NET.Native
+url: https://github.com/FOOincognita/H3.NET.Native
 keywords:
   - h3
   - geospatial

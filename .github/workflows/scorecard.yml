@@ -4,7 +4,7 @@
 # OpenSSF API and uploaded to GitHub code scanning as SARIF.
 #
 # README badge (do NOT add it here; maintainer adds to README):
-#   [![OpenSSF Scorecard](https://api.scorecard.dev/projects/github.com/FOOincognita/H3.NET/badge)](https://scorecard.dev/viewer/?uri=github.com/FOOincognita/H3.NET)
+#   [![OpenSSF Scorecard](https://api.scorecard.dev/projects/github.com/FOOincognita/H3.NET.Native/badge)](https://scorecard.dev/viewer/?uri=github.com/FOOincognita/H3.NET.Native)
 name: Scorecard
 
 on:

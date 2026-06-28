@@ -1,6 +1,6 @@
-# Contributing to H3NET.Native
+# Contributing to H3.NET.Native
 
-Thank you for your interest in contributing. H3NET.Native is a thin, idiomatic P/Invoke binding over [Uber H3](https://h3geo.org) v4.5.0 for .NET 10+. This document covers local setup, the native build, test fixtures, code style, and the git workflow.
+Thank you for your interest in contributing. H3.NET.Native is a thin, idiomatic P/Invoke binding over [Uber H3](https://h3geo.org) v4.5.0 for .NET 10+. This document covers local setup, the native build, test fixtures, code style, and the git workflow.
 
 This repository is an early-stage scaffold. Some files and scripts referenced below describe the intended layout and may not all exist yet during scaffolding.
 

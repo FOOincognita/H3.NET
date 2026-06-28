@@ -1,4 +1,4 @@
-# EditorConfig is the canonical source of code style for H3NET.Native.
+# EditorConfig is the canonical source of code style for H3.NET.Native.
 # The build enables EnforceCodeStyleInBuild + TreatWarningsAsErrors, so these
 # rules are hard build gates. Keep severities deliberate.
 # https://editorconfig.org  |  https://learn.microsoft.com/dotnet/fundamentals/code-analysis/code-style-rule-options

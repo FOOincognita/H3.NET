@@ -63,7 +63,7 @@ reported to the community leaders responsible for enforcement. Conduct concerns
 can be reported confidentially to the maintainer (@FOOincognita) via GitHub's
 private vulnerability reporting channel on the repository
 (Settings > Security > Advisories > Report a vulnerability) at
-https://github.com/FOOincognita/H3.NET. All complaints will be reviewed and
+https://github.com/FOOincognita/H3.NET.Native. All complaints will be reviewed and
 investigated promptly and fairly.
 
 All community leaders are obligated to respect the privacy and security of the

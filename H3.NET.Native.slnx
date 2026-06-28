@@ -1,0 +1,8 @@
+<!-- SPDX-License-Identifier: Apache-2.0 -->
+<Solution>
+  <Project Path="src/H3.NET.Native/H3.NET.Native.csproj" />
+  <Project Path="tests/H3.NET.Native.Tests/H3.NET.Native.Tests.csproj" />
+  <Project Path="tests/H3.NET.Native.MemoryTests/H3.NET.Native.MemoryTests.csproj" />
+  <Project Path="tests/H3.NET.Native.Benchmarks/H3.NET.Native.Benchmarks.csproj" />
+  <!-- samples/H3.NET.Native.QuickStart is intentionally excluded: it consumes the packed nupkg from the local feed (PackageReference consumer path), not a ProjectReference. -->
+</Solution>

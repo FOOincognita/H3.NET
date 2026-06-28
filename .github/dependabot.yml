@@ -1,4 +1,4 @@
-# Dependabot configuration for H3NET.Native.
+# Dependabot configuration for H3.NET.Native.
 # Note: the upstream H3 git submodule (external/h3 @ v4.5.0) is pinned and
 # upgraded manually, so the gitsubmodule ecosystem is intentionally omitted.
 version: 2

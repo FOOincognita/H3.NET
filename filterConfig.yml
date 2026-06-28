@@ -1,8 +1,8 @@
-# DocFX API filter for H3NET.Native.
+# DocFX API filter for H3.NET.Native.
 # Excludes the internal interop layer so only the public, idiomatic surface is documented.
 apiRules:
   # Drop the P/Invoke layer: it is an implementation detail (extern signatures,
   # marshalling structs) that is not part of the public contract.
   - exclude:
-      uidRegex: ^H3NET\.Native\.Interop($|\.)
+      uidRegex: ^H3\.NET\.Native\.Interop($|\.)
       type: Namespace

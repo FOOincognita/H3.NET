@@ -114,10 +114,10 @@ jobs:
             10.0.301
 
       - name: Restore (locked)
-        run: dotnet restore H3.NET.slnx --locked-mode
+        run: dotnet restore H3.NET.Native.slnx --locked-mode
 
       - name: Pack
-        run: dotnet pack src/H3NET.Native/H3NET.Native.csproj -c Release -o artifacts/feed
+        run: dotnet pack src/H3.NET.Native/H3.NET.Native.csproj -c Release -o artifacts/feed
 
       - name: Verify all three RIDs packed
         run: |
@@ -129,7 +129,7 @@ jobs:
       - name: Generate CycloneDX SBOM
         run: |
           dotnet tool install --global CycloneDX
-          dotnet CycloneDX H3.NET.slnx -o artifacts/sbom
+          dotnet CycloneDX H3.NET.Native.slnx -o artifacts/sbom
 
       - name: Attest build provenance
         uses: actions/attest-build-provenance@0f67c3f4856b2e3261c31976d6725780e5e4c373 # v4.1.1

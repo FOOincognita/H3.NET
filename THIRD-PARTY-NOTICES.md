@@ -1,6 +1,6 @@
 # Third-Party Notices
 
-H3NET.Native (NuGet PackageId: `H3NET.Native`; repository: `H3.NET`) incorporates
+H3.NET.Native (NuGet PackageId: `H3.NET.Native`; repository: `H3.NET`) incorporates
 and acknowledges third-party material. This document distinguishes two distinct
 categories that must not be conflated:
 
@@ -39,9 +39,9 @@ the Apache License, Version 2.0 is included in this repository's
 ## 2. Prior-Art / Approach References
 
 The following projects are acknowledged as prior C# work that informed the design
-and API conventions of H3NET.Native. They are listed for attribution and context
+and API conventions of H3.NET.Native. They are listed for attribution and context
 only. No source code, binaries, or other material from these projects is copied,
-derived from, or bundled in H3NET.Native.
+derived from, or bundled in H3.NET.Native.
 
 ### pocketken/H3.net
 
@@ -57,6 +57,6 @@ derived from, or bundled in H3NET.Native.
 - Nature of reference: an earlier .NET binding effort over H3. Reviewed as prior
   art for binding approach. No code included.
 
-H3NET.Native is an independent, thin P/Invoke binding over the upstream Uber H3 C
+H3.NET.Native is an independent, thin P/Invoke binding over the upstream Uber H3 C
 library (v4.5.0). Its public surface and runtime behavior derive from upstream
 H3, not from the projects listed in this section.

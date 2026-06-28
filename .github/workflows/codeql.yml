@@ -1,4 +1,4 @@
-# CodeQL static analysis for H3NET.Native (C# only).
+# CodeQL static analysis for H3.NET.Native (C# only).
 # Build-mode is "manual": we restore with the committed lock files and run an
 # explicit `dotnet build` so CodeQL traces the exact compilation the repo uses
 # (more reliable than autobuild for a multi-TFM, CPM + locked-mode project).
@@ -57,10 +57,10 @@ jobs:
             10.0.301
 
       - name: Restore (locked mode)
-        run: dotnet restore H3.NET.slnx --locked-mode
+        run: dotnet restore H3.NET.Native.slnx --locked-mode
 
       - name: Build
-        run: dotnet build H3.NET.slnx -c Release --no-restore
+        run: dotnet build H3.NET.Native.slnx -c Release --no-restore
 
       - name: Perform CodeQL Analysis
         uses: github/codeql-action/analyze@8aad20d150bbac5944a9f9d289da16a4b0d87c1e # v4.36.2

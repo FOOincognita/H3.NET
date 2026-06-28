@@ -6,7 +6,7 @@ body:
   - type: markdown
     attributes:
       value: |
-        H3NET.Native aims to be a thin, idiomatic binding over Uber H3 v4.5.0.
+        H3.NET.Native aims to be a thin, idiomatic binding over Uber H3 v4.5.0.
         Most feature requests should map to a specific upstream H3 function.
         If you are requesting an existing-but-not-yet-bound function, name it
         below so it can be prioritized in the API fill-in work.

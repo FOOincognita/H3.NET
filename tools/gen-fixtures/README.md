@@ -1,11 +1,11 @@
 # gen-fixtures
 
-Generates the committed ground-truth test corpus for `H3NET.Native` using
+Generates the committed ground-truth test corpus for `H3.NET.Native` using
 [`h3-py`](https://github.com/uber/h3-py) v4 (the same C library, `libh3 4.5.0`,
 that the .NET binding loads).
 
 The generated data lives in
-`tests/H3NET.Native.Tests/Fixtures/data/` and **is committed**. The `.venv`
+`tests/H3.NET.Native.Tests/Fixtures/data/` and **is committed**. The `.venv`
 created below is gitignored.
 
 ## Regenerate
@@ -34,7 +34,7 @@ with the same pinned `h3` version reproduces byte-identical output.
 
 ## Conventions
 
-- Angular values are **degrees** (matching the `H3NET.Native` public surface).
+- Angular values are **degrees** (matching the `H3.NET.Native` public surface).
 - Cells are zero-padded 16-character lowercase hex (`%016x`) so they map
   directly to a .NET `ulong`.
 - Doubles are emitted at full precision so they round-trip exactly.

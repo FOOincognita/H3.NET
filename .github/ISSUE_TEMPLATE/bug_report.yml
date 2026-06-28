@@ -6,7 +6,7 @@ body:
   - type: markdown
     attributes:
       value: |
-        Thanks for filing a bug. H3NET.Native is an early-stage scaffold: a
+        Thanks for filing a bug. H3.NET.Native is an early-stage scaffold: a
         small vertical slice exists and the full H3 API is being filled in over
         subsequent PRs. Please confirm the function you are calling is actually
         implemented before reporting it as broken.
@@ -45,8 +45,8 @@ body:
   - type: input
     id: package-version
     attributes:
-      label: H3NET.Native version
-      description: NuGet package version (PackageId is "H3NET.Native"; the repo is named "H3.NET"). No releases exist yet during the scaffold phase; enter "unreleased / local build" if applicable.
+      label: H3.NET.Native version
+      description: NuGet package version (PackageId is "H3.NET.Native"; the repo is named "H3.NET"). No releases exist yet during the scaffold phase; enter "unreleased / local build" if applicable.
       placeholder: "0.1.0 (or: unreleased / local build)"
     validations:
       required: false

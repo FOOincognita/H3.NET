@@ -7,7 +7,7 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ## [Unreleased]
 
-Initial scaffolding of H3NET.Native, a thin idiomatic P/Invoke binding over
+Initial scaffolding of H3.NET.Native, a thin idiomatic P/Invoke binding over
 Uber H3 v4.5.0 for .NET 10+. No versions have been released yet.
 
 ### Added
@@ -30,7 +30,7 @@ Uber H3 v4.5.0 for .NET 10+. No versions have been released yet.
 
 - Continuous integration workflow (build, test, pack) and a CI status badge.
 - Incremental fill-in of the full Uber H3 API surface (~70 functions).
-- Published documentation site at https://FOOincognita.github.io/H3.NET/.
+- Published documentation site at https://FOOincognita.github.io/H3.NET.Native/.
 - First tagged release.
 
-[Unreleased]: https://github.com/FOOincognita/H3.NET/commits/main
+[Unreleased]: https://github.com/FOOincognita/H3.NET.Native/commits/main
