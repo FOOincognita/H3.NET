@@ -503,6 +503,398 @@ public readonly partial record struct H3Index(ulong Value)
         return true;
     }
 
+    #region Hierarchy
+
+    /// <summary>
+    /// Returns the parent cell of this cell at the given coarser resolution.
+    /// </summary>
+    /// <param name="parentRes">The target parent resolution (0-15); must be less than or equal to this cell's resolution.</param>
+    /// <returns>The parent <see cref="H3Index"/> at <paramref name="parentRes"/>.</returns>
+    /// <exception cref="H3DomainException"><paramref name="parentRes"/> is outside the range 0-15.</exception>
+    /// <exception cref="H3Exception"><paramref name="parentRes"/> is finer than this cell's resolution, or the native operation failed.</exception>
+    public H3Index CellToParent(int parentRes)
+    {
+        H3ErrorMarshaller.ThrowIfError(NativeMethods.CellToParent(Value, parentRes, out ulong parent));
+        return new H3Index(parent);
+    }
+
+    /// <summary>
+    /// Returns the center child cell of this cell at the given finer resolution.
+    /// </summary>
+    /// <param name="childRes">The target child resolution (0-15); must be greater than or equal to this cell's resolution.</param>
+    /// <returns>The center child <see cref="H3Index"/> at <paramref name="childRes"/>.</returns>
+    /// <exception cref="H3DomainException"><paramref name="childRes"/> is outside the range 0-15.</exception>
+    /// <exception cref="H3Exception"><paramref name="childRes"/> is coarser than this cell's resolution, or the native operation failed.</exception>
+    public H3Index CellToCenterChild(int childRes)
+    {
+        H3ErrorMarshaller.ThrowIfError(NativeMethods.CellToCenterChild(Value, childRes, out ulong child));
+        return new H3Index(child);
+    }
+
+    /// <summary>
+    /// Returns the position of this cell within an ordered traversal of all children
+    /// of its parent at the given coarser resolution. Inverse of <see cref="ChildPosToCell"/>.
+    /// </summary>
+    /// <param name="parentRes">The parent resolution (0-15); must be less than or equal to this cell's resolution.</param>
+    /// <returns>The zero-based child position of this cell within its parent at <paramref name="parentRes"/>.</returns>
+    /// <exception cref="H3DomainException"><paramref name="parentRes"/> is outside the range 0-15.</exception>
+    /// <exception cref="H3Exception"><paramref name="parentRes"/> is finer than this cell's resolution, or the native operation failed.</exception>
+    public long CellToChildPos(int parentRes)
+    {
+        H3ErrorMarshaller.ThrowIfError(NativeMethods.CellToChildPos(Value, parentRes, out long pos));
+        return pos;
+    }
+
+    /// <summary>
+    /// Returns the child cell of this (parent) cell at the given child position and
+    /// resolution. Inverse of <see cref="CellToChildPos"/>.
+    /// </summary>
+    /// <param name="childPos">The zero-based child position, in <c>[0, cellToChildrenSize)</c>.</param>
+    /// <param name="childRes">The child resolution (0-15); must be greater than or equal to this cell's resolution.</param>
+    /// <returns>The child <see cref="H3Index"/> at <paramref name="childPos"/> and <paramref name="childRes"/>.</returns>
+    /// <exception cref="H3DomainException"><paramref name="childRes"/> is outside the range 0-15, or <paramref name="childPos"/> is outside the valid range.</exception>
+    /// <exception cref="H3Exception"><paramref name="childRes"/> is coarser than this cell's resolution, or the native operation failed.</exception>
+    public H3Index ChildPosToCell(long childPos, int childRes)
+    {
+        H3ErrorMarshaller.ThrowIfError(NativeMethods.ChildPosToCell(childPos, Value, childRes, out ulong child));
+        return new H3Index(child);
+    }
+
+    /// <summary>
+    /// Returns all child cells of this cell at the given finer resolution.
+    /// </summary>
+    /// <param name="childRes">The target child resolution (0-15); must be greater than or equal to this cell's resolution.</param>
+    /// <returns>The child cells, with null padding slots removed (pentagon parents yield fewer than the hexagon maximum). Order is not guaranteed.</returns>
+    /// <exception cref="ArgumentOutOfRangeException"><paramref name="childRes"/> implies a result so large that it would exceed <see cref="Array.MaxLength"/>.</exception>
+    /// <exception cref="H3DomainException"><paramref name="childRes"/> is outside the range 0-15.</exception>
+    /// <exception cref="H3Exception"><paramref name="childRes"/> is coarser than this cell's resolution, or the native operation failed.</exception>
+    public unsafe H3Index[] CellToChildren(int childRes)
+    {
+        long maxSize = CellToChildrenSize(childRes);
+        if (maxSize <= 0)
+        {
+            return [];
+        }
+
+        if (maxSize > Array.MaxLength)
+        {
+            throw new ArgumentOutOfRangeException(
+                nameof(childRes),
+                childRes,
+                $"childRes={childRes} would require {maxSize} cells, exceeding the maximum array length.");
+        }
+
+        var buffer = new ulong[maxSize];
+        fixed (ulong* ptr = buffer)
+        {
+            H3ErrorMarshaller.ThrowIfError(NativeMethods.CellToChildren(Value, childRes, ptr));
+        }
+
+        int count = 0;
+        for (long i = 0; i < maxSize; i++)
+        {
+            if (buffer[i] != 0)
+            {
+                count++;
+            }
+        }
+
+        var result = new H3Index[count];
+        int next = 0;
+        for (long i = 0; i < maxSize; i++)
+        {
+            if (buffer[i] != 0)
+            {
+                result[next++] = new H3Index(buffer[i]);
+            }
+        }
+
+        return result;
+    }
+
+    /// <summary>
+    /// Fills <paramref name="destination"/> with the child cells of this cell at the
+    /// given finer resolution, packing non-null cells to the front.
+    /// </summary>
+    /// <param name="childRes">The target child resolution (0-15); must be greater than or equal to this cell's resolution.</param>
+    /// <param name="destination">
+    /// The destination span. Its length must be at least the maximum child count for
+    /// <paramref name="childRes"/> (see the upstream <c>cellToChildrenSize</c>).
+    /// </param>
+    /// <returns>The number of non-null child cells written to the front of <paramref name="destination"/>.</returns>
+    /// <exception cref="ArgumentOutOfRangeException"><paramref name="childRes"/> implies a result that would exceed <see cref="Array.MaxLength"/>, or <paramref name="destination"/> is too small.</exception>
+    /// <exception cref="H3DomainException"><paramref name="childRes"/> is outside the range 0-15.</exception>
+    /// <exception cref="H3Exception"><paramref name="childRes"/> is coarser than this cell's resolution, or the native operation failed.</exception>
+    public unsafe int CellToChildrenInto(int childRes, Span<H3Index> destination)
+    {
+        long maxSize = CellToChildrenSize(childRes);
+
+        if (maxSize > Array.MaxLength)
+        {
+            throw new ArgumentOutOfRangeException(
+                nameof(childRes),
+                childRes,
+                $"childRes={childRes} would require {maxSize} cells, exceeding the maximum array length.");
+        }
+
+        if (destination.Length < maxSize)
+        {
+            throw new ArgumentOutOfRangeException(
+                nameof(destination),
+                destination.Length,
+                $"Destination span must hold at least {maxSize} elements for childRes={childRes}.");
+        }
+
+        if (maxSize <= 0)
+        {
+            return 0;
+        }
+
+        // Write directly into the caller's span: H3Index is blittable and layout-compatible
+        // with ulong, so the native fill needs no intermediate buffer.
+        fixed (H3Index* ptr = destination)
+        {
+            H3ErrorMarshaller.ThrowIfError(NativeMethods.CellToChildren(Value, childRes, (ulong*)ptr));
+        }
+
+        // Compact the H3_NULL (0) padding holes in place. The write index never
+        // outruns the read index, so no live entry is clobbered.
+        int count = 0;
+        for (long i = 0; i < maxSize; i++)
+        {
+            if (destination[(int)i].Value != 0)
+            {
+                destination[count++] = destination[(int)i];
+            }
+        }
+
+        return count;
+    }
+
+    /// <summary>
+    /// Compacts a set of cells into the smaller, mixed-resolution set of cells that
+    /// covers the same area. Inverse of <see cref="UncompactCells(ReadOnlySpan{H3Index}, int)"/>.
+    /// </summary>
+    /// <param name="cells">The cells to compact. All must be the same resolution and duplicate-free.</param>
+    /// <returns>The compacted, mixed-resolution set of cells. Order is not guaranteed.</returns>
+    /// <exception cref="H3Exception">The input contains mixed resolutions or duplicates, or the native operation failed.</exception>
+    public static unsafe H3Index[] CompactCells(ReadOnlySpan<H3Index> cells)
+    {
+        if (cells.Length == 0)
+        {
+            return [];
+        }
+
+        // `new ulong[]` is CLR zero-initialized, so the trailing slots the native
+        // compactCells leaves untouched read as H3_NULL(0) and the strip below is valid.
+        // A future switch to a non-cleared buffer (e.g. ArrayPool) MUST pre-clear it.
+        var buffer = new ulong[cells.Length];
+        fixed (H3Index* inPtr = cells)
+        fixed (ulong* outPtr = buffer)
+        {
+            H3ErrorMarshaller.ThrowIfError(NativeMethods.CompactCells((ulong*)inPtr, outPtr, cells.Length));
+        }
+
+        int count = 0;
+        for (int i = 0; i < buffer.Length; i++)
+        {
+            if (buffer[i] != 0)
+            {
+                count++;
+            }
+        }
+
+        var result = new H3Index[count];
+        int next = 0;
+        for (int i = 0; i < buffer.Length; i++)
+        {
+            if (buffer[i] != 0)
+            {
+                result[next++] = new H3Index(buffer[i]);
+            }
+        }
+
+        return result;
+    }
+
+    /// <summary>
+    /// Compacts a set of cells into <paramref name="destination"/>, packing non-null
+    /// cells to the front. Inverse of <see cref="UncompactCellsInto"/>.
+    /// </summary>
+    /// <param name="cells">The cells to compact. All must be the same resolution and duplicate-free.</param>
+    /// <param name="destination">The destination span. Its length must be at least <paramref name="cells"/>.Length (compaction never grows the set).</param>
+    /// <returns>The number of cells written to the front of <paramref name="destination"/>.</returns>
+    /// <exception cref="ArgumentOutOfRangeException"><paramref name="destination"/> is too small.</exception>
+    /// <exception cref="H3Exception">The input contains mixed resolutions or duplicates, or the native operation failed.</exception>
+    public static unsafe int CompactCellsInto(ReadOnlySpan<H3Index> cells, Span<H3Index> destination)
+    {
+        if (destination.Length < cells.Length)
+        {
+            throw new ArgumentOutOfRangeException(
+                nameof(destination),
+                destination.Length,
+                $"Destination span must hold at least {cells.Length} elements.");
+        }
+
+        if (cells.Length == 0)
+        {
+            return 0;
+        }
+
+        // The native compactCells writes its result strictly front-to-back and leaves the
+        // trailing slots untouched -- it does NOT H3_NULL-pad the unused tail. The array
+        // overload survives this only because `new ulong[]` is CLR zero-initialized; a
+        // caller-supplied span may carry stale data. Pre-clear the scanned window so the
+        // unwritten tail reads as H3_NULL(0) and the strip below counts only real cells.
+        destination[..cells.Length].Clear();
+
+        fixed (H3Index* inPtr = cells)
+        fixed (H3Index* outPtr = destination)
+        {
+            H3ErrorMarshaller.ThrowIfError(NativeMethods.CompactCells((ulong*)inPtr, (ulong*)outPtr, cells.Length));
+        }
+
+        // Compact the H3_NULL (0) padding holes in place. The native body fills the
+        // output front-to-back, so the write index never outruns the read index.
+        int count = 0;
+        for (int i = 0; i < cells.Length; i++)
+        {
+            if (destination[i].Value != 0)
+            {
+                destination[count++] = destination[i];
+            }
+        }
+
+        return count;
+    }
+
+    /// <summary>
+    /// Uncompacts a mixed-resolution set of cells to the equivalent set at the given
+    /// uniform resolution. Inverse of <see cref="CompactCells"/>.
+    /// </summary>
+    /// <param name="cells">The compacted, mixed-resolution cells.</param>
+    /// <param name="res">The target uniform resolution (0-15); must be greater than or equal to the finest resolution present in <paramref name="cells"/>.</param>
+    /// <returns>The uncompacted set of cells, all at <paramref name="res"/>. Order is not guaranteed.</returns>
+    /// <exception cref="ArgumentOutOfRangeException"><paramref name="res"/> implies a result so large that it would exceed <see cref="Array.MaxLength"/>.</exception>
+    /// <exception cref="H3DomainException"><paramref name="res"/> is outside the range 0-15.</exception>
+    /// <exception cref="H3Exception"><paramref name="res"/> is finer than the input requires, or the native operation failed.</exception>
+    public static unsafe H3Index[] UncompactCells(ReadOnlySpan<H3Index> cells, int res)
+    {
+        if (cells.Length == 0)
+        {
+            return [];
+        }
+
+        long maxOut = UncompactCellsSize(cells, res);
+        if (maxOut <= 0)
+        {
+            return [];
+        }
+
+        if (maxOut > Array.MaxLength)
+        {
+            throw new ArgumentOutOfRangeException(
+                nameof(res),
+                res,
+                $"res={res} would require {maxOut} cells, exceeding the maximum array length.");
+        }
+
+        var buffer = new ulong[maxOut];
+        fixed (H3Index* inPtr = cells)
+        fixed (ulong* outPtr = buffer)
+        {
+            H3ErrorMarshaller.ThrowIfError(NativeMethods.UncompactCells((ulong*)inPtr, cells.Length, outPtr, maxOut, res));
+        }
+
+        int count = 0;
+        for (long i = 0; i < maxOut; i++)
+        {
+            if (buffer[i] != 0)
+            {
+                count++;
+            }
+        }
+
+        var result = new H3Index[count];
+        int next = 0;
+        for (long i = 0; i < maxOut; i++)
+        {
+            if (buffer[i] != 0)
+            {
+                result[next++] = new H3Index(buffer[i]);
+            }
+        }
+
+        return result;
+    }
+
+    /// <summary>
+    /// Uncompacts a mixed-resolution set of cells into <paramref name="destination"/>
+    /// at the given uniform resolution, packing non-null cells to the front. Inverse
+    /// of <see cref="CompactCellsInto"/>.
+    /// </summary>
+    /// <param name="cells">The compacted, mixed-resolution cells.</param>
+    /// <param name="res">The target uniform resolution (0-15); must be greater than or equal to the finest resolution present in <paramref name="cells"/>.</param>
+    /// <param name="destination">
+    /// The destination span. Its length must be at least the uncompacted size for
+    /// <paramref name="res"/> (see the upstream <c>uncompactCellsSize</c>).
+    /// </param>
+    /// <returns>The number of cells written to the front of <paramref name="destination"/>.</returns>
+    /// <exception cref="ArgumentOutOfRangeException"><paramref name="res"/> implies a result that would exceed <see cref="Array.MaxLength"/>, or <paramref name="destination"/> is too small.</exception>
+    /// <exception cref="H3DomainException"><paramref name="res"/> is outside the range 0-15.</exception>
+    /// <exception cref="H3Exception"><paramref name="res"/> is finer than the input requires, or the native operation failed.</exception>
+    public static unsafe int UncompactCellsInto(ReadOnlySpan<H3Index> cells, int res, Span<H3Index> destination)
+    {
+        if (cells.Length == 0)
+        {
+            return 0;
+        }
+
+        long maxOut = UncompactCellsSize(cells, res);
+
+        if (maxOut > Array.MaxLength)
+        {
+            throw new ArgumentOutOfRangeException(
+                nameof(res),
+                res,
+                $"res={res} would require {maxOut} cells, exceeding the maximum array length.");
+        }
+
+        if (destination.Length < maxOut)
+        {
+            throw new ArgumentOutOfRangeException(
+                nameof(destination),
+                destination.Length,
+                $"Destination span must hold at least {maxOut} elements for res={res}.");
+        }
+
+        if (maxOut <= 0)
+        {
+            return 0;
+        }
+
+        fixed (H3Index* inPtr = cells)
+        fixed (H3Index* outPtr = destination)
+        {
+            H3ErrorMarshaller.ThrowIfError(NativeMethods.UncompactCells((ulong*)inPtr, cells.Length, (ulong*)outPtr, maxOut, res));
+        }
+
+        // Compact the H3_NULL (0) padding holes in place. The native body fills the
+        // output front-to-back, so the write index never outruns the read index.
+        int count = 0;
+        for (long i = 0; i < maxOut; i++)
+        {
+            if (destination[(int)i].Value != 0)
+            {
+                destination[count++] = destination[(int)i];
+            }
+        }
+
+        return count;
+    }
+
+    #endregion Hierarchy
+
     // Sentinel written by getIcosahedronFaces into unused slots; 0 is a valid face,
     // so the compaction passes strip -1, not H3_NULL.
     private const int InvalidFace = -1;
@@ -511,6 +903,21 @@ public readonly partial record struct H3Index(ulong Value)
     {
         H3ErrorMarshaller.ThrowIfError(NativeMethods.MaxFaceCount(Value, out int count));
         return count;
+    }
+
+    internal long CellToChildrenSize(int childRes)
+    {
+        H3ErrorMarshaller.ThrowIfError(NativeMethods.CellToChildrenSize(Value, childRes, out long size));
+        return size;
+    }
+
+    internal static unsafe long UncompactCellsSize(ReadOnlySpan<H3Index> cells, int res)
+    {
+        fixed (H3Index* p = cells)
+        {
+            H3ErrorMarshaller.ThrowIfError(NativeMethods.UncompactCellsSize((ulong*)p, cells.Length, res, out long size));
+            return size;
+        }
     }
 
     private void EnsureValidCell()

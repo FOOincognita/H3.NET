@@ -78,6 +78,32 @@ internal static class FixtureLoader
         [property: JsonPropertyName("cell")] string Cell,
         [property: JsonPropertyName("faces")] IReadOnlyList<int> Faces);
 
+    /// <summary>
+    /// One hierarchy.ndjson record: a sample cell plus its chosen parent, center child,
+    /// and full sorted children set. Covers hexagons and pentagons.
+    /// </summary>
+    public sealed record HierarchyCase(
+        [property: JsonPropertyName("cell")] string Cell,
+        [property: JsonPropertyName("res")] int Res,
+        [property: JsonPropertyName("parent_res")] int ParentRes,
+        [property: JsonPropertyName("parent")] string Parent,
+        [property: JsonPropertyName("center_child_res")] int CenterChildRes,
+        [property: JsonPropertyName("center_child")] string CenterChild,
+        [property: JsonPropertyName("children_res")] int ChildrenRes,
+        [property: JsonPropertyName("children")] IReadOnlyList<string> Children);
+
+    /// <summary>One child_pos.ndjson record: a child cell and its cellToChildPos at a coarser parent resolution.</summary>
+    public sealed record ChildPosCase(
+        [property: JsonPropertyName("child")] string Child,
+        [property: JsonPropertyName("parent_res")] int ParentRes,
+        [property: JsonPropertyName("pos")] long Pos);
+
+    /// <summary>One compact.ndjson record: a full child set at a resolution and its compacted form.</summary>
+    public sealed record CompactCase(
+        [property: JsonPropertyName("res")] int Res,
+        [property: JsonPropertyName("input")] IReadOnlyList<string> Input,
+        [property: JsonPropertyName("compacted")] IReadOnlyList<string> Compacted);
+
     // --- Loaders ---
 
     public static IEnumerable<LatLngToCellCase> LoadLatLngToCell() =>
@@ -100,6 +126,15 @@ internal static class FixtureLoader
 
     public static IEnumerable<IcosahedronFacesCase> LoadIcosahedronFaces() =>
         LoadNdjson<IcosahedronFacesCase>("icosahedron_faces.ndjson");
+
+    public static IEnumerable<HierarchyCase> LoadHierarchy() =>
+        LoadNdjson<HierarchyCase>("hierarchy.ndjson");
+
+    public static IEnumerable<ChildPosCase> LoadChildPos() =>
+        LoadNdjson<ChildPosCase>("child_pos.ndjson");
+
+    public static IEnumerable<CompactCase> LoadCompact() =>
+        LoadNdjson<CompactCase>("compact.ndjson");
 
     /// <summary>Reads res0_cells.csv: one 16-hex cell per line.</summary>
     public static IReadOnlyList<string> LoadRes0Cells()

@@ -1,0 +1,7 @@
+{"compacted": ["08001fffffffffff"], "input": ["081003ffffffffff", "081007ffffffffff", "08100bffffffffff", "08100fffffffffff", "081013ffffffffff", "081017ffffffffff", "08101bffffffffff"], "res": 1}
+{"compacted": ["08003fffffffffff"], "input": ["081023ffffffffff", "081027ffffffffff", "08102bffffffffff", "08102fffffffffff", "081033ffffffffff", "081037ffffffffff", "08103bffffffffff"], "res": 1}
+{"compacted": ["08005fffffffffff"], "input": ["081043ffffffffff", "081047ffffffffff", "08104bffffffffff", "08104fffffffffff", "081053ffffffffff", "081057ffffffffff", "08105bffffffffff"], "res": 1}
+{"compacted": ["08007fffffffffff"], "input": ["081063ffffffffff", "081067ffffffffff", "08106bffffffffff", "08106fffffffffff", "081073ffffffffff", "081077ffffffffff", "08107bffffffffff"], "res": 1}
+{"compacted": ["08009fffffffffff"], "input": ["081083ffffffffff", "08108bffffffffff", "08108fffffffffff", "081093ffffffffff", "081097ffffffffff", "08109bffffffffff"], "res": 1}
+{"compacted": ["08428309ffffffff"], "input": ["085283083fffffff", "085283087fffffff", "08528308bfffffff", "08528308ffffffff", "085283093fffffff", "085283097fffffff", "08528309bfffffff"], "res": 5}
+{"compacted": ["084be0e3ffffffff"], "input": ["085be0e23fffffff", "085be0e27fffffff", "085be0e2bfffffff", "085be0e2ffffffff", "085be0e33fffffff", "085be0e37fffffff", "085be0e3bfffffff"], "res": 5}
