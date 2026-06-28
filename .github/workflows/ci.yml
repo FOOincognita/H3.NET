@@ -1,0 +1,338 @@
+name: CI
+
+# Pull-request validation and main-branch push gate for H3NET.Native.
+# Builds the three native RIDs, lints, runs the managed test matrix (incl. musl),
+# packs + verifies the multi-RID nupkg, smoke-tests the PackageReference consumer
+# path, runs the valgrind/managed memory gate, and warns (never gates) on benchmarks.
+
+on:
+  pull_request:
+  push:
+    branches: [main]
+
+# Top-level least privilege; individual jobs elevate only as needed (none do here).
+permissions:
+  contents: read
+
+concurrency:
+  group: ci-${{ github.workflow }}-${{ github.ref }}
+  cancel-in-progress: true
+
+jobs:
+  # Build libh3 for each shipped RID. build-native.sh does NOT cross-compile, so the
+  # macOS leg runs on an arm64 host (macos-latest) matching osx-arm64; the two linux
+  # RIDs are produced via their Dockerfiles (manylinux for glibc baseline, alpine for musl).
+  native-build:
+    name: native-build (${{ matrix.rid }})
+    runs-on: ${{ matrix.os }}
+    strategy:
+      fail-fast: false
+      matrix:
+        include:
+          - rid: linux-x64
+            os: ubuntu-latest
+            dockerfile: build/docker/Dockerfile.manylinux
+          - rid: linux-musl-x64
+            os: ubuntu-latest
+            dockerfile: build/docker/Dockerfile.alpine
+          - rid: osx-arm64
+            os: macos-latest
+    steps:
+      - name: Checkout (with submodules)
+        uses: actions/checkout@34e114876b0b11c390a56381ad16ebd13914f8d5 # v4
+        with:
+          submodules: recursive
+
+      # Linux legs: build inside the pinned base image and export the scratch stage's
+      # libh3.so via BuildKit --output. The export stage is FROM scratch (no command),
+      # so `docker create` cannot be used on it; --output writes the file to the host.
+      - name: Build native via Docker
+        if: matrix.dockerfile != ''
+        run: |
+          mkdir -p "runtimes/${{ matrix.rid }}/native"
+          DOCKER_BUILDKIT=1 docker build -f "${{ matrix.dockerfile }}" --target export \
+            --output "type=local,dest=runtimes/${{ matrix.rid }}/native" .
+
+      # macOS legs: cmake is preinstalled on the runners; the script builds the host RID.
+      - name: Build native via build-native.sh
+        if: matrix.dockerfile == ''
+        run: bash build/build-native.sh "${{ matrix.rid }}"
+
+      - name: Upload native artifact
+        uses: actions/upload-artifact@ea165f8d65b6e75b540449e92b4886f43607fa02 # v4
+        with:
+          name: native-${{ matrix.rid }}
+          path: runtimes/${{ matrix.rid }}/native/libh3.*
+          retention-days: 1
+          if-no-files-found: error
+
+  # Format/analyzer gate. TreatWarningsAsErrors is repo-wide, so dotnet format must
+  # report no changes. No native lib needed for a format verification.
+  lint:
+    name: lint
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout
+        uses: actions/checkout@34e114876b0b11c390a56381ad16ebd13914f8d5 # v4
+
+      - name: Setup .NET 8 + 10
+        uses: actions/setup-dotnet@67a3573c9a986a3f9c594539f4ab511d57bb3ce9 # v4
+        with:
+          dotnet-version: |
+            8.0.x
+            10.0.301
+
+      - name: Restore (locked)
+        run: dotnet restore H3.NET.slnx --locked-mode
+
+      - name: Verify formatting
+        run: dotnet format H3.NET.slnx --verify-no-changes
+
+  # Managed test matrix across the three host RIDs plus a musl/alpine container leg.
+  # Each leg downloads the matching native artifact so the eng/ copy target can place
+  # libh3 next to the test binaries (ProjectReference path does not auto-propagate it).
+  managed-test:
+    name: managed-test (${{ matrix.label }})
+    needs: native-build
+    runs-on: ${{ matrix.os }}
+    strategy:
+      fail-fast: false
+      matrix:
+        include:
+          - label: linux-x64
+            os: ubuntu-latest
+            rid: linux-x64
+          - label: osx-arm64
+            os: macos-latest
+            rid: osx-arm64
+    steps:
+      - name: Checkout
+        uses: actions/checkout@34e114876b0b11c390a56381ad16ebd13914f8d5 # v4
+
+      # Install both SDKs; global.json selects 10.0.301 for builds while the 8.0
+      # runtime covers the net8.0 test leg.
+      - name: Setup .NET 8 + 10
+        uses: actions/setup-dotnet@67a3573c9a986a3f9c594539f4ab511d57bb3ce9 # v4
+        with:
+          dotnet-version: |
+            8.0.x
+            10.0.301
+
+      - name: Download native artifact
+        uses: actions/download-artifact@d3f86a106a0bac45b974a628896c90dbdf5c8093 # v4
+        with:
+          name: native-${{ matrix.rid }}
+          path: runtimes/${{ matrix.rid }}/native
+
+      - name: Restore (locked)
+        run: dotnet restore H3.NET.slnx --locked-mode
+
+      - name: Build
+        run: dotnet build H3.NET.slnx -c Release --no-restore
+
+      - name: Test (net10.0)
+        run: dotnet test H3.NET.slnx -c Release -f net10.0 --no-build
+
+      - name: Test (net8.0)
+        run: dotnet test H3.NET.slnx -c Release -f net8.0 --no-build
+
+      # coverage deferred to follow-up (MTP code-coverage extension) — see HANDOFF
+      # (coverlet.collector emits MTP0001 under Microsoft.Testing.Platform; collecting
+      # it correctly would require a package/csproj change, which is out of scope here).
+
+  # musl/alpine managed tests run via `docker run` (NOT a job `container:`) so the
+  # JS-based actions (checkout, download-artifact) execute on the glibc host; only the
+  # dotnet commands run inside the musl image, where a job container would otherwise
+  # fail because the runner-injected Node is glibc-linked and cannot exec on musl.
+  managed-test-musl:
+    name: managed-test (linux-musl-x64)
+    needs: native-build
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout
+        uses: actions/checkout@34e114876b0b11c390a56381ad16ebd13914f8d5 # v4
+
+      - name: Download native artifact
+        uses: actions/download-artifact@d3f86a106a0bac45b974a628896c90dbdf5c8093 # v4
+        with:
+          name: native-linux-musl-x64
+          path: runtimes/linux-musl-x64/native
+
+      # SDK 10 is in the alpine image; add the musl .NET 8 runtime (dotnet-install
+      # auto-detects musl) so the net8.0 leg runs. The eng/ target copies the
+      # linux-musl-x64 native next to the test bins via $(NETCoreSdkRuntimeIdentifier).
+      - name: Test in alpine (net10 + net8)
+        run: |
+          docker run --rm -v "$PWD":/work -w /work mcr.microsoft.com/dotnet/sdk:10.0-alpine sh -euxc '
+            apk add --no-cache bash curl icu-libs krb5-libs libgcc libintl libssl3 libstdc++ zlib
+            curl -sSL https://dot.net/v1/dotnet-install.sh -o /tmp/dotnet-install.sh
+            bash /tmp/dotnet-install.sh --channel 8.0 --runtime dotnet --install-dir /usr/share/dotnet
+            export DOTNET_ROOT=/usr/share/dotnet
+            dotnet restore H3.NET.slnx --locked-mode
+            dotnet build H3.NET.slnx -c Release --no-restore
+            dotnet test H3.NET.slnx -c Release -f net10.0 --no-build
+            dotnet test H3.NET.slnx -c Release -f net8.0 --no-build
+          '
+
+  # Pack the binding with all three native RIDs present, then assert each RID actually
+  # landed under runtimes/<rid>/native/ inside the produced .nupkg.
+  pack-and-restore:
+    name: pack-and-restore
+    needs: native-build
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout
+        uses: actions/checkout@34e114876b0b11c390a56381ad16ebd13914f8d5 # v4
+
+      - name: Download native linux-x64
+        uses: actions/download-artifact@d3f86a106a0bac45b974a628896c90dbdf5c8093 # v4
+        with:
+          name: native-linux-x64
+          path: runtimes/linux-x64/native
+
+      - name: Download native linux-musl-x64
+        uses: actions/download-artifact@d3f86a106a0bac45b974a628896c90dbdf5c8093 # v4
+        with:
+          name: native-linux-musl-x64
+          path: runtimes/linux-musl-x64/native
+
+      - name: Download native osx-arm64
+        uses: actions/download-artifact@d3f86a106a0bac45b974a628896c90dbdf5c8093 # v4
+        with:
+          name: native-osx-arm64
+          path: runtimes/osx-arm64/native
+
+      - name: Setup .NET 8 + 10
+        uses: actions/setup-dotnet@67a3573c9a986a3f9c594539f4ab511d57bb3ce9 # v4
+        with:
+          dotnet-version: |
+            8.0.x
+            10.0.301
+
+      - name: Restore (locked)
+        run: dotnet restore H3.NET.slnx --locked-mode
+
+      - name: Pack
+        run: dotnet pack src/H3NET.Native/H3NET.Native.csproj -c Release -o artifacts/feed
+
+      - name: Verify all three RIDs packed
+        run: |
+          for r in linux-x64 linux-musl-x64 osx-arm64; do
+            unzip -l artifacts/feed/*.nupkg | grep -q "runtimes/$r/native/libh3" || { echo "missing $r"; exit 1; }
+          done
+
+      - name: Upload nupkg feed
+        uses: actions/upload-artifact@ea165f8d65b6e75b540449e92b4886f43607fa02 # v4
+        with:
+          name: nupkg-feed
+          path: artifacts/feed
+          retention-days: 1
+          if-no-files-found: error
+
+  # Validate the true PackageReference native-propagation path (no eng/ help): restore
+  # the QuickStart sample from the local feed and assert the expected res-9 SF cell.
+  consumer-smoke:
+    name: consumer-smoke (${{ matrix.os }})
+    needs: pack-and-restore
+    runs-on: ${{ matrix.os }}
+    strategy:
+      fail-fast: false
+      matrix:
+        os: [ubuntu-latest, macos-latest]
+    steps:
+      - name: Checkout
+        uses: actions/checkout@34e114876b0b11c390a56381ad16ebd13914f8d5 # v4
+
+      - name: Download nupkg feed
+        uses: actions/download-artifact@d3f86a106a0bac45b974a628896c90dbdf5c8093 # v4
+        with:
+          name: nupkg-feed
+          path: artifacts/feed
+
+      - name: Setup .NET 10
+        uses: actions/setup-dotnet@67a3573c9a986a3f9c594539f4ab511d57bb3ce9 # v4
+        with:
+          dotnet-version: 10.0.301
+
+      # The sample's nuget.config (<clear/> + nuget.org + ../../artifacts/feed) and a
+      # floating *-* PackageReference pull the freshly packed binding from the feed.
+      - name: Run QuickStart sample
+        run: |
+          output=$(dotnet run --project samples/H3NET.Native.QuickStart -c Release)
+          echo "$output"
+          echo "$output" | grep -q "08928308280fffff" || { echo "expected cell 08928308280fffff not found in sample output"; exit 1; }
+
+  # Authoritative byte-level leak gate (valgrind over the pure-C harness) plus a
+  # managed soak that catches unbounded heap/RSS growth.
+  memory-linux:
+    name: memory-linux
+    needs: native-build
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout (with submodules)
+        uses: actions/checkout@34e114876b0b11c390a56381ad16ebd13914f8d5 # v4
+        with:
+          submodules: recursive
+
+      - name: Install valgrind
+        run: sudo apt-get update && sudo apt-get install -y valgrind
+
+      # ubuntu is a linux-x64 host, so this builds libh3 natively (no docker) and
+      # populates external/h3/build/lib/libh3.so that the C harness links against.
+      - name: Build native (linux-x64)
+        run: bash build/build-native.sh linux-x64
+
+      - name: Build C leak harness
+        run: |
+          cmake -B harness-build -S tests/H3NET.Native.MemoryTests/native-harness -DH3_BUILD_DIR="$PWD/external/h3/build"
+          cmake --build harness-build
+
+      - name: Run valgrind leak gate
+        run: valgrind --leak-check=full --show-leak-kinds=all --errors-for-leak-kinds=all --error-exitcode=1 ./harness-build/leakcheck 100
+
+      - name: Setup .NET 8 + 10
+        uses: actions/setup-dotnet@67a3573c9a986a3f9c594539f4ab511d57bb3ce9 # v4
+        with:
+          dotnet-version: |
+            8.0.x
+            10.0.301
+
+      - name: Restore (locked)
+        run: dotnet restore H3.NET.slnx --locked-mode
+
+      - name: Build
+        run: dotnet build H3.NET.slnx -c Release --no-restore
+
+      - name: Managed soak
+        env:
+          H3_SOAK_ITERS: "5000000"
+        run: dotnet test tests/H3NET.Native.MemoryTests/H3NET.Native.MemoryTests.csproj -c Release -f net10.0 --no-build --filter "Category=Soak"
+
+      # ASan/LSan LD_PRELOAD gate deferred — needs a CLR suppressions file (follow-up)
+
+  # Warn-only: prove the benchmarks project compiles and runs a tiny job. Never gates.
+  benchmarks:
+    name: benchmarks
+    needs: native-build
+    runs-on: ubuntu-latest
+    continue-on-error: true
+    steps:
+      - name: Checkout
+        uses: actions/checkout@34e114876b0b11c390a56381ad16ebd13914f8d5 # v4
+
+      - name: Download native linux-x64
+        uses: actions/download-artifact@d3f86a106a0bac45b974a628896c90dbdf5c8093 # v4
+        with:
+          name: native-linux-x64
+          path: runtimes/linux-x64/native
+
+      - name: Setup .NET 10
+        uses: actions/setup-dotnet@67a3573c9a986a3f9c594539f4ab511d57bb3ce9 # v4
+        with:
+          dotnet-version: 10.0.301
+
+      - name: Restore (locked)
+        run: dotnet restore H3.NET.slnx --locked-mode
+
+      - name: Build benchmarks
+        run: dotnet build tests/H3NET.Native.Benchmarks/H3NET.Native.Benchmarks.csproj -c Release --no-restore

@@ -34,3 +34,22 @@ updates:
         update-types:
           - "minor"
           - "patch"
+
+  # Native build base images: manylinux (Dockerfile.manylinux) and alpine
+  # (Dockerfile.alpine) under build/docker/. Keeps the glibc/musl toolchain
+  # bases current. Grouped so a single PR bundles minor/patch bumps.
+  - package-ecosystem: "docker"
+    directory: "/build/docker"
+    schedule:
+      interval: "weekly"
+      day: "monday"
+    open-pull-requests-limit: 5
+    labels:
+      - "dependencies"
+      - "docker"
+    groups:
+      docker:
+        applies-to: version-updates
+        update-types:
+          - "minor"
+          - "patch"

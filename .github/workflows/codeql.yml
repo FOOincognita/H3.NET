@@ -1,0 +1,68 @@
+# CodeQL static analysis for H3NET.Native (C# only).
+# Build-mode is "manual": we restore with the committed lock files and run an
+# explicit `dotnet build` so CodeQL traces the exact compilation the repo uses
+# (more reliable than autobuild for a multi-TFM, CPM + locked-mode project).
+# The native libh3 is NOT required to compile the managed binding.
+name: CodeQL
+
+on:
+  pull_request:
+    branches:
+      - main
+  push:
+    branches:
+      - main
+  schedule:
+    # Weekly, Mondays 07:13 UTC (off the hour to avoid scheduler contention).
+    - cron: "13 7 * * 1"
+
+# Least privilege at the top level; the analyze job elevates as needed.
+permissions:
+  contents: read
+
+concurrency:
+  group: codeql-${{ github.workflow }}-${{ github.ref }}
+  cancel-in-progress: true
+
+jobs:
+  analyze:
+    name: Analyze (csharp)
+    runs-on: ubuntu-latest
+    permissions:
+      security-events: write
+      contents: read
+      actions: read
+    strategy:
+      fail-fast: false
+      matrix:
+        language:
+          - csharp
+    steps:
+      - name: Checkout
+        uses: actions/checkout@34e114876b0b11c390a56381ad16ebd13914f8d5 # v4
+
+      - name: Initialize CodeQL
+        uses: github/codeql-action/init@dd903d2e4f5405488e5ef1422510ee31c8b32357 # v3
+        with:
+          languages: ${{ matrix.language }}
+          build-mode: manual
+
+      # global.json pins SDK 10.0.301 for the build; the .NET 8 runtime/SDK is
+      # installed so multi-targeted (net8.0) compilation resolves.
+      - name: Setup .NET
+        uses: actions/setup-dotnet@67a3573c9a986a3f9c594539f4ab511d57bb3ce9 # v4
+        with:
+          dotnet-version: |
+            8.0.x
+            10.0.301
+
+      - name: Restore (locked mode)
+        run: dotnet restore H3.NET.slnx --locked-mode
+
+      - name: Build
+        run: dotnet build H3.NET.slnx -c Release --no-restore
+
+      - name: Perform CodeQL Analysis
+        uses: github/codeql-action/analyze@dd903d2e4f5405488e5ef1422510ee31c8b32357 # v3
+        with:
+          category: "/language:${{ matrix.language }}"

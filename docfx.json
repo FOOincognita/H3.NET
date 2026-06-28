@@ -1,0 +1,69 @@
+{
+  "metadata": [
+    {
+      "src": [
+        {
+          "src": "src/H3NET.Native",
+          "files": [
+            "H3NET.Native.csproj"
+          ]
+        }
+      ],
+      "dest": "api",
+      "outputFormat": "mref",
+      "properties": {
+        "TargetFramework": "net10.0"
+      },
+      "namespaceLayout": "nested",
+      "memberLayout": "samePage",
+      "filter": "filterConfig.yml"
+    }
+  ],
+  "build": {
+    "content": [
+      {
+        "files": [
+          "api/**.yml",
+          "api/**/toc.yml"
+        ]
+      },
+      {
+        "files": [
+          "index.md",
+          "toc.yml"
+        ],
+        "src": "docs"
+      },
+      {
+        "files": [
+          "articles/**.md",
+          "articles/**/toc.yml"
+        ],
+        "src": "docs"
+      }
+    ],
+    "resource": [
+      {
+        "files": [
+          "articles/images/**"
+        ],
+        "src": "docs"
+      }
+    ],
+    "globalMetadata": {
+      "_appName": "H3NET.Native",
+      "_appTitle": "H3NET.Native",
+      "_enableSearch": true,
+      "_disableContribution": false,
+      "_gitContribute": {
+        "repo": "https://github.com/FOOincognita/H3.NET",
+        "branch": "main"
+      }
+    },
+    "dest": "_site",
+    "template": [
+      "default",
+      "modern"
+    ]
+  }
+}

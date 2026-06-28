@@ -1,0 +1,200 @@
+name: Release
+
+# Triggered ONLY by a v* tag push. Builds the three native RIDs, packs the multi-RID
+# nupkg, generates a CycloneDX SBOM, attests build provenance, publishes to nuget.org
+# via OIDC trusted publishing, and creates the GitHub release.
+#
+# Maintainer prerequisites (one-time, outside this repo):
+#   - nuget.org OIDC trusted-publisher policy:
+#       Owner=FOOincognita, Repo=H3.NET, Workflow=release.yml, Environment=release.
+#       The first publish must occur within 7 days of creating the policy.
+#   - Repo variable NUGET_USER set to the nuget.org account/user for the policy.
+#   - A GitHub environment named `release` (the publish job is bound to it).
+
+on:
+  push:
+    tags: ['v*']
+
+# Top-level least privilege; individual jobs elevate only the scopes they require.
+permissions:
+  contents: read
+
+concurrency:
+  group: release-${{ github.workflow }}-${{ github.ref }}
+  cancel-in-progress: false
+
+jobs:
+  # IDENTICAL to ci.yml's native-build, with fetch-depth: 0 so the full history/tags
+  # are present (MinVer computes the package version from the v* tag).
+  native-build:
+    name: native-build (${{ matrix.rid }})
+    runs-on: ${{ matrix.os }}
+    strategy:
+      fail-fast: false
+      matrix:
+        include:
+          - rid: linux-x64
+            os: ubuntu-latest
+            dockerfile: build/docker/Dockerfile.manylinux
+          - rid: linux-musl-x64
+            os: ubuntu-latest
+            dockerfile: build/docker/Dockerfile.alpine
+          - rid: osx-arm64
+            os: macos-latest
+    steps:
+      - name: Checkout (with submodules)
+        uses: actions/checkout@34e114876b0b11c390a56381ad16ebd13914f8d5 # v4
+        with:
+          submodules: recursive
+          fetch-depth: 0
+
+      # Linux legs: build inside the pinned base image and export the scratch stage's
+      # libh3.so via BuildKit --output. The export stage is FROM scratch (no command),
+      # so `docker create` cannot be used on it; --output writes the file to the host.
+      - name: Build native via Docker
+        if: matrix.dockerfile != ''
+        run: |
+          mkdir -p "runtimes/${{ matrix.rid }}/native"
+          DOCKER_BUILDKIT=1 docker build -f "${{ matrix.dockerfile }}" --target export \
+            --output "type=local,dest=runtimes/${{ matrix.rid }}/native" .
+
+      # macOS legs: cmake is preinstalled on the runners; the script builds the host RID.
+      - name: Build native via build-native.sh
+        if: matrix.dockerfile == ''
+        run: bash build/build-native.sh "${{ matrix.rid }}"
+
+      - name: Upload native artifact
+        uses: actions/upload-artifact@ea165f8d65b6e75b540449e92b4886f43607fa02 # v4
+        with:
+          name: native-${{ matrix.rid }}
+          path: runtimes/${{ matrix.rid }}/native/libh3.*
+          retention-days: 1
+          if-no-files-found: error
+
+  # Pack the versioned multi-RID nupkg, verify RID coverage, emit an SBOM, and attest
+  # build provenance over the produced package.
+  pack:
+    name: pack
+    needs: native-build
+    runs-on: ubuntu-latest
+    permissions:
+      id-token: write
+      attestations: write
+      contents: read
+    steps:
+      - name: Checkout (full history)
+        uses: actions/checkout@34e114876b0b11c390a56381ad16ebd13914f8d5 # v4
+        with:
+          submodules: recursive
+          fetch-depth: 0
+
+      - name: Download native linux-x64
+        uses: actions/download-artifact@d3f86a106a0bac45b974a628896c90dbdf5c8093 # v4
+        with:
+          name: native-linux-x64
+          path: runtimes/linux-x64/native
+
+      - name: Download native linux-musl-x64
+        uses: actions/download-artifact@d3f86a106a0bac45b974a628896c90dbdf5c8093 # v4
+        with:
+          name: native-linux-musl-x64
+          path: runtimes/linux-musl-x64/native
+
+      - name: Download native osx-arm64
+        uses: actions/download-artifact@d3f86a106a0bac45b974a628896c90dbdf5c8093 # v4
+        with:
+          name: native-osx-arm64
+          path: runtimes/osx-arm64/native
+
+      - name: Setup .NET 8 + 10
+        uses: actions/setup-dotnet@67a3573c9a986a3f9c594539f4ab511d57bb3ce9 # v4
+        with:
+          dotnet-version: |
+            8.0.x
+            10.0.301
+
+      - name: Restore (locked)
+        run: dotnet restore H3.NET.slnx --locked-mode
+
+      - name: Pack
+        run: dotnet pack src/H3NET.Native/H3NET.Native.csproj -c Release -o artifacts/feed
+
+      - name: Verify all three RIDs packed
+        run: |
+          for r in linux-x64 linux-musl-x64 osx-arm64; do
+            unzip -l artifacts/feed/*.nupkg | grep -q "runtimes/$r/native/libh3" || { echo "missing $r"; exit 1; }
+          done
+
+      # Tool install in CI is ephemeral and not a repo change.
+      - name: Generate CycloneDX SBOM
+        run: |
+          dotnet tool install --global CycloneDX
+          dotnet CycloneDX H3.NET.slnx -o artifacts/sbom
+
+      - name: Attest build provenance
+        uses: actions/attest-build-provenance@e8998f949152b193b063cb0ec769d69d929409be # v2
+        with:
+          subject-path: 'artifacts/feed/*.nupkg'
+
+      - name: Upload release artifacts
+        uses: actions/upload-artifact@ea165f8d65b6e75b540449e92b4886f43607fa02 # v4
+        with:
+          name: release-artifacts
+          path: |
+            artifacts/feed/*.nupkg
+            artifacts/feed/*.snupkg
+            artifacts/sbom/**
+          if-no-files-found: error
+
+  # Publish to nuget.org via OIDC trusted publishing in the protected `release`
+  # environment. NuGet/login exchanges the workflow OIDC token for an ephemeral
+  # (1-hour) API key; no long-lived secret is stored.
+  publish:
+    name: publish
+    needs: pack
+    runs-on: ubuntu-latest
+    environment: release
+    permissions:
+      id-token: write
+      contents: read
+    steps:
+      - name: Download release artifacts
+        uses: actions/download-artifact@d3f86a106a0bac45b974a628896c90dbdf5c8093 # v4
+        with:
+          name: release-artifacts
+          path: artifacts
+
+      - name: Setup .NET 10
+        uses: actions/setup-dotnet@67a3573c9a986a3f9c594539f4ab511d57bb3ce9 # v4
+        with:
+          dotnet-version: 10.0.301
+
+      - name: NuGet OIDC login
+        id: nuget-login
+        uses: NuGet/login@8d196754b4036150537f80ac539e15c2f1028841 # v1
+        with:
+          user: ${{ vars.NUGET_USER }}
+
+      - name: Push to nuget.org
+        run: dotnet nuget push "artifacts/**/*.nupkg" --api-key "${{ steps.nuget-login.outputs.NUGET_API_KEY }}" --source https://api.nuget.org/v3/index.json --skip-duplicate
+
+  # Create the GitHub release for the tag and attach the package + SBOM.
+  github-release:
+    name: github-release
+    needs: publish
+    runs-on: ubuntu-latest
+    permissions:
+      contents: write
+    steps:
+      - name: Download release artifacts
+        uses: actions/download-artifact@d3f86a106a0bac45b974a628896c90dbdf5c8093 # v4
+        with:
+          name: release-artifacts
+          path: artifacts
+
+      - name: Create GitHub release
+        env:
+          GH_TOKEN: ${{ github.token }}
+        run: |
+          assets=$(find artifacts -type f \( -name '*.nupkg' -o -name '*.snupkg' -o -path '*/sbom/*' \))
+          gh release create "${{ github.ref_name }}" --generate-notes $assets

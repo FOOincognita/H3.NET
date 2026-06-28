@@ -1,0 +1,55 @@
+# OpenSSF Scorecard supply-chain posture analysis.
+# Runs on pushes to main, weekly, and whenever a branch protection rule changes
+# (so the "Branch-Protection" check stays current). Results are published to the
+# OpenSSF API and uploaded to GitHub code scanning as SARIF.
+#
+# README badge (do NOT add it here; maintainer adds to README):
+#   [![OpenSSF Scorecard](https://api.scorecard.dev/projects/github.com/FOOincognita/H3.NET/badge)](https://scorecard.dev/viewer/?uri=github.com/FOOincognita/H3.NET)
+name: Scorecard
+
+on:
+  push:
+    branches:
+      - main
+  schedule:
+    # Weekly, Mondays 08:27 UTC.
+    - cron: "27 8 * * 1"
+  branch_protection_rule:
+
+# Least privilege at the top level; the analysis job elevates as needed.
+permissions:
+  contents: read
+
+concurrency:
+  group: scorecard-${{ github.workflow }}-${{ github.ref }}
+  cancel-in-progress: true
+
+jobs:
+  analysis:
+    name: Scorecard analysis
+    runs-on: ubuntu-latest
+    permissions:
+      # Needed to upload SARIF results to the code-scanning dashboard.
+      security-events: write
+      # Needed for OIDC to publish results to the OpenSSF API (publish_results).
+      id-token: write
+      contents: read
+    steps:
+      - name: Checkout
+        uses: actions/checkout@34e114876b0b11c390a56381ad16ebd13914f8d5 # v4
+        with:
+          persist-credentials: false
+
+      - name: Run analysis
+        uses: ossf/scorecard-action@4eaacf0543bb3f2c246792bd56e8cdeffafb205a # v2.4.3
+        with:
+          results_file: results.sarif
+          results_format: sarif
+          # Publish results to the OpenSSF REST API for the public badge/tracker.
+          publish_results: true
+
+      # Upload to GitHub code scanning so findings surface in the Security tab.
+      - name: Upload SARIF to code scanning
+        uses: github/codeql-action/upload-sarif@dd903d2e4f5405488e5ef1422510ee31c8b32357 # v3
+        with:
+          sarif_file: results.sarif
