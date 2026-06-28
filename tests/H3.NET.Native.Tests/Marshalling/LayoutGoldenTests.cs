@@ -76,6 +76,50 @@ public sealed class LayoutGoldenTests
         Assert.Equal(4, (int)Marshal.OffsetOf<NativeCoordIJ>(nameof(NativeCoordIJ.J)));
     }
 
+    [Theory]
+    // Including negatives and asymmetric I/J pins that the conversion never transposes,
+    // negates, or drops a sign bit while crossing the public<->interop boundary.
+    [InlineData(0, 0)]
+    [InlineData(1, 2)]
+    [InlineData(-3, 7)]
+    [InlineData(int.MinValue, int.MaxValue)]
+    public void CoordIJ_ToNative_PreservesComponents(int i, int j)
+    {
+        var managed = new CoordIJ(i, j);
+        var native = managed.ToNative();
+
+        Assert.Equal(i, native.I);
+        Assert.Equal(j, native.J);
+    }
+
+    [Theory]
+    [InlineData(0, 0)]
+    [InlineData(1, 2)]
+    [InlineData(-3, 7)]
+    [InlineData(int.MinValue, int.MaxValue)]
+    public void CoordIJ_FromNative_PreservesComponents(int i, int j)
+    {
+        var native = new NativeCoordIJ { I = i, J = j };
+        var managed = CoordIJ.FromNative(native);
+
+        Assert.Equal(i, managed.I);
+        Assert.Equal(j, managed.J);
+    }
+
+    [Theory]
+    [InlineData(0, 0)]
+    [InlineData(1, 2)]
+    [InlineData(-3, 7)]
+    [InlineData(int.MinValue, int.MaxValue)]
+    public void CoordIJ_NativeRoundTrip_IsIdentity(int i, int j)
+    {
+        // CoordIJ -> NativeCoordIJ -> CoordIJ must reproduce the original record exactly.
+        var original = new CoordIJ(i, j);
+        var roundTripped = CoordIJ.FromNative(original.ToNative());
+
+        Assert.Equal(original, roundTripped);
+    }
+
     [Fact]
     public void CellBoundaryVerts_InlineArray_HasContiguous16ByteStride()
     {

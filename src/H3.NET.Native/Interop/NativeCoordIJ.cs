@@ -4,7 +4,7 @@ using System.Runtime.InteropServices;
 
 namespace H3.NET.Native.Interop;
 
-/// <summary>IJ hexagon coordinates (C <c>CoordIJ</c>, 8 bytes). Included for ABI completeness; unused by the current slice.</summary>
+/// <summary>IJ hexagon coordinates (C <c>CoordIJ</c>, 8 bytes), used to marshal the local IJ APIs.</summary>
 [StructLayout(LayoutKind.Sequential)]
 internal struct NativeCoordIJ
 {

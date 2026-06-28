@@ -895,6 +895,419 @@ public readonly partial record struct H3Index(ulong Value)
 
     #endregion Hierarchy
 
+    #region Grid traversal
+
+    /// <summary>
+    /// Returns the cells forming the hollow grid ring at exactly grid distance
+    /// <paramref name="k"/> from this cell (the boundary of the k-ring, excluding the
+    /// interior). For <paramref name="k"/> = 0 the result is this cell itself.
+    /// </summary>
+    /// <param name="k">The grid distance (ring radius); must be non-negative.</param>
+    /// <returns>The cells on the ring, with null padding slots removed (pentagon distortion can leave holes). Order is not guaranteed.</returns>
+    /// <exception cref="ArgumentOutOfRangeException"><paramref name="k"/> is negative, or so large that the result would exceed <see cref="Array.MaxLength"/>.</exception>
+    /// <exception cref="H3InvalidCellException">This is not a valid H3 cell.</exception>
+    /// <exception cref="H3Exception">The native operation failed.</exception>
+    public unsafe H3Index[] GridRing(int k)
+    {
+        ArgumentOutOfRangeException.ThrowIfNegative(k);
+
+        long maxSize = MaxGridRingSize(k);
+        if (maxSize <= 0)
+        {
+            return [];
+        }
+
+        if (maxSize > Array.MaxLength)
+        {
+            throw new ArgumentOutOfRangeException(
+                nameof(k),
+                k,
+                $"k={k} would require {maxSize} cells, exceeding the maximum array length.");
+        }
+
+        var buffer = new ulong[maxSize];
+        fixed (ulong* ptr = buffer)
+        {
+            H3ErrorMarshaller.ThrowIfError(NativeMethods.GridRing(Value, k, ptr));
+        }
+
+        int count = 0;
+        for (long i = 0; i < maxSize; i++)
+        {
+            if (buffer[i] != 0)
+            {
+                count++;
+            }
+        }
+
+        var result = new H3Index[count];
+        int next = 0;
+        for (long i = 0; i < maxSize; i++)
+        {
+            if (buffer[i] != 0)
+            {
+                result[next++] = new H3Index(buffer[i]);
+            }
+        }
+
+        return result;
+    }
+
+    /// <summary>
+    /// Fills <paramref name="destination"/> with the cells forming the hollow grid ring
+    /// at exactly grid distance <paramref name="k"/> from this cell, packing non-null
+    /// cells to the front.
+    /// </summary>
+    /// <param name="k">The grid distance (ring radius); must be non-negative.</param>
+    /// <param name="destination">
+    /// The destination span. Its length must be at least the maximum grid-ring size for
+    /// <paramref name="k"/> (see the upstream <c>maxGridRingSize</c>).
+    /// </param>
+    /// <returns>The number of non-null cells written to the front of <paramref name="destination"/>.</returns>
+    /// <exception cref="ArgumentOutOfRangeException"><paramref name="k"/> is negative, so large that the result would exceed <see cref="Array.MaxLength"/>, or <paramref name="destination"/> is too small.</exception>
+    /// <exception cref="H3InvalidCellException">This is not a valid H3 cell.</exception>
+    /// <exception cref="H3Exception">The native operation failed.</exception>
+    public unsafe int GridRingInto(int k, Span<H3Index> destination)
+    {
+        ArgumentOutOfRangeException.ThrowIfNegative(k);
+
+        long maxSize = MaxGridRingSize(k);
+
+        if (maxSize > Array.MaxLength)
+        {
+            throw new ArgumentOutOfRangeException(
+                nameof(k),
+                k,
+                $"k={k} would require {maxSize} cells, exceeding the maximum array length.");
+        }
+
+        if (destination.Length < maxSize)
+        {
+            throw new ArgumentOutOfRangeException(
+                nameof(destination),
+                destination.Length,
+                $"Destination span must hold at least {maxSize} elements for k={k}.");
+        }
+
+        if (maxSize <= 0)
+        {
+            return 0;
+        }
+
+        // Native gridRing does NOT guarantee zero-padding the tail (pentagon holes), and a
+        // caller-supplied span may carry stale data, so pre-clear before the fill + strip.
+        destination[..(int)maxSize].Clear();
+
+        // Write directly into the caller's span: H3Index is blittable and layout-compatible
+        // with ulong, so the native fill needs no intermediate buffer.
+        fixed (H3Index* ptr = destination)
+        {
+            H3ErrorMarshaller.ThrowIfError(NativeMethods.GridRing(Value, k, (ulong*)ptr));
+        }
+
+        // Compact the H3_NULL (0) padding holes in place. The write index never
+        // outruns the read index, so no live entry is clobbered.
+        int count = 0;
+        for (long i = 0; i < maxSize; i++)
+        {
+            if (destination[(int)i].Value != 0)
+            {
+                destination[count++] = destination[(int)i];
+            }
+        }
+
+        return count;
+    }
+
+    /// <summary>
+    /// Returns the line of cells forming the minimal-length grid path from this cell
+    /// (inclusive) to <paramref name="destination"/> (inclusive).
+    /// </summary>
+    /// <param name="destination">The end cell of the path; must be the same resolution as this cell.</param>
+    /// <returns>
+    /// The ordered path of cells, where the first element is this cell and the last is
+    /// <paramref name="destination"/>. The path is not necessarily unique near pentagons.
+    /// </returns>
+    /// <exception cref="ArgumentOutOfRangeException">The path would exceed <see cref="Array.MaxLength"/>.</exception>
+    /// <exception cref="H3Exception">The endpoints are too far apart, are different resolutions, or the path crosses a pentagon or the antimeridian.</exception>
+    public unsafe H3Index[] GridPathCells(H3Index destination)
+    {
+        long size = GridPathCellsSize(this, destination);
+        if (size <= 0)
+        {
+            return [];
+        }
+
+        if (size > Array.MaxLength)
+        {
+            throw new ArgumentOutOfRangeException(
+                nameof(destination),
+                destination,
+                $"The path would require {size} cells, exceeding the maximum array length.");
+        }
+
+        var result = new H3Index[size];
+        // gridPathCellsSize returns the EXACT length, so the native fill writes every
+        // slot and no H3_NULL strip is required; copy straight through.
+        fixed (H3Index* ptr = result)
+        {
+            H3ErrorMarshaller.ThrowIfError(NativeMethods.GridPathCells(Value, destination.Value, (ulong*)ptr));
+        }
+
+        return result;
+    }
+
+    /// <summary>
+    /// Fills <paramref name="result"/> with the line of cells forming the minimal-length
+    /// grid path from this cell (inclusive) to <paramref name="destination"/> (inclusive).
+    /// </summary>
+    /// <param name="destination">The end cell of the path; must be the same resolution as this cell.</param>
+    /// <param name="result">
+    /// The destination span. Its length must be at least the exact path size (see the
+    /// upstream <c>gridPathCellsSize</c>); the first written element is this cell and the
+    /// last is <paramref name="destination"/>.
+    /// </param>
+    /// <returns>The number of cells written to the front of <paramref name="result"/> (the exact path length).</returns>
+    /// <exception cref="ArgumentOutOfRangeException">The path would exceed <see cref="Array.MaxLength"/>, or <paramref name="result"/> is too small.</exception>
+    /// <exception cref="H3Exception">The endpoints are too far apart, are different resolutions, or the path crosses a pentagon or the antimeridian.</exception>
+    public unsafe int GridPathCellsInto(H3Index destination, Span<H3Index> result)
+    {
+        long size = GridPathCellsSize(this, destination);
+
+        if (size > Array.MaxLength)
+        {
+            throw new ArgumentOutOfRangeException(
+                nameof(destination),
+                destination,
+                $"The path would require {size} cells, exceeding the maximum array length.");
+        }
+
+        if (result.Length < size)
+        {
+            throw new ArgumentOutOfRangeException(
+                nameof(result),
+                result.Length,
+                $"Result span must hold at least {size} elements for this path.");
+        }
+
+        if (size <= 0)
+        {
+            return 0;
+        }
+
+        // Exact size: the native fill writes every slot front-to-back, so this is a
+        // straight copy with no H3_NULL strip and no pre-clear required.
+        fixed (H3Index* ptr = result)
+        {
+            H3ErrorMarshaller.ThrowIfError(NativeMethods.GridPathCells(Value, destination.Value, (ulong*)ptr));
+        }
+
+        return (int)size;
+    }
+
+    /// <summary>
+    /// Returns the grid distance (number of steps along the H3 grid) between this cell
+    /// and <paramref name="other"/>. The metric is symmetric and reflexive (a cell's
+    /// distance to itself is 0).
+    /// </summary>
+    /// <param name="other">The other cell; must be the same resolution as this cell.</param>
+    /// <returns>The grid distance between the two cells.</returns>
+    /// <exception cref="H3InvalidCellException">Either cell is not a valid H3 cell.</exception>
+    /// <exception cref="H3Exception">The cells are different resolutions, are too far apart, or pentagon distortion prevents a finite distance.</exception>
+    public long GridDistance(H3Index other)
+    {
+        H3ErrorMarshaller.ThrowIfError(NativeMethods.GridDistance(Value, other.Value, out long distance));
+        return distance;
+    }
+
+    /// <summary>
+    /// Returns the local IJ coordinates of <paramref name="target"/> relative to this
+    /// cell as the anchoring origin.
+    /// </summary>
+    /// <param name="target">The cell to locate relative to this origin.</param>
+    /// <returns>The local IJ coordinates of <paramref name="target"/>.</returns>
+    /// <remarks>
+    /// Local IJ coordinates are only meaningful relative to this origin and are not
+    /// guaranteed to be defined across pentagons or the antimeridian.
+    /// </remarks>
+    /// <exception cref="H3InvalidCellException">Either cell is not a valid H3 cell.</exception>
+    /// <exception cref="H3Exception">The cells are different resolutions, <paramref name="target"/> is too far from the origin, or pentagon distortion prevents a local coordinate.</exception>
+    public CoordIJ CellToLocalIJ(H3Index target)
+    {
+        // mode is reserved (only 0 is defined), so it is hidden and always passed as 0.
+        H3ErrorMarshaller.ThrowIfError(NativeMethods.CellToLocalIj(Value, target.Value, 0u, out NativeCoordIJ native));
+        return CoordIJ.FromNative(native);
+    }
+
+    /// <summary>
+    /// Returns the cell at the given local IJ coordinates relative to this cell as the
+    /// anchoring origin. Inverse of <see cref="CellToLocalIJ"/>.
+    /// </summary>
+    /// <param name="ij">The local IJ coordinates relative to this origin.</param>
+    /// <returns>The cell at <paramref name="ij"/> relative to this origin.</returns>
+    /// <remarks>
+    /// This is the inverse of <see cref="CellToLocalIJ"/>, but the round trip is not
+    /// guaranteed invertible near pentagons or the antimeridian.
+    /// </remarks>
+    /// <exception cref="H3InvalidCellException">This origin is not a valid H3 cell.</exception>
+    /// <exception cref="H3Exception">The IJ coordinates do not resolve to a cell near this origin.</exception>
+    public H3Index LocalIJToCell(CoordIJ ij)
+    {
+        // mode is reserved (only 0 is defined), so it is hidden and always passed as 0.
+        var native = ij.ToNative();
+        H3ErrorMarshaller.ThrowIfError(NativeMethods.LocalIjToCell(Value, in native, 0u, out ulong cell));
+        return new H3Index(cell);
+    }
+
+    /// <summary>
+    /// Returns all cells within grid distance <paramref name="k"/> of this cell paired
+    /// with their grid distance from this cell, as two parallel arrays where index
+    /// <c>i</c> in <c>Cells</c> corresponds to index <c>i</c> in <c>Distances</c>.
+    /// </summary>
+    /// <param name="k">The grid distance (number of rings); must be non-negative.</param>
+    /// <returns>
+    /// A tuple of parallel arrays: the cells in the k-ring (this cell at distance 0) and
+    /// each cell's grid distance in <c>[0, k]</c>, with null padding slots removed. Order
+    /// is not guaranteed.
+    /// </returns>
+    /// <exception cref="ArgumentOutOfRangeException"><paramref name="k"/> is negative, or so large that the result would exceed <see cref="Array.MaxLength"/>.</exception>
+    /// <exception cref="H3Exception">The native operation failed.</exception>
+    public unsafe (H3Index[] Cells, int[] Distances) GridDiskDistances(int k)
+    {
+        ArgumentOutOfRangeException.ThrowIfNegative(k);
+
+        H3ErrorMarshaller.ThrowIfError(NativeMethods.MaxGridDiskSize(k, out long maxSize));
+        if (maxSize <= 0)
+        {
+            return ([], []);
+        }
+
+        if (maxSize > Array.MaxLength)
+        {
+            throw new ArgumentOutOfRangeException(
+                nameof(k),
+                k,
+                $"k={k} would require {maxSize} cells, exceeding the maximum array length.");
+        }
+
+        var cellBuffer = new ulong[maxSize];
+        var distanceBuffer = new int[maxSize];
+        fixed (ulong* cellPtr = cellBuffer)
+        fixed (int* distancePtr = distanceBuffer)
+        {
+            H3ErrorMarshaller.ThrowIfError(NativeMethods.GridDiskDistances(Value, k, cellPtr, distancePtr));
+        }
+
+        // The cells buffer is the sentinel channel: distances carries no sentinel (a real
+        // distance can be 0 at the origin), so a slot is live iff its cell is non-null.
+        int count = 0;
+        for (long i = 0; i < maxSize; i++)
+        {
+            if (cellBuffer[i] != 0)
+            {
+                count++;
+            }
+        }
+
+        var cells = new H3Index[count];
+        var distances = new int[count];
+        int next = 0;
+        for (long i = 0; i < maxSize; i++)
+        {
+            if (cellBuffer[i] != 0)
+            {
+                cells[next] = new H3Index(cellBuffer[i]);
+                distances[next] = distanceBuffer[i];
+                next++;
+            }
+        }
+
+        return (cells, distances);
+    }
+
+    /// <summary>
+    /// Fills <paramref name="cells"/> and <paramref name="distances"/> with the cells
+    /// within grid distance <paramref name="k"/> of this cell and their grid distances,
+    /// packing the non-null entries in lockstep to the front of both spans.
+    /// </summary>
+    /// <param name="k">The grid distance (number of rings); must be non-negative.</param>
+    /// <param name="cells">
+    /// The destination span for the cells. Its length must be at least the maximum
+    /// grid-disk size for <paramref name="k"/> (see the upstream <c>maxGridDiskSize</c>).
+    /// </param>
+    /// <param name="distances">
+    /// The destination span for the per-cell grid distances; index <c>i</c> here
+    /// corresponds to index <c>i</c> in <paramref name="cells"/>. Its length must be at
+    /// least the same maximum grid-disk size.
+    /// </param>
+    /// <returns>The number of non-null entries written to the front of both spans.</returns>
+    /// <exception cref="ArgumentOutOfRangeException"><paramref name="k"/> is negative, so large that the result would exceed <see cref="Array.MaxLength"/>, or either span is too small.</exception>
+    /// <exception cref="H3Exception">The native operation failed.</exception>
+    public unsafe int GridDiskDistancesInto(int k, Span<H3Index> cells, Span<int> distances)
+    {
+        ArgumentOutOfRangeException.ThrowIfNegative(k);
+
+        H3ErrorMarshaller.ThrowIfError(NativeMethods.MaxGridDiskSize(k, out long maxSize));
+
+        if (maxSize > Array.MaxLength)
+        {
+            throw new ArgumentOutOfRangeException(
+                nameof(k),
+                k,
+                $"k={k} would require {maxSize} cells, exceeding the maximum array length.");
+        }
+
+        if (cells.Length < maxSize)
+        {
+            throw new ArgumentOutOfRangeException(
+                nameof(cells),
+                cells.Length,
+                $"Cells span must hold at least {maxSize} elements for k={k}.");
+        }
+
+        if (distances.Length < maxSize)
+        {
+            throw new ArgumentOutOfRangeException(
+                nameof(distances),
+                distances.Length,
+                $"Distances span must hold at least {maxSize} elements for k={k}.");
+        }
+
+        if (maxSize <= 0)
+        {
+            return 0;
+        }
+
+        // The cells buffer is the H3_NULL sentinel channel. Native gridDiskDistances does
+        // not guarantee zero-padding the tail and a caller span may carry stale data, so
+        // pre-clear the cells window before the fill so empty slots read as H3_NULL(0).
+        cells[..(int)maxSize].Clear();
+
+        // H3Index is blittable/layout-compatible with ulong: native fills directly.
+        fixed (H3Index* cellPtr = cells)
+        fixed (int* distancePtr = distances)
+        {
+            H3ErrorMarshaller.ThrowIfError(NativeMethods.GridDiskDistances(Value, k, (ulong*)cellPtr, distancePtr));
+        }
+
+        // Compact both spans in lockstep using the cells buffer as the sentinel channel.
+        // The write index never outruns the read index, so no live entry is clobbered.
+        int count = 0;
+        for (long i = 0; i < maxSize; i++)
+        {
+            if (cells[(int)i].Value != 0)
+            {
+                cells[count] = cells[(int)i];
+                distances[count] = distances[(int)i];
+                count++;
+            }
+        }
+
+        return count;
+    }
+
+    #endregion Grid traversal
+
     // Sentinel written by getIcosahedronFaces into unused slots; 0 is a valid face,
     // so the compaction passes strip -1, not H3_NULL.
     private const int InvalidFace = -1;
@@ -918,6 +1331,18 @@ public readonly partial record struct H3Index(ulong Value)
             H3ErrorMarshaller.ThrowIfError(NativeMethods.UncompactCellsSize((ulong*)p, cells.Length, res, out long size));
             return size;
         }
+    }
+
+    internal static long MaxGridRingSize(int k)
+    {
+        H3ErrorMarshaller.ThrowIfError(NativeMethods.MaxGridRingSize(k, out long size));
+        return size;
+    }
+
+    internal static long GridPathCellsSize(H3Index start, H3Index end)
+    {
+        H3ErrorMarshaller.ThrowIfError(NativeMethods.GridPathCellsSize(start.Value, end.Value, out long size));
+        return size;
     }
 
     private void EnsureValidCell()
