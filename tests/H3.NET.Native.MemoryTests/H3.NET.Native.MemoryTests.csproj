@@ -1,0 +1,50 @@
+<!-- SPDX-License-Identifier: Apache-2.0 -->
+<Project Sdk="Microsoft.NET.Sdk">
+
+  <PropertyGroup>
+    <TargetFrameworks>net10.0;net8.0</TargetFrameworks>
+    <IsPackable>false</IsPackable>
+    <IsTestProject>true</IsTestProject>
+    <AllowUnsafeBlocks>true</AllowUnsafeBlocks>
+
+    <!--
+      Non-shipping test project: do not require XML doc comments. The doc file stays
+      enabled (Directory.Build.props) because IDE0005 (remove unnecessary usings) only
+      runs on build when GenerateDocumentationFile=true; we instead suppress the
+      "missing XML comment" warning CS1591 for test code.
+    -->
+    <NoWarn>$(NoWarn);CS1591</NoWarn>
+  </PropertyGroup>
+
+  <!--
+    The native-harness/ subtree is a standalone pure-C valgrind program (leakcheck.c,
+    CMakeLists.txt). The .NET SDK does not compile .c, but it WOULD otherwise glob the
+    README/CMakeLists as None/Content. Exclude the whole subtree so nothing under it is
+    treated as a project item.
+  -->
+  <ItemGroup>
+    <Compile Remove="native-harness/**/*" />
+    <Content Remove="native-harness/**/*" />
+    <None Remove="native-harness/**/*" />
+    <EmbeddedResource Remove="native-harness/**/*" />
+  </ItemGroup>
+
+  <ItemGroup>
+    <ProjectReference Include="../../src/H3.NET.Native/H3.NET.Native.csproj" />
+  </ItemGroup>
+
+  <!-- CPM is on: PackageReferences MUST omit Version. -->
+  <ItemGroup>
+    <PackageReference Include="xunit.v3" />
+    <PackageReference Include="xunit.runner.visualstudio" />
+    <PackageReference Include="Microsoft.NET.Test.Sdk" />
+  </ItemGroup>
+
+  <!--
+    Copy the host-RID native libh3 next to this ProjectReference consumer's output so
+    the dynamic loader resolves it at test time (ProjectReference does not propagate
+    the packaged runtimes/ assets the way PackageReference does).
+  -->
+  <Import Project="../../eng/H3.NET.Native.targets" />
+
+</Project>

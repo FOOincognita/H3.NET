@@ -1,0 +1,68 @@
+<!-- SPDX-License-Identifier: Apache-2.0 -->
+<Project Sdk="Microsoft.NET.Sdk">
+
+  <PropertyGroup>
+    <TargetFrameworks>net10.0;net8.0</TargetFrameworks>
+    <AllowUnsafeBlocks>true</AllowUnsafeBlocks>
+  </PropertyGroup>
+
+  <!-- Expose internal interop types (e.g. CellBoundary) to the test assembly for the marshalling golden tests. -->
+  <ItemGroup>
+    <InternalsVisibleTo Include="H3.NET.Native.Tests" />
+  </ItemGroup>
+
+  <!--
+    Package metadata. Versioning, authorship, repository, license file packaging,
+    and analyzers/MinVer are supplied by the repo-root Directory.Build.props and
+    GlobalPackageReference; do not redefine those here.
+  -->
+  <PropertyGroup>
+    <PackageId>H3.NET.Native</PackageId>
+    <Description>Idiomatic P/Invoke binding over Uber H3 v4.5.0; bundles native libh3 for supported runtimes.</Description>
+    <PackageLicenseExpression>Apache-2.0</PackageLicenseExpression>
+    <PackageReadmeFile>README.md</PackageReadmeFile>
+    <PackageTags>h3;geospatial;hexagon;dggs;pinvoke;uber;spatial-index</PackageTags>
+    <IncludeBuildOutput>true</IncludeBuildOutput>
+  </PropertyGroup>
+
+  <!-- Pack the repository-root README into the package root. -->
+  <ItemGroup>
+    <None Include="../../README.md" Pack="true" PackagePath="/" Visible="false" />
+  </ItemGroup>
+
+  <!--
+    Native asset packaging. One entry per supported RID, each gated on Exists so a
+    local single-RID build still packs whatever is present. These land under
+    runtimes/{rid}/native/ in the nupkg, which the SDK resolves automatically for
+    PackageReference consumers (but not for ProjectReference consumers; see the
+    eng/ and build/ targets for that mitigation).
+  -->
+  <ItemGroup>
+    <None Include="../../runtimes/linux-x64/native/libh3.so"
+          Pack="true" PackagePath="runtimes/linux-x64/native/" Visible="false"
+          Condition="Exists('../../runtimes/linux-x64/native/libh3.so')" />
+    <None Include="../../runtimes/linux-musl-x64/native/libh3.so"
+          Pack="true" PackagePath="runtimes/linux-musl-x64/native/" Visible="false"
+          Condition="Exists('../../runtimes/linux-musl-x64/native/libh3.so')" />
+    <None Include="../../runtimes/osx-arm64/native/libh3.dylib"
+          Pack="true" PackagePath="runtimes/osx-arm64/native/" Visible="false"
+          Condition="Exists('../../runtimes/osx-arm64/native/libh3.dylib')" />
+  </ItemGroup>
+
+  <!--
+    Ship the consumer-side native-copy target. buildTransitive/ applies to both
+    direct and transitive PackageReference consumers, so framework-dependent
+    (RID-less) consumers get the host native lib copied next to their output.
+  -->
+  <ItemGroup>
+    <None Include="build/H3.NET.Native.targets"
+          Pack="true" PackagePath="buildTransitive/H3.NET.Native.targets" Visible="false" />
+  </ItemGroup>
+
+  <!--
+    Local-dev mitigation: copy the host-RID native lib into OutDir after Build so
+    ProjectReference consumers (tests, samples) can load it during local dev.
+  -->
+  <Import Project="../../eng/H3.NET.Native.targets" />
+
+</Project>

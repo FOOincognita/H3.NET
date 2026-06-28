@@ -12,7 +12,7 @@
 #   -Rid    One of: linux-x64, linux-musl-x64, osx-arm64
 #   -Clean  Remove the CMake build directory before configuring.
 #
-# NOTE: Windows (win-x64) is NOT a shipped RID for H3NET.Native. This script is
+# NOTE: Windows (win-x64) is NOT a shipped RID for H3.NET.Native. This script is
 # provided so Windows contributors can build the macOS/linux artifacts under an
 # appropriate toolchain (e.g. WSL) or validate the pipeline locally.
 

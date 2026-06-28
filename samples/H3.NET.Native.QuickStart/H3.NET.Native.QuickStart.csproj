@@ -1,0 +1,36 @@
+<!-- SPDX-License-Identifier: Apache-2.0 -->
+<Project Sdk="Microsoft.NET.Sdk">
+
+  <!--
+    EXTERNAL consumer sample. This project is intentionally NOT part of H3.NET.Native.slnx and
+    is restored/built on its own. It validates the TRUE PackageReference path: native
+    assets must propagate to a PackageReference consumer purely through the packed nupkg
+    (resolved from the local feed at ../../artifacts/feed via this directory's nuget.config),
+    with NO help from the repo's eng/ targets.
+  -->
+  <PropertyGroup>
+    <OutputType>Exe</OutputType>
+    <TargetFramework>net10.0</TargetFramework>
+    <Nullable>enable</Nullable>
+    <ImplicitUsings>enable</ImplicitUsings>
+    <IsPackable>false</IsPackable>
+
+    <!--
+      Opt OUT of the repo's Central Package Management so this behaves like a project
+      living outside the repo: the PackageReference below carries its own Version.
+    -->
+    <ManagePackageVersionsCentrally>false</ManagePackageVersionsCentrally>
+
+    <!-- Avoid lockfile churn when restoring against a moving local feed. -->
+    <RestorePackagesWithLockFile>false</RestorePackagesWithLockFile>
+  </PropertyGroup>
+
+  <!--
+    Floating prerelease version: pick up whatever H3.NET.Native happens to be in the
+    local feed (MinVer-stamped prereleases included). The PACKAGE delivers libh3.
+  -->
+  <ItemGroup>
+    <PackageReference Include="H3.NET.Native" Version="*-*" />
+  </ItemGroup>
+
+</Project>

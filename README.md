@@ -1,14 +1,14 @@
-# H3NET.Native
+# H3.NET.Native
 
-[![NuGet](https://img.shields.io/nuget/v/H3NET.Native.svg)](https://www.nuget.org/packages/H3NET.Native/)
+[![NuGet](https://img.shields.io/nuget/v/H3.NET.Native.svg)](https://www.nuget.org/packages/H3.NET.Native/)
 [![License: Apache 2.0](https://img.shields.io/badge/License-Apache_2.0-blue.svg)](LICENSE)
 <!-- CI build-status badge intentionally omitted until the CI workflow lands in a later PR. -->
 
-A thin, idiomatic P/Invoke binding over [Uber H3](https://h3geo.org) v4.5.0 for .NET 8 and .NET 10 (`net8.0` / `net10.0`). H3NET.Native exposes the H3 hexagonal hierarchical geospatial indexing system through a clean, managed .NET API. The native `libh3` is built from a pinned upstream source revision and bundled directly in the NuGet package, so consumers need no C compiler, CMake, or other native toolchain to use it.
+A thin, idiomatic P/Invoke binding over [Uber H3](https://h3geo.org) v4.5.0 for .NET 8 and .NET 10 (`net8.0` / `net10.0`). H3.NET.Native exposes the H3 hexagonal hierarchical geospatial indexing system through a clean, managed .NET API. The native `libh3` is built from a pinned upstream source revision and bundled directly in the NuGet package, so consumers need no C compiler, CMake, or other native toolchain to use it.
 
-## Package and repository naming
+## NuGet package id
 
-The repository is named **H3.NET**, but the published NuGet **PackageId is `H3NET.Native`**. The id `H3.NET` was already taken on nuget.org by an unrelated package, so the binding is distributed as `H3NET.Native`. Use `H3NET.Native` in all `dotnet add package` and `PackageReference` declarations.
+The published NuGet **PackageId is `H3.NET.Native`**. The shorter id `H3.NET` was already taken on nuget.org by an unrelated package, so the binding is distributed as `H3.NET.Native`. Use `H3.NET.Native` in all `dotnet add package` and `PackageReference` declarations.
 
 ## Status
 
@@ -17,10 +17,10 @@ Early preview / scaffold in progress. The repository currently contains the proj
 ## Installation
 
 ```sh
-dotnet add package H3NET.Native
+dotnet add package H3.NET.Native
 ```
 
-The bundled native assets are delivered through NuGet's `runtimes/{rid}/native/` convention. This means H3NET.Native must be consumed as a **`PackageReference`** (from nuget.org or another feed) so the native libraries propagate to your build and publish output. A bare **`ProjectReference`** to the source project does **not** carry the bundled native libraries, and your application will fail to load `libh3` at runtime.
+The bundled native assets are delivered through NuGet's `runtimes/{rid}/native/` convention. This means H3.NET.Native must be consumed as a **`PackageReference`** (from nuget.org or another feed) so the native libraries propagate to your build and publish output. A bare **`ProjectReference`** to the source project does **not** carry the bundled native libraries, and your application will fail to load `libh3` at runtime.
 
 ## Supported platforms
 
@@ -36,7 +36,7 @@ There is currently **no Windows support** and **no Native AOT requirement or sup
 The following snippet illustrates the **target** public API for the current vertical slice. All latitude and longitude values are in **degrees** (radians are internal only), matching `h3-py` and `h3-go`. Method names and shapes may change while the binding is in preview.
 
 ```csharp
-using H3NET.Native;
+using H3.NET.Native;
 
 var cell = H3Index.FromLatLng(new LatLng(37.7752, -122.4188), resolution: 9);
 Console.WriteLine(cell);                 // H3 index
@@ -68,7 +68,7 @@ Benchmarks are informational, never gate CI, and their shapes may change while t
 
 ## Links
 
-- API documentation: https://FOOincognita.github.io/H3.NET/ (available once docs publish)
+- API documentation: https://FOOincognita.github.io/H3.NET.Native/ (available once docs publish)
 - Uber H3: https://h3geo.org
 - [Contributing](CONTRIBUTING.md)
 - [Security policy](SECURITY.md)

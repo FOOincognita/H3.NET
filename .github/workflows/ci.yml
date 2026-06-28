@@ -1,6 +1,6 @@
 name: CI
 
-# Pull-request validation and main-branch push gate for H3NET.Native.
+# Pull-request validation and main-branch push gate for H3.NET.Native.
 # Builds the three native RIDs, lints, runs the managed test matrix (incl. musl),
 # packs + verifies the multi-RID nupkg, smoke-tests the PackageReference consumer
 # path, runs the valgrind/managed memory gate, and warns (never gates) on benchmarks.
@@ -83,10 +83,10 @@ jobs:
             10.0.301
 
       - name: Restore (locked)
-        run: dotnet restore H3.NET.slnx --locked-mode
+        run: dotnet restore H3.NET.Native.slnx --locked-mode
 
       - name: Verify formatting
-        run: dotnet format H3.NET.slnx --verify-no-changes
+        run: dotnet format H3.NET.Native.slnx --verify-no-changes
 
   # Managed test matrix across the three host RIDs plus a musl/alpine container leg.
   # Each leg downloads the matching native artifact so the eng/ copy target can place
@@ -125,16 +125,16 @@ jobs:
           path: runtimes/${{ matrix.rid }}/native
 
       - name: Restore (locked)
-        run: dotnet restore H3.NET.slnx --locked-mode
+        run: dotnet restore H3.NET.Native.slnx --locked-mode
 
       - name: Build
-        run: dotnet build H3.NET.slnx -c Release --no-restore
+        run: dotnet build H3.NET.Native.slnx -c Release --no-restore
 
       - name: Test (net10.0)
-        run: dotnet test H3.NET.slnx -c Release -f net10.0 --no-build
+        run: dotnet test H3.NET.Native.slnx -c Release -f net10.0 --no-build
 
       - name: Test (net8.0)
-        run: dotnet test H3.NET.slnx -c Release -f net8.0 --no-build
+        run: dotnet test H3.NET.Native.slnx -c Release -f net8.0 --no-build
 
       # coverage deferred to follow-up (MTP code-coverage extension)
       # (coverlet.collector emits MTP0001 under Microsoft.Testing.Platform; collecting
@@ -168,10 +168,10 @@ jobs:
             curl -sSL https://dot.net/v1/dotnet-install.sh -o /tmp/dotnet-install.sh
             bash /tmp/dotnet-install.sh --channel 8.0 --runtime dotnet --install-dir /usr/share/dotnet
             export DOTNET_ROOT=/usr/share/dotnet
-            dotnet restore H3.NET.slnx --locked-mode
-            dotnet build H3.NET.slnx -c Release --no-restore
-            dotnet test H3.NET.slnx -c Release -f net10.0 --no-build
-            dotnet test H3.NET.slnx -c Release -f net8.0 --no-build
+            dotnet restore H3.NET.Native.slnx --locked-mode
+            dotnet build H3.NET.Native.slnx -c Release --no-restore
+            dotnet test H3.NET.Native.slnx -c Release -f net10.0 --no-build
+            dotnet test H3.NET.Native.slnx -c Release -f net8.0 --no-build
           '
 
   # Pack the binding with all three native RIDs present, then assert each RID actually
@@ -210,10 +210,10 @@ jobs:
             10.0.301
 
       - name: Restore (locked)
-        run: dotnet restore H3.NET.slnx --locked-mode
+        run: dotnet restore H3.NET.Native.slnx --locked-mode
 
       - name: Pack
-        run: dotnet pack src/H3NET.Native/H3NET.Native.csproj -c Release -o artifacts/feed
+        run: dotnet pack src/H3.NET.Native/H3.NET.Native.csproj -c Release -o artifacts/feed
 
       - name: Verify all three RIDs packed
         run: |
@@ -258,7 +258,7 @@ jobs:
       # floating *-* PackageReference pull the freshly packed binding from the feed.
       - name: Run QuickStart sample
         run: |
-          output=$(dotnet run --project samples/H3NET.Native.QuickStart -c Release)
+          output=$(dotnet run --project samples/H3.NET.Native.QuickStart -c Release)
           echo "$output"
           echo "$output" | grep -q "08928308280fffff" || { echo "expected cell 08928308280fffff not found in sample output"; exit 1; }
 
@@ -284,7 +284,7 @@ jobs:
 
       - name: Build C leak harness
         run: |
-          cmake -B harness-build -S tests/H3NET.Native.MemoryTests/native-harness -DH3_BUILD_DIR="$PWD/external/h3/build"
+          cmake -B harness-build -S tests/H3.NET.Native.MemoryTests/native-harness -DH3_BUILD_DIR="$PWD/external/h3/build"
           cmake --build harness-build
 
       - name: Run valgrind leak gate
@@ -298,15 +298,15 @@ jobs:
             10.0.301
 
       - name: Restore (locked)
-        run: dotnet restore H3.NET.slnx --locked-mode
+        run: dotnet restore H3.NET.Native.slnx --locked-mode
 
       - name: Build
-        run: dotnet build H3.NET.slnx -c Release --no-restore
+        run: dotnet build H3.NET.Native.slnx -c Release --no-restore
 
       - name: Managed soak
         env:
           H3_SOAK_ITERS: "5000000"
-        run: dotnet test tests/H3NET.Native.MemoryTests/H3NET.Native.MemoryTests.csproj -c Release -f net10.0 --no-build --filter "Category=Soak"
+        run: dotnet test tests/H3.NET.Native.MemoryTests/H3.NET.Native.MemoryTests.csproj -c Release -f net10.0 --no-build --filter "Category=Soak"
 
       # ASan/LSan LD_PRELOAD gate deferred — needs a CLR suppressions file (follow-up)
 
@@ -332,7 +332,7 @@ jobs:
           dotnet-version: 10.0.301
 
       - name: Restore (locked)
-        run: dotnet restore H3.NET.slnx --locked-mode
+        run: dotnet restore H3.NET.Native.slnx --locked-mode
 
       - name: Build benchmarks
-        run: dotnet build tests/H3NET.Native.Benchmarks/H3NET.Native.Benchmarks.csproj -c Release --no-restore
+        run: dotnet build tests/H3.NET.Native.Benchmarks/H3.NET.Native.Benchmarks.csproj -c Release --no-restore

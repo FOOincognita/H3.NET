@@ -1,10 +1,10 @@
 # SPDX-License-Identifier: Apache-2.0
-"""Deterministic fixture generator for the H3NET.Native test corpus.
+"""Deterministic fixture generator for the H3.NET.Native test corpus.
 
 Emits ground-truth fixtures produced by h3-py v4 into the committed data
 directory consumed by the .NET interop conformance tests.
 
-All angular values at the public surface are DEGREES (matching the H3NET.Native
+All angular values at the public surface are DEGREES (matching the H3.NET.Native
 public API). H3 cell indexes are emitted as zero-padded 16-character lowercase
 hex strings ("%016x") so they round-trip exactly to a ulong on the .NET side.
 
@@ -42,7 +42,7 @@ _REPO_ROOT = os.path.abspath(os.path.join(_THIS_DIR, "..", ".."))
 DATA_DIR = os.path.join(
     _REPO_ROOT,
     "tests",
-    "H3NET.Native.Tests",
+    "H3.NET.Native.Tests",
     "Fixtures",
     "data",
 )
@@ -316,7 +316,7 @@ def main() -> None:
         "seed": SEED,
         "generated_counts": counts,
         "note": (
-            "Committed, curated ground-truth corpus for H3NET.Native interop "
+            "Committed, curated ground-truth corpus for H3.NET.Native interop "
             "conformance tests. Angular values are DEGREES; cells are "
             "zero-padded 16-hex strings (ulong). Doubles are full precision. "
             "Regenerate with tools/gen-fixtures/gen_fixtures.py. The nightly "

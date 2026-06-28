@@ -2,7 +2,7 @@
 
 ## Supported versions
 
-H3NET.Native is currently a pre-1.0 scaffold and has no released versions yet.
+H3.NET.Native is currently a pre-1.0 scaffold and has no released versions yet.
 Once releases are published, the **latest published version** is the supported
 version for security fixes. Pre-release and previously published versions are
 not guaranteed to receive backported fixes prior to 1.0.
@@ -17,7 +17,7 @@ not guaranteed to receive backported fixes prior to 1.0.
 Please report security vulnerabilities privately through **GitHub's private
 vulnerability reporting** rather than opening a public issue:
 
-1. Go to https://github.com/FOOincognita/H3.NET
+1. Go to https://github.com/FOOincognita/H3.NET.Native
 2. Open the **Security** tab.
 3. Select **Advisories > Report a vulnerability**.
 
@@ -37,7 +37,7 @@ advisory published.
 
 ## Native dependency surface
 
-H3NET.Native bundles a native library, `libh3`, built from Uber H3 (pinned to
+H3.NET.Native bundles a native library, `libh3`, built from Uber H3 (pinned to
 tag **v4.5.0**, https://github.com/uber/h3). Because of this, the security
 surface includes both the managed binding and the bundled native code.
 

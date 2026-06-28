@@ -9,17 +9,17 @@
 ## Add the package
 
 ```bash
-dotnet add package H3NET.Native
+dotnet add package H3.NET.Native
 ```
 
-The package id is `H3NET.Native`; the repository is `H3.NET`.
+The package id is `H3.NET.Native`; the repository is `H3.NET.Native`.
 
 ## First program
 
 All angular values are in **degrees**.
 
 ```csharp
-using H3NET.Native;
+using H3.NET.Native;
 
 // 1. Index a coordinate at a chosen resolution (0 = coarsest, 15 = finest).
 var sanFrancisco = new LatLng(LatitudeDegrees: 37.7752, LongitudeDegrees: -122.4188);
@@ -42,4 +42,4 @@ Operations that can fail surface H3 status codes as typed exceptions derived fro
 
 ## Next steps
 
-Browse the [API reference](../api/H3NET.Native.html) for the full set of types and members.
+Browse the [API reference](../api/H3.NET.Native.html) for the full set of types and members.

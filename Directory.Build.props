@@ -36,11 +36,11 @@
   <PropertyGroup>
     <Authors>FOOincognita</Authors>
     <Company>FOOincognita</Company>
-    <Product>H3NET.Native</Product>
+    <Product>H3.NET.Native</Product>
     <Copyright>Copyright 2026 FOOincognita</Copyright>
-    <RepositoryUrl>https://github.com/FOOincognita/H3.NET</RepositoryUrl>
+    <RepositoryUrl>https://github.com/FOOincognita/H3.NET.Native</RepositoryUrl>
     <RepositoryType>git</RepositoryType>
-    <PackageProjectUrl>https://github.com/FOOincognita/H3.NET</PackageProjectUrl>
+    <PackageProjectUrl>https://github.com/FOOincognita/H3.NET.Native</PackageProjectUrl>
   </PropertyGroup>
 
 </Project>

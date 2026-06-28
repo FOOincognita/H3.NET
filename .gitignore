@@ -1,4 +1,4 @@
-# H3NET.Native .gitignore
+# H3.NET.Native .gitignore
 # Keep committed: packages.lock.json, *.csproj, *.props, *.targets, global.json, nuget.config
 
 # --- Agent tooling ---
