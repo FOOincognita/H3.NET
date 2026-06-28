@@ -1308,6 +1308,130 @@ public readonly partial record struct H3Index(ulong Value)
 
     #endregion Grid traversal
 
+    #region Directed edges
+
+    /// <summary>
+    /// Returns a value indicating whether <paramref name="destination"/> is an adjacent
+    /// neighbor of this cell.
+    /// </summary>
+    /// <param name="destination">The candidate neighbor cell; must be the same resolution as this cell.</param>
+    /// <returns><see langword="true"/> if the two cells are adjacent neighbors; otherwise <see langword="false"/>.</returns>
+    /// <exception cref="H3Exception">Either cell is not valid, or the cells are different resolutions.</exception>
+    public bool IsNeighbor(H3Index destination)
+    {
+        H3ErrorMarshaller.ThrowIfError(NativeMethods.AreNeighborCells(Value, destination.Value, out int neighbor));
+        return neighbor != 0;
+    }
+
+    /// <summary>
+    /// Returns the directed edge from this cell to <paramref name="destination"/>.
+    /// </summary>
+    /// <param name="destination">The neighbor cell the edge points to; must be an adjacent neighbor at the same resolution.</param>
+    /// <returns>The <see cref="H3DirectedEdge"/> from this cell to <paramref name="destination"/>.</returns>
+    /// <exception cref="H3Exception">The two cells are not neighbors, or are different resolutions.</exception>
+    public H3DirectedEdge DirectedEdgeTo(H3Index destination)
+    {
+        H3ErrorMarshaller.ThrowIfError(NativeMethods.CellsToDirectedEdge(Value, destination.Value, out ulong edge));
+        return new H3DirectedEdge(edge);
+    }
+
+    /// <summary>
+    /// Returns the directed edges originating at this cell, one per adjacent neighbor.
+    /// </summary>
+    /// <returns>The directed edges (6 for a hexagon, 5 for a pentagon). Order is not guaranteed.</returns>
+    /// <exception cref="H3InvalidCellException">This is not a valid H3 cell.</exception>
+    /// <exception cref="H3Exception">The native operation failed.</exception>
+    public unsafe H3DirectedEdge[] GetDirectedEdges()
+    {
+        // Native originToDirectedEdges does not validate its origin (it merely bit-flips the
+        // mode/reserved bits and always returns E_SUCCESS), so guard here to honor the
+        // documented H3InvalidCellException, mirroring GetIcosahedronFaces.
+        EnsureValidCell();
+
+        // Fixed-capacity 6 (M4): `stackalloc` is CLR zero-initialized, so the pentagon's
+        // single unwritten slot reads as H3_NULL(0) and the strip below is valid.
+        Span<ulong> buffer = stackalloc ulong[6];
+        fixed (ulong* ptr = buffer)
+        {
+            H3ErrorMarshaller.ThrowIfError(NativeMethods.OriginToDirectedEdges(Value, ptr));
+        }
+
+        int count = 0;
+        for (int i = 0; i < 6; i++)
+        {
+            if (buffer[i] != 0)
+            {
+                count++;
+            }
+        }
+
+        var result = new H3DirectedEdge[count];
+        int next = 0;
+        for (int i = 0; i < 6; i++)
+        {
+            if (buffer[i] != 0)
+            {
+                result[next++] = new H3DirectedEdge(buffer[i]);
+            }
+        }
+
+        return result;
+    }
+
+    /// <summary>
+    /// Fills <paramref name="destination"/> with the directed edges originating at this
+    /// cell, packing the non-null edges to the front.
+    /// </summary>
+    /// <param name="destination">The destination span. Its length must be at least 6 (the per-cell maximum).</param>
+    /// <returns>The number of directed edges written to the front of <paramref name="destination"/> (6 for a hexagon, 5 for a pentagon).</returns>
+    /// <exception cref="ArgumentOutOfRangeException"><paramref name="destination"/> is too small.</exception>
+    /// <exception cref="H3InvalidCellException">This is not a valid H3 cell.</exception>
+    /// <exception cref="H3Exception">The native operation failed.</exception>
+    public unsafe int GetDirectedEdgesInto(Span<H3DirectedEdge> destination)
+    {
+        if (destination.Length < MaxEdgeCount)
+        {
+            throw new ArgumentOutOfRangeException(
+                nameof(destination),
+                destination.Length,
+                $"Destination span must hold at least {MaxEdgeCount} elements.");
+        }
+
+        // Native originToDirectedEdges does not validate its origin (it always returns
+        // E_SUCCESS), so guard the receiver after the caller-arg check to honor the
+        // documented H3InvalidCellException, mirroring GetIcosahedronFaces.
+        EnsureValidCell();
+
+        // Native originToDirectedEdges does NOT guarantee zero-padding the pentagon hole,
+        // and a caller-supplied span may carry stale data, so pre-clear before the fill + strip.
+        destination[..MaxEdgeCount].Clear();
+
+        // Write directly into the caller's span: H3DirectedEdge is blittable and layout-
+        // compatible with ulong, so the native fill needs no intermediate buffer.
+        fixed (H3DirectedEdge* ptr = destination)
+        {
+            H3ErrorMarshaller.ThrowIfError(NativeMethods.OriginToDirectedEdges(Value, (ulong*)ptr));
+        }
+
+        // Compact the H3_NULL (0) padding holes in place. The write index never
+        // outruns the read index, so no live entry is clobbered.
+        int count = 0;
+        for (int i = 0; i < MaxEdgeCount; i++)
+        {
+            if (destination[i].Value != 0)
+            {
+                destination[count++] = destination[i];
+            }
+        }
+
+        return count;
+    }
+
+    #endregion Directed edges
+
+    // Per-cell directed-edge capacity: 6 for a hexagon, 5 valid + 1 H3_NULL for a pentagon.
+    private const int MaxEdgeCount = 6;
+
     // Sentinel written by getIcosahedronFaces into unused slots; 0 is a valid face,
     // so the compaction passes strip -1, not H3_NULL.
     private const int InvalidFace = -1;

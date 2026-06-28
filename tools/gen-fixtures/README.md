@@ -40,6 +40,7 @@ Run after `gen_fixtures.py` (they import its helpers and write into the same dat
 .venv/bin/python gen_inspection_fixtures.py     # index_digits + icosahedron_faces
 .venv/bin/python gen_hierarchy_fixtures.py      # hierarchy + child_pos + compact
 .venv/bin/python gen_grid_traversal_fixtures.py # grid_ring + grid_path + grid_distance + local_ij + grid_disk_distances
+.venv/bin/python gen_directed_edge_fixtures.py  # directed_edge + neighbor
 ```
 
 | File | Contents |
@@ -49,6 +50,8 @@ Run after `gen_fixtures.py` (they import its helpers and write into the same dat
 | `grid_distance.ndjson` | `{origin, other, distance}` over the same pairs as `grid_path`. |
 | `local_ij.ndjson` | `{origin, target, i, j}` local IJ of `target` relative to `origin` (mode 0). |
 | `grid_disk_distances.ndjson` | `{cell, k, cells, distances}` parallel arrays; `distances[i]` is the grid distance of `cells[i]`. Derived from `grid_disk` via concentric set arithmetic (h3-py 4.5.0 has no `grid_disk_distances`). |
+| `directed_edge.ndjson` | `{origin, is_pentagon, edges:[{edge, origin, destination, cells, reverse, boundary:[[lat,lng],...]}]}`; `edges` is `origin_to_directed_edges` (6 hexagon / 5 pentagon). `reverse` is computed as `cells_to_directed_edge(dest, origin)` since h3-py 4.5.0 does not wrap `reverseDirectedEdge`. |
+| `neighbor.ndjson` | `{origin, candidate, are_neighbors}` triples covering both the true branch (origin's distance-1 ring) and the false branch (an equal-resolution non-adjacent corpus cell). |
 
 ## Conventions
 

@@ -136,6 +136,27 @@ internal static class FixtureLoader
         [property: JsonPropertyName("cells")] IReadOnlyList<string> Cells,
         [property: JsonPropertyName("distances")] IReadOnlyList<int> Distances);
 
+    /// <summary>One directed_edge.ndjson record: an origin cell and every directed edge originating at it.</summary>
+    public sealed record DirectedEdgeCase(
+        [property: JsonPropertyName("origin")] string Origin,
+        [property: JsonPropertyName("is_pentagon")] bool IsPentagon,
+        [property: JsonPropertyName("edges")] IReadOnlyList<DirectedEdgeDetail> Edges);
+
+    /// <summary>One directed edge's full oracle: its index, origin/destination cells, cell pair, reverse, and boundary.</summary>
+    public sealed record DirectedEdgeDetail(
+        [property: JsonPropertyName("edge")] string Edge,
+        [property: JsonPropertyName("origin")] string Origin,
+        [property: JsonPropertyName("destination")] string Destination,
+        [property: JsonPropertyName("cells")] IReadOnlyList<string> Cells,
+        [property: JsonPropertyName("reverse")] string Reverse,
+        [property: JsonPropertyName("boundary")] IReadOnlyList<double[]> Boundary);
+
+    /// <summary>One neighbor.ndjson record: an ordered (origin, candidate) pair and the are_neighbor_cells result.</summary>
+    public sealed record NeighborCase(
+        [property: JsonPropertyName("origin")] string Origin,
+        [property: JsonPropertyName("candidate")] string Candidate,
+        [property: JsonPropertyName("are_neighbors")] bool AreNeighbors);
+
     // --- Loaders ---
 
     public static IEnumerable<LatLngToCellCase> LoadLatLngToCell() =>
@@ -182,6 +203,12 @@ internal static class FixtureLoader
 
     public static IEnumerable<GridDiskDistancesCase> LoadGridDiskDistances() =>
         LoadNdjson<GridDiskDistancesCase>("grid_disk_distances.ndjson");
+
+    public static IEnumerable<DirectedEdgeCase> LoadDirectedEdge() =>
+        LoadNdjson<DirectedEdgeCase>("directed_edge.ndjson");
+
+    public static IEnumerable<NeighborCase> LoadNeighbor() =>
+        LoadNdjson<NeighborCase>("neighbor.ndjson");
 
     /// <summary>Reads res0_cells.csv: one 16-hex cell per line.</summary>
     public static IReadOnlyList<string> LoadRes0Cells()

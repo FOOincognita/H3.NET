@@ -133,6 +133,12 @@ internal static unsafe partial class NativeMethods
     [LibraryImport("h3", EntryPoint = "isValidIndex")]
     internal static partial int IsValidIndex(ulong cell);
 
+    // isValidDirectedEdge returns a bare C int (NOT H3Error) and never throws; it is
+    // the validity predicate for a directed-edge index, so callers must NOT
+    // validate-first against it.
+    [LibraryImport("h3", EntryPoint = "isValidDirectedEdge")]
+    internal static partial int IsValidDirectedEdge(ulong edge);
+
     // ---- Inspection / string conversion (H3Error channel) ------------------
 
     // getIndexDigit only bit-extracts the stored digit; it validates 1 <= res <= 15
@@ -202,6 +208,42 @@ internal static unsafe partial class NativeMethods
     // slots are H3_NULL.
     [LibraryImport("h3", EntryPoint = "uncompactCells")]
     internal static partial H3ErrorCode UncompactCells(ulong* compactedSet, long numCompacted, ulong* outSet, long numOut, int res);
+
+    // ---- Directed edges ----------------------------------------------------
+
+    // Carries a REAL H3Error channel despite the int* out param: the int reports the
+    // boolean (0/1) while the return value can surface E_RES_MISMATCH for cells of
+    // differing resolution. NOT a bare-int predicate.
+    [LibraryImport("h3", EntryPoint = "areNeighborCells")]
+    internal static partial H3ErrorCode AreNeighborCells(ulong origin, ulong destination, out int outNeighbor);
+
+    // Throws E_NOT_NEIGHBORS when the cells are not adjacent and E_RES_MISMATCH when
+    // their resolutions differ.
+    [LibraryImport("h3", EntryPoint = "cellsToDirectedEdge")]
+    internal static partial H3ErrorCode CellsToDirectedEdge(ulong origin, ulong destination, out ulong outEdge);
+
+    [LibraryImport("h3", EntryPoint = "getDirectedEdgeOrigin")]
+    internal static partial H3ErrorCode GetDirectedEdgeOrigin(ulong edge, out ulong outCell);
+
+    [LibraryImport("h3", EntryPoint = "getDirectedEdgeDestination")]
+    internal static partial H3ErrorCode GetDirectedEdgeDestination(ulong edge, out ulong outCell);
+
+    // Constant-size 2 (M2): originDestination must point at exactly 2 slots; native
+    // writes out[0]=origin and out[1]=destination, so there is no H3_NULL padding.
+    [LibraryImport("h3", EntryPoint = "directedEdgeToCells")]
+    internal static partial H3ErrorCode DirectedEdgeToCells(ulong edge, ulong* originDestination);
+
+    // Fixed-capacity 6 (M4): edges must point at exactly 6 slots. A hexagon yields 6
+    // valid edges; a pentagon yields 5 valid edges plus one H3_NULL(0) slot, so
+    // callers strip the H3_NULL entries.
+    [LibraryImport("h3", EntryPoint = "originToDirectedEdges")]
+    internal static partial H3ErrorCode OriginToDirectedEdges(ulong origin, ulong* edges);
+
+    [LibraryImport("h3", EntryPoint = "directedEdgeToBoundary")]
+    internal static partial H3ErrorCode DirectedEdgeToBoundary(ulong edge, out CellBoundary boundary);
+
+    [LibraryImport("h3", EntryPoint = "reverseDirectedEdge")]
+    internal static partial H3ErrorCode ReverseDirectedEdge(ulong edge, out ulong outEdge);
 
     // ---- Corpus helpers ----------------------------------------------------
 
