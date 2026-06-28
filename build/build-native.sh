@@ -7,7 +7,7 @@
 # Usage:
 #   build-native.sh <rid> [--clean]
 #
-#   <rid>     One of: linux-x64, linux-musl-x64, osx-x64, osx-arm64
+#   <rid>     One of: linux-x64, linux-musl-x64, osx-arm64
 #   --clean   Remove the CMake build directory before configuring.
 #
 # This script natively builds the host RID (osx-arm64 on the dev box). The two
@@ -17,7 +17,7 @@
 set -euo pipefail
 
 readonly EXPECTED_H3_TAG="v4.5.0"
-readonly VALID_RIDS=("linux-x64" "linux-musl-x64" "osx-x64" "osx-arm64")
+readonly VALID_RIDS=("linux-x64" "linux-musl-x64" "osx-arm64")
 
 die() {
     printf 'error: %s\n' "$*" >&2
@@ -35,7 +35,7 @@ info() {
 usage() {
     cat >&2 <<'EOF'
 Usage: build-native.sh <rid> [--clean]
-  <rid>     One of: linux-x64, linux-musl-x64, osx-x64, osx-arm64
+  <rid>     One of: linux-x64, linux-musl-x64, osx-arm64
   --clean   Remove the CMake build directory before configuring.
 EOF
     exit 2

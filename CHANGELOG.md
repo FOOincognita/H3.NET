@@ -19,7 +19,7 @@ Uber H3 v4.5.0 for .NET 10+. No versions have been released yet.
 - Native build skeleton: Uber H3 pinned as a git submodule at tag `v4.5.0`
   (`external/h3`) with a per-RID native build script producing
   `runtimes/<rid>/native/libh3.{so,dylib}` for `linux-x64`, `linux-musl-x64`,
-  `osx-x64`, and `osx-arm64`.
+  and `osx-arm64`.
 - Vertical slice: an initial ~5-function public API exercising the full
   native-build, packaging, and P/Invoke interop path end to end (degrees-based
   lat/lng public surface).

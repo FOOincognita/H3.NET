@@ -1,0 +1,45 @@
+# Getting started
+
+## Requirements
+
+- A .NET SDK that can target `net10.0` or `net8.0`.
+- A supported runtime: `linux-x64`, `linux-musl-x64`, or `osx-arm64`. The matching
+  native `libh3` is bundled in the package and resolved automatically for these RIDs.
+
+## Add the package
+
+```bash
+dotnet add package H3NET.Native
+```
+
+The package id is `H3NET.Native`; the repository is `H3.NET`.
+
+## First program
+
+All angular values are in **degrees**.
+
+```csharp
+using H3NET.Native;
+
+// 1. Index a coordinate at a chosen resolution (0 = coarsest, 15 = finest).
+var sanFrancisco = new LatLng(LatitudeDegrees: 37.7752, LongitudeDegrees: -122.4188);
+H3Index cell = H3Index.FromLatLng(sanFrancisco, resolution: 9);
+Console.WriteLine(cell);             // 08928308280fffff
+
+// 2. Recover the cell center as latitude/longitude (degrees).
+LatLng center = cell.ToLatLng();
+Console.WriteLine($"{center.LatitudeDegrees}, {center.LongitudeDegrees}");
+
+// 3. Inspect the cell.
+Console.WriteLine(cell.Resolution);  // 9
+```
+
+## Error handling
+
+Operations that can fail surface H3 status codes as typed exceptions derived from
+`H3Exception` (for example `H3InvalidCellException`, `H3DomainException`,
+`H3PentagonException`, `H3MemoryException`). Catch `H3Exception` to handle any of them.
+
+## Next steps
+
+Browse the [API reference](../api/H3NET.Native.html) for the full set of types and members.
