@@ -1,0 +1,294 @@
+{"cell": "08001fffffffffff", "faces": [1]}
+{"cell": "08003fffffffffff", "faces": [1, 2]}
+{"cell": "08005fffffffffff", "faces": [1]}
+{"cell": "08007fffffffffff", "faces": [2]}
+{"cell": "08009fffffffffff", "faces": [0, 1, 2, 3, 4]}
+{"cell": "0800bfffffffffff", "faces": [0, 1]}
+{"cell": "0800dfffffffffff", "faces": [1]}
+{"cell": "0800ffffffffffff", "faces": [2]}
+{"cell": "08011fffffffffff", "faces": [0]}
+{"cell": "08013fffffffffff", "faces": [2]}
+{"cell": "08015fffffffffff", "faces": [1]}
+{"cell": "08017fffffffffff", "faces": [1, 6]}
+{"cell": "08019fffffffffff", "faces": [3]}
+{"cell": "0801bfffffffffff", "faces": [2, 3]}
+{"cell": "0801dfffffffffff", "faces": [1, 2, 6, 7, 11]}
+{"cell": "0801ffffffffffff", "faces": [4]}
+{"cell": "08021fffffffffff", "faces": [0]}
+{"cell": "08023fffffffffff", "faces": [6]}
+{"cell": "08025fffffffffff", "faces": [0]}
+{"cell": "08027fffffffffff", "faces": [2, 7]}
+{"cell": "08029fffffffffff", "faces": [7]}
+{"cell": "0802bfffffffffff", "faces": [2]}
+{"cell": "0802dfffffffffff", "faces": [0, 4]}
+{"cell": "0802ffffffffffff", "faces": [6]}
+{"cell": "08031fffffffffff", "faces": [0, 1, 5, 6, 10]}
+{"cell": "08033fffffffffff", "faces": [6]}
+{"cell": "08035fffffffffff", "faces": [3]}
+{"cell": "08037fffffffffff", "faces": [11]}
+{"cell": "08039fffffffffff", "faces": [3, 4]}
+{"cell": "0803bfffffffffff", "faces": [3]}
+{"cell": "0803dfffffffffff", "faces": [0, 5]}
+{"cell": "0803ffffffffffff", "faces": [4]}
+{"cell": "08041fffffffffff", "faces": [5]}
+{"cell": "08043fffffffffff", "faces": [0]}
+{"cell": "08045fffffffffff", "faces": [7]}
+{"cell": "08047fffffffffff", "faces": [6, 11]}
+{"cell": "08049fffffffffff", "faces": [7]}
+{"cell": "0804bfffffffffff", "faces": [10]}
+{"cell": "0804dfffffffffff", "faces": [2, 3, 7, 8, 12]}
+{"cell": "0804ffffffffffff", "faces": [6, 10]}
+{"cell": "08051fffffffffff", "faces": [7, 11]}
+{"cell": "08053fffffffffff", "faces": [4]}
+{"cell": "08055fffffffffff", "faces": [3]}
+{"cell": "08057fffffffffff", "faces": [3, 8]}
+{"cell": "08059fffffffffff", "faces": [4]}
+{"cell": "0805bfffffffffff", "faces": [6]}
+{"cell": "0805dfffffffffff", "faces": [11]}
+{"cell": "0805ffffffffffff", "faces": [8]}
+{"cell": "08061fffffffffff", "faces": [5]}
+{"cell": "08063fffffffffff", "faces": [0, 4, 5, 9, 14]}
+{"cell": "08065fffffffffff", "faces": [5]}
+{"cell": "08067fffffffffff", "faces": [12]}
+{"cell": "08069fffffffffff", "faces": [5, 10]}
+{"cell": "0806bfffffffffff", "faces": [4, 9]}
+{"cell": "0806dfffffffffff", "faces": [7, 12]}
+{"cell": "0806ffffffffffff", "faces": [7]}
+{"cell": "08071fffffffffff", "faces": [11]}
+{"cell": "08073fffffffffff", "faces": [10]}
+{"cell": "08075fffffffffff", "faces": [3, 4, 8, 9, 13]}
+{"cell": "08077fffffffffff", "faces": [10]}
+{"cell": "08079fffffffffff", "faces": [11]}
+{"cell": "0807bfffffffffff", "faces": [9]}
+{"cell": "0807dfffffffffff", "faces": [8]}
+{"cell": "0807ffffffffffff", "faces": [6, 10, 11, 15, 16]}
+{"cell": "08081fffffffffff", "faces": [8]}
+{"cell": "08083fffffffffff", "faces": [9]}
+{"cell": "08085fffffffffff", "faces": [14]}
+{"cell": "08087fffffffffff", "faces": [5, 14]}
+{"cell": "08089fffffffffff", "faces": [11, 16]}
+{"cell": "0808bfffffffffff", "faces": [8, 12]}
+{"cell": "0808dfffffffffff", "faces": [5]}
+{"cell": "0808ffffffffffff", "faces": [12]}
+{"cell": "08091fffffffffff", "faces": [7, 11, 12, 16, 17]}
+{"cell": "08093fffffffffff", "faces": [12]}
+{"cell": "08095fffffffffff", "faces": [10]}
+{"cell": "08097fffffffffff", "faces": [9]}
+{"cell": "08099fffffffffff", "faces": [13]}
+{"cell": "0809bfffffffffff", "faces": [16]}
+{"cell": "0809dfffffffffff", "faces": [10, 15]}
+{"cell": "0809ffffffffffff", "faces": [15]}
+{"cell": "080a1fffffffffff", "faces": [16]}
+{"cell": "080a3fffffffffff", "faces": [9, 14]}
+{"cell": "080a5fffffffffff", "faces": [8, 13]}
+{"cell": "080a7fffffffffff", "faces": [5, 10, 14, 15, 19]}
+{"cell": "080a9fffffffffff", "faces": [8]}
+{"cell": "080abfffffffffff", "faces": [14]}
+{"cell": "080adfffffffffff", "faces": [9, 13]}
+{"cell": "080affffffffffff", "faces": [14]}
+{"cell": "080b1fffffffffff", "faces": [17]}
+{"cell": "080b3fffffffffff", "faces": [12]}
+{"cell": "080b5fffffffffff", "faces": [16]}
+{"cell": "080b7fffffffffff", "faces": [12, 17]}
+{"cell": "080b9fffffffffff", "faces": [15]}
+{"cell": "080bbfffffffffff", "faces": [15, 16]}
+{"cell": "080bdfffffffffff", "faces": [9]}
+{"cell": "080bffffffffffff", "faces": [15]}
+{"cell": "080c1fffffffffff", "faces": [13]}
+{"cell": "080c3fffffffffff", "faces": [8, 12, 13, 17, 18]}
+{"cell": "080c5fffffffffff", "faces": [13]}
+{"cell": "080c7fffffffffff", "faces": [16, 17]}
+{"cell": "080c9fffffffffff", "faces": [19]}
+{"cell": "080cbfffffffffff", "faces": [14]}
+{"cell": "080cdfffffffffff", "faces": [14, 19]}
+{"cell": "080cffffffffffff", "faces": [17]}
+{"cell": "080d1fffffffffff", "faces": [13]}
+{"cell": "080d3fffffffffff", "faces": [17]}
+{"cell": "080d5fffffffffff", "faces": [16]}
+{"cell": "080d7fffffffffff", "faces": [9, 13, 14, 18, 19]}
+{"cell": "080d9fffffffffff", "faces": [15, 19]}
+{"cell": "080dbfffffffffff", "faces": [15]}
+{"cell": "080ddfffffffffff", "faces": [13, 18]}
+{"cell": "080dffffffffffff", "faces": [18]}
+{"cell": "080e1fffffffffff", "faces": [19]}
+{"cell": "080e3fffffffffff", "faces": [17]}
+{"cell": "080e5fffffffffff", "faces": [19]}
+{"cell": "080e7fffffffffff", "faces": [18]}
+{"cell": "080e9fffffffffff", "faces": [17, 18]}
+{"cell": "080ebfffffffffff", "faces": [15, 16, 17, 18, 19]}
+{"cell": "080edfffffffffff", "faces": [19]}
+{"cell": "080effffffffffff", "faces": [18]}
+{"cell": "080f1fffffffffff", "faces": [18, 19]}
+{"cell": "080f3fffffffffff", "faces": [18]}
+{"cell": "0830800fffffffff", "faces": [0, 1, 2, 3, 4]}
+{"cell": "0831c00fffffffff", "faces": [1, 2, 6, 7, 11]}
+{"cell": "0833000fffffffff", "faces": [0, 1, 5, 6, 10]}
+{"cell": "0834c00fffffffff", "faces": [2, 3, 7, 8, 12]}
+{"cell": "0836200fffffffff", "faces": [0, 4, 5, 9, 14]}
+{"cell": "0837400fffffffff", "faces": [3, 4, 8, 9, 13]}
+{"cell": "0837e00fffffffff", "faces": [6, 10, 11, 15, 16]}
+{"cell": "0839000fffffffff", "faces": [7, 11, 12, 16, 17]}
+{"cell": "083a600fffffffff", "faces": [5, 10, 14, 15, 19]}
+{"cell": "083c200fffffffff", "faces": [8, 12, 13, 17, 18]}
+{"cell": "083d600fffffffff", "faces": [9, 13, 14, 18, 19]}
+{"cell": "083ea00fffffffff", "faces": [15, 16, 17, 18, 19]}
+{"cell": "0860800007ffffff", "faces": [0, 1, 2, 3, 4]}
+{"cell": "0861c00007ffffff", "faces": [1, 2, 6, 7, 11]}
+{"cell": "0863000007ffffff", "faces": [0, 1, 5, 6, 10]}
+{"cell": "0864c00007ffffff", "faces": [2, 3, 7, 8, 12]}
+{"cell": "0866200007ffffff", "faces": [0, 4, 5, 9, 14]}
+{"cell": "0867400007ffffff", "faces": [3, 4, 8, 9, 13]}
+{"cell": "0867e00007ffffff", "faces": [6, 10, 11, 15, 16]}
+{"cell": "0869000007ffffff", "faces": [7, 11, 12, 16, 17]}
+{"cell": "086a600007ffffff", "faces": [5, 10, 14, 15, 19]}
+{"cell": "086c200007ffffff", "faces": [8, 12, 13, 17, 18]}
+{"cell": "086d600007ffffff", "faces": [9, 13, 14, 18, 19]}
+{"cell": "086ea00007ffffff", "faces": [15, 16, 17, 18, 19]}
+{"cell": "089080000003ffff", "faces": [0, 1, 2, 3, 4]}
+{"cell": "0891c0000003ffff", "faces": [1, 2, 6, 7, 11]}
+{"cell": "089300000003ffff", "faces": [0, 1, 5, 6, 10]}
+{"cell": "0894c0000003ffff", "faces": [2, 3, 7, 8, 12]}
+{"cell": "089620000003ffff", "faces": [0, 4, 5, 9, 14]}
+{"cell": "089740000003ffff", "faces": [3, 4, 8, 9, 13]}
+{"cell": "0897e0000003ffff", "faces": [6, 10, 11, 15, 16]}
+{"cell": "089900000003ffff", "faces": [7, 11, 12, 16, 17]}
+{"cell": "089a60000003ffff", "faces": [5, 10, 14, 15, 19]}
+{"cell": "089c20000003ffff", "faces": [8, 12, 13, 17, 18]}
+{"cell": "089d60000003ffff", "faces": [9, 13, 14, 18, 19]}
+{"cell": "089ea0000003ffff", "faces": [15, 16, 17, 18, 19]}
+{"cell": "08c08000000001ff", "faces": [0, 1, 2, 3, 4]}
+{"cell": "08c1c000000001ff", "faces": [1, 2, 6, 7, 11]}
+{"cell": "08c30000000001ff", "faces": [0, 1, 5, 6, 10]}
+{"cell": "08c4c000000001ff", "faces": [2, 3, 7, 8, 12]}
+{"cell": "08c62000000001ff", "faces": [0, 4, 5, 9, 14]}
+{"cell": "08c74000000001ff", "faces": [3, 4, 8, 9, 13]}
+{"cell": "08c7e000000001ff", "faces": [6, 10, 11, 15, 16]}
+{"cell": "08c90000000001ff", "faces": [7, 11, 12, 16, 17]}
+{"cell": "08ca6000000001ff", "faces": [5, 10, 14, 15, 19]}
+{"cell": "08cc2000000001ff", "faces": [8, 12, 13, 17, 18]}
+{"cell": "08cd6000000001ff", "faces": [9, 13, 14, 18, 19]}
+{"cell": "08cea000000001ff", "faces": [15, 16, 17, 18, 19]}
+{"cell": "08f0800000000000", "faces": [0, 1, 2, 3, 4]}
+{"cell": "08f1c00000000000", "faces": [1, 2, 6, 7, 11]}
+{"cell": "08f3000000000000", "faces": [0, 1, 5, 6, 10]}
+{"cell": "08f4c00000000000", "faces": [2, 3, 7, 8, 12]}
+{"cell": "08f6200000000000", "faces": [0, 4, 5, 9, 14]}
+{"cell": "08f7400000000000", "faces": [3, 4, 8, 9, 13]}
+{"cell": "08f7e00000000000", "faces": [6, 10, 11, 15, 16]}
+{"cell": "08f9000000000000", "faces": [7, 11, 12, 16, 17]}
+{"cell": "08fa600000000000", "faces": [5, 10, 14, 15, 19]}
+{"cell": "08fc200000000000", "faces": [8, 12, 13, 17, 18]}
+{"cell": "08fd600000000000", "faces": [9, 13, 14, 18, 19]}
+{"cell": "08fea00000000000", "faces": [15, 16, 17, 18, 19]}
+{"cell": "081283ffffffffff", "faces": [7]}
+{"cell": "0822837fffffffff", "faces": [7]}
+{"cell": "0832830fffffffff", "faces": [7]}
+{"cell": "08428309ffffffff", "faces": [7]}
+{"cell": "085283083fffffff", "faces": [7]}
+{"cell": "086283082fffffff", "faces": [7]}
+{"cell": "0872830828ffffff", "faces": [7]}
+{"cell": "08828308281fffff", "faces": [7]}
+{"cell": "089283082803ffff", "faces": [7]}
+{"cell": "08a283082800ffff", "faces": [7]}
+{"cell": "08b283082800bfff", "faces": [7]}
+{"cell": "08c283082800b3ff", "faces": [7]}
+{"cell": "08d283082800b3bf", "faces": [7]}
+{"cell": "08e283082800b397", "faces": [7]}
+{"cell": "08f283082800b390", "faces": [7]}
+{"cell": "081be3ffffffffff", "faces": [15]}
+{"cell": "082be0ffffffffff", "faces": [15]}
+{"cell": "083be0efffffffff", "faces": [15]}
+{"cell": "084be0e3ffffffff", "faces": [15]}
+{"cell": "085be0e37fffffff", "faces": [15]}
+{"cell": "086be0e35fffffff", "faces": [15]}
+{"cell": "087be0e35cffffff", "faces": [15]}
+{"cell": "088be0e35cbfffff", "faces": [15]}
+{"cell": "089be0e35cbbffff", "faces": [15]}
+{"cell": "08abe0e35cbaffff", "faces": [15]}
+{"cell": "08bbe0e35cbadfff", "faces": [15]}
+{"cell": "08cbe0e35cbad1ff", "faces": [15]}
+{"cell": "08dbe0e35cbad0bf", "faces": [15]}
+{"cell": "08ebe0e35cbad0af", "faces": [15]}
+{"cell": "08fbe0e35cbad0a8", "faces": [15]}
+{"cell": "0812f7ffffffffff", "faces": [6, 10]}
+{"cell": "0822f5ffffffffff", "faces": [6]}
+{"cell": "0832f5afffffffff", "faces": [6]}
+{"cell": "0842f5a3ffffffff", "faces": [6]}
+{"cell": "0852f5a37fffffff", "faces": [6]}
+{"cell": "0862f5a377ffffff", "faces": [6]}
+{"cell": "0872f5a375ffffff", "faces": [6]}
+{"cell": "0882f5a375bfffff", "faces": [6]}
+{"cell": "0892f5a375afffff", "faces": [6]}
+{"cell": "08a2f5a375ac7fff", "faces": [6]}
+{"cell": "08b2f5a375ac4fff", "faces": [6]}
+{"cell": "08c2f5a375ac4bff", "faces": [6]}
+{"cell": "08d2f5a375ac4b3f", "faces": [6]}
+{"cell": "08e2f5a375ac4b0f", "faces": [6]}
+{"cell": "08f2f5a375ac4b0d", "faces": [6]}
+{"cell": "0817a7ffffffffff", "faces": [9]}
+{"cell": "0827a6ffffffffff", "faces": [9]}
+{"cell": "0837a6efffffffff", "faces": [9]}
+{"cell": "0847a6e5ffffffff", "faces": [9]}
+{"cell": "0857a6e43fffffff", "faces": [9]}
+{"cell": "0867a6e42fffffff", "faces": [9]}
+{"cell": "0877a6e42cffffff", "faces": [9]}
+{"cell": "0887a6e42cbfffff", "faces": [9]}
+{"cell": "0897a6e42ca3ffff", "faces": [9]}
+{"cell": "08a7a6e42ca27fff", "faces": [9]}
+{"cell": "08b7a6e42ca20fff", "faces": [9]}
+{"cell": "08c7a6e42ca207ff", "faces": [9]}
+{"cell": "08d7a6e42ca2067f", "faces": [9]}
+{"cell": "08e7a6e42ca20647", "faces": [9]}
+{"cell": "08f7a6e42ca20642", "faces": [9]}
+{"cell": "081077ffffffffff", "faces": [2, 3]}
+{"cell": "082075ffffffffff", "faces": [2]}
+{"cell": "083075dfffffffff", "faces": [2]}
+{"cell": "084075ddffffffff", "faces": [2]}
+{"cell": "085075dd7fffffff", "faces": [2]}
+{"cell": "086075dd4fffffff", "faces": [2]}
+{"cell": "087075dd4bffffff", "faces": [2]}
+{"cell": "088075dd4bdfffff", "faces": [2]}
+{"cell": "089075dd4b8bffff", "faces": [2]}
+{"cell": "08a075dd4b897fff", "faces": [2]}
+{"cell": "08b075dd4b890fff", "faces": [2]}
+{"cell": "08c075dd4b890dff", "faces": [2]}
+{"cell": "08d075dd4b890c3f", "faces": [2]}
+{"cell": "08e075dd4b890c2f", "faces": [2]}
+{"cell": "08f075dd4b890c2e", "faces": [2]}
+{"cell": "08eef14543b72af7", "faces": [18]}
+{"cell": "0827c4ffffffffff", "faces": [8]}
+{"cell": "084ad213ffffffff", "faces": [13]}
+{"cell": "0857711cbfffffff", "faces": [10]}
+{"cell": "08a022d21bb4ffff", "faces": [2]}
+{"cell": "08bef3692e21dfff", "faces": [18]}
+{"cell": "082165ffffffffff", "faces": [6]}
+{"cell": "08125bffffffffff", "faces": [0]}
+{"cell": "0817bbffffffffff", "faces": [9, 14]}
+{"cell": "085f22147fffffff", "faces": [18]}
+{"cell": "0839ad1fffffffff", "faces": [16]}
+{"cell": "0831accfffffffff", "faces": [3]}
+{"cell": "083155afffffffff", "faces": [1]}
+{"cell": "08dc85408bcdd33f", "faces": [19]}
+{"cell": "0882c5eb003fffff", "faces": [0]}
+{"cell": "089d2c66a4bbffff", "faces": [17]}
+{"cell": "0830f40fffffffff", "faces": [2]}
+{"cell": "086028048fffffff", "faces": [1]}
+{"cell": "086b4990efffffff", "faces": [16]}
+{"cell": "08dd8740836087bf", "faces": [19]}
+{"cell": "08a23a488076ffff", "faces": [6]}
+{"cell": "08b9689035c20fff", "faces": [9]}
+{"cell": "08ae2c90d514ffff", "faces": [17]}
+{"cell": "08c9d4331bcc65ff", "faces": [15]}
+{"cell": "083e418fffffffff", "faces": [19]}
+{"cell": "08f5c5889ab5e134", "faces": [11]}
+{"cell": "083f329fffffffff", "faces": [18]}
+{"cell": "0858a898ffffffff", "faces": [8]}
+{"cell": "08eb68344166d64f", "faces": [12]}
+{"cell": "088532252dbfffff", "faces": [4]}
+{"cell": "08a6918345607fff", "faces": [5]}
+{"cell": "088247529abfffff", "faces": [0]}
+{"cell": "08a77581b4247fff", "faces": [10]}
+{"cell": "081aa3ffffffffff", "faces": [14]}
+{"cell": "08bdfa22a18cdfff", "faces": [18]}
+{"cell": "085516b87fffffff", "faces": [11]}
+{"cell": "08e5e1626899c357", "faces": [8]}

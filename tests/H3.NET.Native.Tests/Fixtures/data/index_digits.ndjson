@@ -1,0 +1,294 @@
+{"base_cell": 0, "cell": "08001fffffffffff", "digits": [], "is_class_iii": false, "res": 0}
+{"base_cell": 1, "cell": "08003fffffffffff", "digits": [], "is_class_iii": false, "res": 0}
+{"base_cell": 2, "cell": "08005fffffffffff", "digits": [], "is_class_iii": false, "res": 0}
+{"base_cell": 3, "cell": "08007fffffffffff", "digits": [], "is_class_iii": false, "res": 0}
+{"base_cell": 4, "cell": "08009fffffffffff", "digits": [], "is_class_iii": false, "res": 0}
+{"base_cell": 5, "cell": "0800bfffffffffff", "digits": [], "is_class_iii": false, "res": 0}
+{"base_cell": 6, "cell": "0800dfffffffffff", "digits": [], "is_class_iii": false, "res": 0}
+{"base_cell": 7, "cell": "0800ffffffffffff", "digits": [], "is_class_iii": false, "res": 0}
+{"base_cell": 8, "cell": "08011fffffffffff", "digits": [], "is_class_iii": false, "res": 0}
+{"base_cell": 9, "cell": "08013fffffffffff", "digits": [], "is_class_iii": false, "res": 0}
+{"base_cell": 10, "cell": "08015fffffffffff", "digits": [], "is_class_iii": false, "res": 0}
+{"base_cell": 11, "cell": "08017fffffffffff", "digits": [], "is_class_iii": false, "res": 0}
+{"base_cell": 12, "cell": "08019fffffffffff", "digits": [], "is_class_iii": false, "res": 0}
+{"base_cell": 13, "cell": "0801bfffffffffff", "digits": [], "is_class_iii": false, "res": 0}
+{"base_cell": 14, "cell": "0801dfffffffffff", "digits": [], "is_class_iii": false, "res": 0}
+{"base_cell": 15, "cell": "0801ffffffffffff", "digits": [], "is_class_iii": false, "res": 0}
+{"base_cell": 16, "cell": "08021fffffffffff", "digits": [], "is_class_iii": false, "res": 0}
+{"base_cell": 17, "cell": "08023fffffffffff", "digits": [], "is_class_iii": false, "res": 0}
+{"base_cell": 18, "cell": "08025fffffffffff", "digits": [], "is_class_iii": false, "res": 0}
+{"base_cell": 19, "cell": "08027fffffffffff", "digits": [], "is_class_iii": false, "res": 0}
+{"base_cell": 20, "cell": "08029fffffffffff", "digits": [], "is_class_iii": false, "res": 0}
+{"base_cell": 21, "cell": "0802bfffffffffff", "digits": [], "is_class_iii": false, "res": 0}
+{"base_cell": 22, "cell": "0802dfffffffffff", "digits": [], "is_class_iii": false, "res": 0}
+{"base_cell": 23, "cell": "0802ffffffffffff", "digits": [], "is_class_iii": false, "res": 0}
+{"base_cell": 24, "cell": "08031fffffffffff", "digits": [], "is_class_iii": false, "res": 0}
+{"base_cell": 25, "cell": "08033fffffffffff", "digits": [], "is_class_iii": false, "res": 0}
+{"base_cell": 26, "cell": "08035fffffffffff", "digits": [], "is_class_iii": false, "res": 0}
+{"base_cell": 27, "cell": "08037fffffffffff", "digits": [], "is_class_iii": false, "res": 0}
+{"base_cell": 28, "cell": "08039fffffffffff", "digits": [], "is_class_iii": false, "res": 0}
+{"base_cell": 29, "cell": "0803bfffffffffff", "digits": [], "is_class_iii": false, "res": 0}
+{"base_cell": 30, "cell": "0803dfffffffffff", "digits": [], "is_class_iii": false, "res": 0}
+{"base_cell": 31, "cell": "0803ffffffffffff", "digits": [], "is_class_iii": false, "res": 0}
+{"base_cell": 32, "cell": "08041fffffffffff", "digits": [], "is_class_iii": false, "res": 0}
+{"base_cell": 33, "cell": "08043fffffffffff", "digits": [], "is_class_iii": false, "res": 0}
+{"base_cell": 34, "cell": "08045fffffffffff", "digits": [], "is_class_iii": false, "res": 0}
+{"base_cell": 35, "cell": "08047fffffffffff", "digits": [], "is_class_iii": false, "res": 0}
+{"base_cell": 36, "cell": "08049fffffffffff", "digits": [], "is_class_iii": false, "res": 0}
+{"base_cell": 37, "cell": "0804bfffffffffff", "digits": [], "is_class_iii": false, "res": 0}
+{"base_cell": 38, "cell": "0804dfffffffffff", "digits": [], "is_class_iii": false, "res": 0}
+{"base_cell": 39, "cell": "0804ffffffffffff", "digits": [], "is_class_iii": false, "res": 0}
+{"base_cell": 40, "cell": "08051fffffffffff", "digits": [], "is_class_iii": false, "res": 0}
+{"base_cell": 41, "cell": "08053fffffffffff", "digits": [], "is_class_iii": false, "res": 0}
+{"base_cell": 42, "cell": "08055fffffffffff", "digits": [], "is_class_iii": false, "res": 0}
+{"base_cell": 43, "cell": "08057fffffffffff", "digits": [], "is_class_iii": false, "res": 0}
+{"base_cell": 44, "cell": "08059fffffffffff", "digits": [], "is_class_iii": false, "res": 0}
+{"base_cell": 45, "cell": "0805bfffffffffff", "digits": [], "is_class_iii": false, "res": 0}
+{"base_cell": 46, "cell": "0805dfffffffffff", "digits": [], "is_class_iii": false, "res": 0}
+{"base_cell": 47, "cell": "0805ffffffffffff", "digits": [], "is_class_iii": false, "res": 0}
+{"base_cell": 48, "cell": "08061fffffffffff", "digits": [], "is_class_iii": false, "res": 0}
+{"base_cell": 49, "cell": "08063fffffffffff", "digits": [], "is_class_iii": false, "res": 0}
+{"base_cell": 50, "cell": "08065fffffffffff", "digits": [], "is_class_iii": false, "res": 0}
+{"base_cell": 51, "cell": "08067fffffffffff", "digits": [], "is_class_iii": false, "res": 0}
+{"base_cell": 52, "cell": "08069fffffffffff", "digits": [], "is_class_iii": false, "res": 0}
+{"base_cell": 53, "cell": "0806bfffffffffff", "digits": [], "is_class_iii": false, "res": 0}
+{"base_cell": 54, "cell": "0806dfffffffffff", "digits": [], "is_class_iii": false, "res": 0}
+{"base_cell": 55, "cell": "0806ffffffffffff", "digits": [], "is_class_iii": false, "res": 0}
+{"base_cell": 56, "cell": "08071fffffffffff", "digits": [], "is_class_iii": false, "res": 0}
+{"base_cell": 57, "cell": "08073fffffffffff", "digits": [], "is_class_iii": false, "res": 0}
+{"base_cell": 58, "cell": "08075fffffffffff", "digits": [], "is_class_iii": false, "res": 0}
+{"base_cell": 59, "cell": "08077fffffffffff", "digits": [], "is_class_iii": false, "res": 0}
+{"base_cell": 60, "cell": "08079fffffffffff", "digits": [], "is_class_iii": false, "res": 0}
+{"base_cell": 61, "cell": "0807bfffffffffff", "digits": [], "is_class_iii": false, "res": 0}
+{"base_cell": 62, "cell": "0807dfffffffffff", "digits": [], "is_class_iii": false, "res": 0}
+{"base_cell": 63, "cell": "0807ffffffffffff", "digits": [], "is_class_iii": false, "res": 0}
+{"base_cell": 64, "cell": "08081fffffffffff", "digits": [], "is_class_iii": false, "res": 0}
+{"base_cell": 65, "cell": "08083fffffffffff", "digits": [], "is_class_iii": false, "res": 0}
+{"base_cell": 66, "cell": "08085fffffffffff", "digits": [], "is_class_iii": false, "res": 0}
+{"base_cell": 67, "cell": "08087fffffffffff", "digits": [], "is_class_iii": false, "res": 0}
+{"base_cell": 68, "cell": "08089fffffffffff", "digits": [], "is_class_iii": false, "res": 0}
+{"base_cell": 69, "cell": "0808bfffffffffff", "digits": [], "is_class_iii": false, "res": 0}
+{"base_cell": 70, "cell": "0808dfffffffffff", "digits": [], "is_class_iii": false, "res": 0}
+{"base_cell": 71, "cell": "0808ffffffffffff", "digits": [], "is_class_iii": false, "res": 0}
+{"base_cell": 72, "cell": "08091fffffffffff", "digits": [], "is_class_iii": false, "res": 0}
+{"base_cell": 73, "cell": "08093fffffffffff", "digits": [], "is_class_iii": false, "res": 0}
+{"base_cell": 74, "cell": "08095fffffffffff", "digits": [], "is_class_iii": false, "res": 0}
+{"base_cell": 75, "cell": "08097fffffffffff", "digits": [], "is_class_iii": false, "res": 0}
+{"base_cell": 76, "cell": "08099fffffffffff", "digits": [], "is_class_iii": false, "res": 0}
+{"base_cell": 77, "cell": "0809bfffffffffff", "digits": [], "is_class_iii": false, "res": 0}
+{"base_cell": 78, "cell": "0809dfffffffffff", "digits": [], "is_class_iii": false, "res": 0}
+{"base_cell": 79, "cell": "0809ffffffffffff", "digits": [], "is_class_iii": false, "res": 0}
+{"base_cell": 80, "cell": "080a1fffffffffff", "digits": [], "is_class_iii": false, "res": 0}
+{"base_cell": 81, "cell": "080a3fffffffffff", "digits": [], "is_class_iii": false, "res": 0}
+{"base_cell": 82, "cell": "080a5fffffffffff", "digits": [], "is_class_iii": false, "res": 0}
+{"base_cell": 83, "cell": "080a7fffffffffff", "digits": [], "is_class_iii": false, "res": 0}
+{"base_cell": 84, "cell": "080a9fffffffffff", "digits": [], "is_class_iii": false, "res": 0}
+{"base_cell": 85, "cell": "080abfffffffffff", "digits": [], "is_class_iii": false, "res": 0}
+{"base_cell": 86, "cell": "080adfffffffffff", "digits": [], "is_class_iii": false, "res": 0}
+{"base_cell": 87, "cell": "080affffffffffff", "digits": [], "is_class_iii": false, "res": 0}
+{"base_cell": 88, "cell": "080b1fffffffffff", "digits": [], "is_class_iii": false, "res": 0}
+{"base_cell": 89, "cell": "080b3fffffffffff", "digits": [], "is_class_iii": false, "res": 0}
+{"base_cell": 90, "cell": "080b5fffffffffff", "digits": [], "is_class_iii": false, "res": 0}
+{"base_cell": 91, "cell": "080b7fffffffffff", "digits": [], "is_class_iii": false, "res": 0}
+{"base_cell": 92, "cell": "080b9fffffffffff", "digits": [], "is_class_iii": false, "res": 0}
+{"base_cell": 93, "cell": "080bbfffffffffff", "digits": [], "is_class_iii": false, "res": 0}
+{"base_cell": 94, "cell": "080bdfffffffffff", "digits": [], "is_class_iii": false, "res": 0}
+{"base_cell": 95, "cell": "080bffffffffffff", "digits": [], "is_class_iii": false, "res": 0}
+{"base_cell": 96, "cell": "080c1fffffffffff", "digits": [], "is_class_iii": false, "res": 0}
+{"base_cell": 97, "cell": "080c3fffffffffff", "digits": [], "is_class_iii": false, "res": 0}
+{"base_cell": 98, "cell": "080c5fffffffffff", "digits": [], "is_class_iii": false, "res": 0}
+{"base_cell": 99, "cell": "080c7fffffffffff", "digits": [], "is_class_iii": false, "res": 0}
+{"base_cell": 100, "cell": "080c9fffffffffff", "digits": [], "is_class_iii": false, "res": 0}
+{"base_cell": 101, "cell": "080cbfffffffffff", "digits": [], "is_class_iii": false, "res": 0}
+{"base_cell": 102, "cell": "080cdfffffffffff", "digits": [], "is_class_iii": false, "res": 0}
+{"base_cell": 103, "cell": "080cffffffffffff", "digits": [], "is_class_iii": false, "res": 0}
+{"base_cell": 104, "cell": "080d1fffffffffff", "digits": [], "is_class_iii": false, "res": 0}
+{"base_cell": 105, "cell": "080d3fffffffffff", "digits": [], "is_class_iii": false, "res": 0}
+{"base_cell": 106, "cell": "080d5fffffffffff", "digits": [], "is_class_iii": false, "res": 0}
+{"base_cell": 107, "cell": "080d7fffffffffff", "digits": [], "is_class_iii": false, "res": 0}
+{"base_cell": 108, "cell": "080d9fffffffffff", "digits": [], "is_class_iii": false, "res": 0}
+{"base_cell": 109, "cell": "080dbfffffffffff", "digits": [], "is_class_iii": false, "res": 0}
+{"base_cell": 110, "cell": "080ddfffffffffff", "digits": [], "is_class_iii": false, "res": 0}
+{"base_cell": 111, "cell": "080dffffffffffff", "digits": [], "is_class_iii": false, "res": 0}
+{"base_cell": 112, "cell": "080e1fffffffffff", "digits": [], "is_class_iii": false, "res": 0}
+{"base_cell": 113, "cell": "080e3fffffffffff", "digits": [], "is_class_iii": false, "res": 0}
+{"base_cell": 114, "cell": "080e5fffffffffff", "digits": [], "is_class_iii": false, "res": 0}
+{"base_cell": 115, "cell": "080e7fffffffffff", "digits": [], "is_class_iii": false, "res": 0}
+{"base_cell": 116, "cell": "080e9fffffffffff", "digits": [], "is_class_iii": false, "res": 0}
+{"base_cell": 117, "cell": "080ebfffffffffff", "digits": [], "is_class_iii": false, "res": 0}
+{"base_cell": 118, "cell": "080edfffffffffff", "digits": [], "is_class_iii": false, "res": 0}
+{"base_cell": 119, "cell": "080effffffffffff", "digits": [], "is_class_iii": false, "res": 0}
+{"base_cell": 120, "cell": "080f1fffffffffff", "digits": [], "is_class_iii": false, "res": 0}
+{"base_cell": 121, "cell": "080f3fffffffffff", "digits": [], "is_class_iii": false, "res": 0}
+{"base_cell": 4, "cell": "0830800fffffffff", "digits": [0, 0, 0], "is_class_iii": true, "res": 3}
+{"base_cell": 14, "cell": "0831c00fffffffff", "digits": [0, 0, 0], "is_class_iii": true, "res": 3}
+{"base_cell": 24, "cell": "0833000fffffffff", "digits": [0, 0, 0], "is_class_iii": true, "res": 3}
+{"base_cell": 38, "cell": "0834c00fffffffff", "digits": [0, 0, 0], "is_class_iii": true, "res": 3}
+{"base_cell": 49, "cell": "0836200fffffffff", "digits": [0, 0, 0], "is_class_iii": true, "res": 3}
+{"base_cell": 58, "cell": "0837400fffffffff", "digits": [0, 0, 0], "is_class_iii": true, "res": 3}
+{"base_cell": 63, "cell": "0837e00fffffffff", "digits": [0, 0, 0], "is_class_iii": true, "res": 3}
+{"base_cell": 72, "cell": "0839000fffffffff", "digits": [0, 0, 0], "is_class_iii": true, "res": 3}
+{"base_cell": 83, "cell": "083a600fffffffff", "digits": [0, 0, 0], "is_class_iii": true, "res": 3}
+{"base_cell": 97, "cell": "083c200fffffffff", "digits": [0, 0, 0], "is_class_iii": true, "res": 3}
+{"base_cell": 107, "cell": "083d600fffffffff", "digits": [0, 0, 0], "is_class_iii": true, "res": 3}
+{"base_cell": 117, "cell": "083ea00fffffffff", "digits": [0, 0, 0], "is_class_iii": true, "res": 3}
+{"base_cell": 4, "cell": "0860800007ffffff", "digits": [0, 0, 0, 0, 0, 0], "is_class_iii": false, "res": 6}
+{"base_cell": 14, "cell": "0861c00007ffffff", "digits": [0, 0, 0, 0, 0, 0], "is_class_iii": false, "res": 6}
+{"base_cell": 24, "cell": "0863000007ffffff", "digits": [0, 0, 0, 0, 0, 0], "is_class_iii": false, "res": 6}
+{"base_cell": 38, "cell": "0864c00007ffffff", "digits": [0, 0, 0, 0, 0, 0], "is_class_iii": false, "res": 6}
+{"base_cell": 49, "cell": "0866200007ffffff", "digits": [0, 0, 0, 0, 0, 0], "is_class_iii": false, "res": 6}
+{"base_cell": 58, "cell": "0867400007ffffff", "digits": [0, 0, 0, 0, 0, 0], "is_class_iii": false, "res": 6}
+{"base_cell": 63, "cell": "0867e00007ffffff", "digits": [0, 0, 0, 0, 0, 0], "is_class_iii": false, "res": 6}
+{"base_cell": 72, "cell": "0869000007ffffff", "digits": [0, 0, 0, 0, 0, 0], "is_class_iii": false, "res": 6}
+{"base_cell": 83, "cell": "086a600007ffffff", "digits": [0, 0, 0, 0, 0, 0], "is_class_iii": false, "res": 6}
+{"base_cell": 97, "cell": "086c200007ffffff", "digits": [0, 0, 0, 0, 0, 0], "is_class_iii": false, "res": 6}
+{"base_cell": 107, "cell": "086d600007ffffff", "digits": [0, 0, 0, 0, 0, 0], "is_class_iii": false, "res": 6}
+{"base_cell": 117, "cell": "086ea00007ffffff", "digits": [0, 0, 0, 0, 0, 0], "is_class_iii": false, "res": 6}
+{"base_cell": 4, "cell": "089080000003ffff", "digits": [0, 0, 0, 0, 0, 0, 0, 0, 0], "is_class_iii": true, "res": 9}
+{"base_cell": 14, "cell": "0891c0000003ffff", "digits": [0, 0, 0, 0, 0, 0, 0, 0, 0], "is_class_iii": true, "res": 9}
+{"base_cell": 24, "cell": "089300000003ffff", "digits": [0, 0, 0, 0, 0, 0, 0, 0, 0], "is_class_iii": true, "res": 9}
+{"base_cell": 38, "cell": "0894c0000003ffff", "digits": [0, 0, 0, 0, 0, 0, 0, 0, 0], "is_class_iii": true, "res": 9}
+{"base_cell": 49, "cell": "089620000003ffff", "digits": [0, 0, 0, 0, 0, 0, 0, 0, 0], "is_class_iii": true, "res": 9}
+{"base_cell": 58, "cell": "089740000003ffff", "digits": [0, 0, 0, 0, 0, 0, 0, 0, 0], "is_class_iii": true, "res": 9}
+{"base_cell": 63, "cell": "0897e0000003ffff", "digits": [0, 0, 0, 0, 0, 0, 0, 0, 0], "is_class_iii": true, "res": 9}
+{"base_cell": 72, "cell": "089900000003ffff", "digits": [0, 0, 0, 0, 0, 0, 0, 0, 0], "is_class_iii": true, "res": 9}
+{"base_cell": 83, "cell": "089a60000003ffff", "digits": [0, 0, 0, 0, 0, 0, 0, 0, 0], "is_class_iii": true, "res": 9}
+{"base_cell": 97, "cell": "089c20000003ffff", "digits": [0, 0, 0, 0, 0, 0, 0, 0, 0], "is_class_iii": true, "res": 9}
+{"base_cell": 107, "cell": "089d60000003ffff", "digits": [0, 0, 0, 0, 0, 0, 0, 0, 0], "is_class_iii": true, "res": 9}
+{"base_cell": 117, "cell": "089ea0000003ffff", "digits": [0, 0, 0, 0, 0, 0, 0, 0, 0], "is_class_iii": true, "res": 9}
+{"base_cell": 4, "cell": "08c08000000001ff", "digits": [0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0], "is_class_iii": false, "res": 12}
+{"base_cell": 14, "cell": "08c1c000000001ff", "digits": [0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0], "is_class_iii": false, "res": 12}
+{"base_cell": 24, "cell": "08c30000000001ff", "digits": [0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0], "is_class_iii": false, "res": 12}
+{"base_cell": 38, "cell": "08c4c000000001ff", "digits": [0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0], "is_class_iii": false, "res": 12}
+{"base_cell": 49, "cell": "08c62000000001ff", "digits": [0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0], "is_class_iii": false, "res": 12}
+{"base_cell": 58, "cell": "08c74000000001ff", "digits": [0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0], "is_class_iii": false, "res": 12}
+{"base_cell": 63, "cell": "08c7e000000001ff", "digits": [0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0], "is_class_iii": false, "res": 12}
+{"base_cell": 72, "cell": "08c90000000001ff", "digits": [0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0], "is_class_iii": false, "res": 12}
+{"base_cell": 83, "cell": "08ca6000000001ff", "digits": [0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0], "is_class_iii": false, "res": 12}
+{"base_cell": 97, "cell": "08cc2000000001ff", "digits": [0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0], "is_class_iii": false, "res": 12}
+{"base_cell": 107, "cell": "08cd6000000001ff", "digits": [0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0], "is_class_iii": false, "res": 12}
+{"base_cell": 117, "cell": "08cea000000001ff", "digits": [0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0], "is_class_iii": false, "res": 12}
+{"base_cell": 4, "cell": "08f0800000000000", "digits": [0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0], "is_class_iii": true, "res": 15}
+{"base_cell": 14, "cell": "08f1c00000000000", "digits": [0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0], "is_class_iii": true, "res": 15}
+{"base_cell": 24, "cell": "08f3000000000000", "digits": [0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0], "is_class_iii": true, "res": 15}
+{"base_cell": 38, "cell": "08f4c00000000000", "digits": [0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0], "is_class_iii": true, "res": 15}
+{"base_cell": 49, "cell": "08f6200000000000", "digits": [0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0], "is_class_iii": true, "res": 15}
+{"base_cell": 58, "cell": "08f7400000000000", "digits": [0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0], "is_class_iii": true, "res": 15}
+{"base_cell": 63, "cell": "08f7e00000000000", "digits": [0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0], "is_class_iii": true, "res": 15}
+{"base_cell": 72, "cell": "08f9000000000000", "digits": [0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0], "is_class_iii": true, "res": 15}
+{"base_cell": 83, "cell": "08fa600000000000", "digits": [0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0], "is_class_iii": true, "res": 15}
+{"base_cell": 97, "cell": "08fc200000000000", "digits": [0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0], "is_class_iii": true, "res": 15}
+{"base_cell": 107, "cell": "08fd600000000000", "digits": [0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0], "is_class_iii": true, "res": 15}
+{"base_cell": 117, "cell": "08fea00000000000", "digits": [0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0], "is_class_iii": true, "res": 15}
+{"base_cell": 20, "cell": "081283ffffffffff", "digits": [0], "is_class_iii": true, "res": 1}
+{"base_cell": 20, "cell": "0822837fffffffff", "digits": [0, 6], "is_class_iii": false, "res": 2}
+{"base_cell": 20, "cell": "0832830fffffffff", "digits": [0, 6, 0], "is_class_iii": true, "res": 3}
+{"base_cell": 20, "cell": "08428309ffffffff", "digits": [0, 6, 0, 4], "is_class_iii": false, "res": 4}
+{"base_cell": 20, "cell": "085283083fffffff", "digits": [0, 6, 0, 4, 0], "is_class_iii": true, "res": 5}
+{"base_cell": 20, "cell": "086283082fffffff", "digits": [0, 6, 0, 4, 0, 5], "is_class_iii": false, "res": 6}
+{"base_cell": 20, "cell": "0872830828ffffff", "digits": [0, 6, 0, 4, 0, 5, 0], "is_class_iii": true, "res": 7}
+{"base_cell": 20, "cell": "08828308281fffff", "digits": [0, 6, 0, 4, 0, 5, 0, 0], "is_class_iii": false, "res": 8}
+{"base_cell": 20, "cell": "089283082803ffff", "digits": [0, 6, 0, 4, 0, 5, 0, 0, 0], "is_class_iii": true, "res": 9}
+{"base_cell": 20, "cell": "08a283082800ffff", "digits": [0, 6, 0, 4, 0, 5, 0, 0, 0, 1], "is_class_iii": false, "res": 10}
+{"base_cell": 20, "cell": "08b283082800bfff", "digits": [0, 6, 0, 4, 0, 5, 0, 0, 0, 1, 3], "is_class_iii": true, "res": 11}
+{"base_cell": 20, "cell": "08c283082800b3ff", "digits": [0, 6, 0, 4, 0, 5, 0, 0, 0, 1, 3, 1], "is_class_iii": false, "res": 12}
+{"base_cell": 20, "cell": "08d283082800b3bf", "digits": [0, 6, 0, 4, 0, 5, 0, 0, 0, 1, 3, 1, 6], "is_class_iii": true, "res": 13}
+{"base_cell": 20, "cell": "08e283082800b397", "digits": [0, 6, 0, 4, 0, 5, 0, 0, 0, 1, 3, 1, 6, 2], "is_class_iii": false, "res": 14}
+{"base_cell": 20, "cell": "08f283082800b390", "digits": [0, 6, 0, 4, 0, 5, 0, 0, 0, 1, 3, 1, 6, 2, 0], "is_class_iii": true, "res": 15}
+{"base_cell": 95, "cell": "081be3ffffffffff", "digits": [0], "is_class_iii": true, "res": 1}
+{"base_cell": 95, "cell": "082be0ffffffffff", "digits": [0, 1], "is_class_iii": false, "res": 2}
+{"base_cell": 95, "cell": "083be0efffffffff", "digits": [0, 1, 6], "is_class_iii": true, "res": 3}
+{"base_cell": 95, "cell": "084be0e3ffffffff", "digits": [0, 1, 6, 1], "is_class_iii": false, "res": 4}
+{"base_cell": 95, "cell": "085be0e37fffffff", "digits": [0, 1, 6, 1, 5], "is_class_iii": true, "res": 5}
+{"base_cell": 95, "cell": "086be0e35fffffff", "digits": [0, 1, 6, 1, 5, 3], "is_class_iii": false, "res": 6}
+{"base_cell": 95, "cell": "087be0e35cffffff", "digits": [0, 1, 6, 1, 5, 3, 4], "is_class_iii": true, "res": 7}
+{"base_cell": 95, "cell": "088be0e35cbfffff", "digits": [0, 1, 6, 1, 5, 3, 4, 5], "is_class_iii": false, "res": 8}
+{"base_cell": 95, "cell": "089be0e35cbbffff", "digits": [0, 1, 6, 1, 5, 3, 4, 5, 6], "is_class_iii": true, "res": 9}
+{"base_cell": 95, "cell": "08abe0e35cbaffff", "digits": [0, 1, 6, 1, 5, 3, 4, 5, 6, 5], "is_class_iii": false, "res": 10}
+{"base_cell": 95, "cell": "08bbe0e35cbadfff", "digits": [0, 1, 6, 1, 5, 3, 4, 5, 6, 5, 5], "is_class_iii": true, "res": 11}
+{"base_cell": 95, "cell": "08cbe0e35cbad1ff", "digits": [0, 1, 6, 1, 5, 3, 4, 5, 6, 5, 5, 0], "is_class_iii": false, "res": 12}
+{"base_cell": 95, "cell": "08dbe0e35cbad0bf", "digits": [0, 1, 6, 1, 5, 3, 4, 5, 6, 5, 5, 0, 2], "is_class_iii": true, "res": 13}
+{"base_cell": 95, "cell": "08ebe0e35cbad0af", "digits": [0, 1, 6, 1, 5, 3, 4, 5, 6, 5, 5, 0, 2, 5], "is_class_iii": false, "res": 14}
+{"base_cell": 95, "cell": "08fbe0e35cbad0a8", "digits": [0, 1, 6, 1, 5, 3, 4, 5, 6, 5, 5, 0, 2, 5, 0], "is_class_iii": true, "res": 15}
+{"base_cell": 23, "cell": "0812f7ffffffffff", "digits": [5], "is_class_iii": true, "res": 1}
+{"base_cell": 23, "cell": "0822f5ffffffffff", "digits": [5, 3], "is_class_iii": false, "res": 2}
+{"base_cell": 23, "cell": "0832f5afffffffff", "digits": [5, 3, 2], "is_class_iii": true, "res": 3}
+{"base_cell": 23, "cell": "0842f5a3ffffffff", "digits": [5, 3, 2, 1], "is_class_iii": false, "res": 4}
+{"base_cell": 23, "cell": "0852f5a37fffffff", "digits": [5, 3, 2, 1, 5], "is_class_iii": true, "res": 5}
+{"base_cell": 23, "cell": "0862f5a377ffffff", "digits": [5, 3, 2, 1, 5, 6], "is_class_iii": false, "res": 6}
+{"base_cell": 23, "cell": "0872f5a375ffffff", "digits": [5, 3, 2, 1, 5, 6, 5], "is_class_iii": true, "res": 7}
+{"base_cell": 23, "cell": "0882f5a375bfffff", "digits": [5, 3, 2, 1, 5, 6, 5, 5], "is_class_iii": false, "res": 8}
+{"base_cell": 23, "cell": "0892f5a375afffff", "digits": [5, 3, 2, 1, 5, 6, 5, 5, 3], "is_class_iii": true, "res": 9}
+{"base_cell": 23, "cell": "08a2f5a375ac7fff", "digits": [5, 3, 2, 1, 5, 6, 5, 5, 3, 0], "is_class_iii": false, "res": 10}
+{"base_cell": 23, "cell": "08b2f5a375ac4fff", "digits": [5, 3, 2, 1, 5, 6, 5, 5, 3, 0, 4], "is_class_iii": true, "res": 11}
+{"base_cell": 23, "cell": "08c2f5a375ac4bff", "digits": [5, 3, 2, 1, 5, 6, 5, 5, 3, 0, 4, 5], "is_class_iii": false, "res": 12}
+{"base_cell": 23, "cell": "08d2f5a375ac4b3f", "digits": [5, 3, 2, 1, 5, 6, 5, 5, 3, 0, 4, 5, 4], "is_class_iii": true, "res": 13}
+{"base_cell": 23, "cell": "08e2f5a375ac4b0f", "digits": [5, 3, 2, 1, 5, 6, 5, 5, 3, 0, 4, 5, 4, 1], "is_class_iii": false, "res": 14}
+{"base_cell": 23, "cell": "08f2f5a375ac4b0d", "digits": [5, 3, 2, 1, 5, 6, 5, 5, 3, 0, 4, 5, 4, 1, 5], "is_class_iii": true, "res": 15}
+{"base_cell": 61, "cell": "0817a7ffffffffff", "digits": [1], "is_class_iii": true, "res": 1}
+{"base_cell": 61, "cell": "0827a6ffffffffff", "digits": [1, 5], "is_class_iii": false, "res": 2}
+{"base_cell": 61, "cell": "0837a6efffffffff", "digits": [1, 5, 6], "is_class_iii": true, "res": 3}
+{"base_cell": 61, "cell": "0847a6e5ffffffff", "digits": [1, 5, 6, 2], "is_class_iii": false, "res": 4}
+{"base_cell": 61, "cell": "0857a6e43fffffff", "digits": [1, 5, 6, 2, 0], "is_class_iii": true, "res": 5}
+{"base_cell": 61, "cell": "0867a6e42fffffff", "digits": [1, 5, 6, 2, 0, 5], "is_class_iii": false, "res": 6}
+{"base_cell": 61, "cell": "0877a6e42cffffff", "digits": [1, 5, 6, 2, 0, 5, 4], "is_class_iii": true, "res": 7}
+{"base_cell": 61, "cell": "0887a6e42cbfffff", "digits": [1, 5, 6, 2, 0, 5, 4, 5], "is_class_iii": false, "res": 8}
+{"base_cell": 61, "cell": "0897a6e42ca3ffff", "digits": [1, 5, 6, 2, 0, 5, 4, 5, 0], "is_class_iii": true, "res": 9}
+{"base_cell": 61, "cell": "08a7a6e42ca27fff", "digits": [1, 5, 6, 2, 0, 5, 4, 5, 0, 4], "is_class_iii": false, "res": 10}
+{"base_cell": 61, "cell": "08b7a6e42ca20fff", "digits": [1, 5, 6, 2, 0, 5, 4, 5, 0, 4, 0], "is_class_iii": true, "res": 11}
+{"base_cell": 61, "cell": "08c7a6e42ca207ff", "digits": [1, 5, 6, 2, 0, 5, 4, 5, 0, 4, 0, 3], "is_class_iii": false, "res": 12}
+{"base_cell": 61, "cell": "08d7a6e42ca2067f", "digits": [1, 5, 6, 2, 0, 5, 4, 5, 0, 4, 0, 3, 1], "is_class_iii": true, "res": 13}
+{"base_cell": 61, "cell": "08e7a6e42ca20647", "digits": [1, 5, 6, 2, 0, 5, 4, 5, 0, 4, 0, 3, 1, 0], "is_class_iii": false, "res": 14}
+{"base_cell": 61, "cell": "08f7a6e42ca20642", "digits": [1, 5, 6, 2, 0, 5, 4, 5, 0, 4, 0, 3, 1, 0, 2], "is_class_iii": true, "res": 15}
+{"base_cell": 3, "cell": "081077ffffffffff", "digits": [5], "is_class_iii": true, "res": 1}
+{"base_cell": 3, "cell": "082075ffffffffff", "digits": [5, 3], "is_class_iii": false, "res": 2}
+{"base_cell": 3, "cell": "083075dfffffffff", "digits": [5, 3, 5], "is_class_iii": true, "res": 3}
+{"base_cell": 3, "cell": "084075ddffffffff", "digits": [5, 3, 5, 6], "is_class_iii": false, "res": 4}
+{"base_cell": 3, "cell": "085075dd7fffffff", "digits": [5, 3, 5, 6, 5], "is_class_iii": true, "res": 5}
+{"base_cell": 3, "cell": "086075dd4fffffff", "digits": [5, 3, 5, 6, 5, 1], "is_class_iii": false, "res": 6}
+{"base_cell": 3, "cell": "087075dd4bffffff", "digits": [5, 3, 5, 6, 5, 1, 3], "is_class_iii": true, "res": 7}
+{"base_cell": 3, "cell": "088075dd4bdfffff", "digits": [5, 3, 5, 6, 5, 1, 3, 6], "is_class_iii": false, "res": 8}
+{"base_cell": 3, "cell": "089075dd4b8bffff", "digits": [5, 3, 5, 6, 5, 1, 3, 4, 2], "is_class_iii": true, "res": 9}
+{"base_cell": 3, "cell": "08a075dd4b897fff", "digits": [5, 3, 5, 6, 5, 1, 3, 4, 2, 2], "is_class_iii": false, "res": 10}
+{"base_cell": 3, "cell": "08b075dd4b890fff", "digits": [5, 3, 5, 6, 5, 1, 3, 4, 2, 2, 0], "is_class_iii": true, "res": 11}
+{"base_cell": 3, "cell": "08c075dd4b890dff", "digits": [5, 3, 5, 6, 5, 1, 3, 4, 2, 2, 0, 6], "is_class_iii": false, "res": 12}
+{"base_cell": 3, "cell": "08d075dd4b890c3f", "digits": [5, 3, 5, 6, 5, 1, 3, 4, 2, 2, 0, 6, 0], "is_class_iii": true, "res": 13}
+{"base_cell": 3, "cell": "08e075dd4b890c2f", "digits": [5, 3, 5, 6, 5, 1, 3, 4, 2, 2, 0, 6, 0, 5], "is_class_iii": false, "res": 14}
+{"base_cell": 3, "cell": "08f075dd4b890c2e", "digits": [5, 3, 5, 6, 5, 1, 3, 4, 2, 2, 0, 6, 0, 5, 6], "is_class_iii": true, "res": 15}
+{"base_cell": 119, "cell": "08eef14543b72af7", "digits": [4, 2, 4, 2, 5, 0, 3, 5, 5, 6, 2, 5, 3, 6], "is_class_iii": false, "res": 14}
+{"base_cell": 62, "cell": "0827c4ffffffffff", "digits": [1, 1], "is_class_iii": false, "res": 2}
+{"base_cell": 86, "cell": "084ad213ffffffff", "digits": [4, 4, 1, 1], "is_class_iii": false, "res": 4}
+{"base_cell": 59, "cell": "0857711cbfffffff", "digits": [4, 2, 1, 6, 2], "is_class_iii": true, "res": 5}
+{"base_cell": 1, "cell": "08a022d21bb4ffff", "digits": [0, 5, 5, 1, 0, 3, 3, 5, 5, 1], "is_class_iii": false, "res": 10}
+{"base_cell": 119, "cell": "08bef3692e21dfff", "digits": [4, 6, 6, 4, 4, 5, 6, 1, 0, 3, 5], "is_class_iii": true, "res": 11}
+{"base_cell": 11, "cell": "082165ffffffffff", "digits": [1, 3], "is_class_iii": false, "res": 2}
+{"base_cell": 18, "cell": "08125bffffffffff", "digits": [6], "is_class_iii": true, "res": 1}
+{"base_cell": 61, "cell": "0817bbffffffffff", "digits": [6], "is_class_iii": true, "res": 1}
+{"base_cell": 121, "cell": "085f22147fffffff", "digits": [0, 4, 1, 2, 1], "is_class_iii": true, "res": 5}
+{"base_cell": 77, "cell": "0839ad1fffffffff", "digits": [3, 2, 1], "is_class_iii": true, "res": 3}
+{"base_cell": 13, "cell": "0831accfffffffff", "digits": [3, 1, 4], "is_class_iii": true, "res": 3}
+{"base_cell": 10, "cell": "083155afffffffff", "digits": [5, 3, 2], "is_class_iii": true, "res": 3}
+{"base_cell": 100, "cell": "08dc85408bcdd33f", "digits": [1, 2, 4, 0, 2, 1, 3, 6, 3, 3, 5, 1, 4], "is_class_iii": true, "res": 13}
+{"base_cell": 22, "cell": "0882c5eb003fffff", "digits": [1, 3, 6, 5, 4, 0, 0, 1], "is_class_iii": false, "res": 8}
+{"base_cell": 105, "cell": "089d2c66a4bbffff", "digits": [3, 0, 6, 3, 2, 4, 4, 5, 6], "is_class_iii": true, "res": 9}
+{"base_cell": 7, "cell": "0830f40fffffffff", "digits": [5, 0, 0], "is_class_iii": true, "res": 3}
+{"base_cell": 1, "cell": "086028048fffffff", "digits": [2, 0, 0, 2, 2, 1], "is_class_iii": false, "res": 6}
+{"base_cell": 90, "cell": "086b4990efffffff", "digits": [2, 3, 1, 0, 3, 5], "is_class_iii": false, "res": 6}
+{"base_cell": 108, "cell": "08dd8740836087bf", "digits": [1, 6, 4, 0, 2, 0, 3, 3, 0, 1, 0, 3, 6], "is_class_iii": true, "res": 13}
+{"base_cell": 17, "cell": "08a23a488076ffff", "digits": [6, 4, 4, 4, 2, 0, 0, 3, 5, 5], "is_class_iii": false, "res": 10}
+{"base_cell": 75, "cell": "08b9689035c20fff", "digits": [2, 1, 1, 0, 0, 6, 5, 6, 0, 4, 0], "is_class_iii": true, "res": 11}
+{"base_cell": 113, "cell": "08ae2c90d514ffff", "digits": [3, 1, 1, 0, 3, 2, 5, 0, 5, 1], "is_class_iii": false, "res": 10}
+{"base_cell": 78, "cell": "08c9d4331bcc65ff", "digits": [5, 0, 3, 1, 4, 3, 3, 6, 3, 0, 6, 2], "is_class_iii": false, "res": 12}
+{"base_cell": 114, "cell": "083e418fffffffff", "digits": [0, 3, 0], "is_class_iii": true, "res": 3}
+{"base_cell": 46, "cell": "08f5c5889ab5e134", "digits": [1, 3, 0, 4, 2, 3, 2, 5, 5, 3, 6, 0, 4, 6, 4], "is_class_iii": true, "res": 15}
+{"base_cell": 121, "cell": "083f329fffffffff", "digits": [4, 5, 1], "is_class_iii": true, "res": 3}
+{"base_cell": 69, "cell": "0858a898ffffffff", "digits": [2, 1, 1, 4, 3], "is_class_iii": true, "res": 5}
+{"base_cell": 91, "cell": "08eb68344166d64f", "digits": [2, 0, 3, 2, 1, 0, 1, 3, 1, 5, 5, 3, 1, 1], "is_class_iii": false, "res": 14}
+{"base_cell": 41, "cell": "088532252dbfffff", "digits": [4, 4, 2, 2, 4, 5, 5, 5], "is_class_iii": false, "res": 8}
+{"base_cell": 52, "cell": "08a6918345607fff", "digits": [4, 3, 0, 1, 5, 0, 5, 3, 0, 0], "is_class_iii": false, "res": 10}
+{"base_cell": 18, "cell": "088247529abfffff", "digits": [1, 6, 5, 1, 2, 3, 2, 5], "is_class_iii": false, "res": 8}
+{"base_cell": 59, "cell": "08a77581b4247fff", "digits": [5, 3, 0, 0, 6, 6, 4, 1, 1, 0], "is_class_iii": false, "res": 10}
+{"base_cell": 85, "cell": "081aa3ffffffffff", "digits": [0], "is_class_iii": true, "res": 1}
+{"base_cell": 111, "cell": "08bdfa22a18cdfff", "digits": [6, 4, 2, 1, 2, 4, 1, 4, 3, 1, 5], "is_class_iii": true, "res": 11}
+{"base_cell": 40, "cell": "085516b87fffffff", "digits": [5, 5, 3, 4, 1], "is_class_iii": true, "res": 5}
+{"base_cell": 47, "cell": "08e5e1626899c357", "digits": [0, 2, 6, 1, 1, 5, 0, 4, 6, 3, 4, 1, 5, 2], "is_class_iii": false, "res": 14}

@@ -3,6 +3,8 @@
     "cell_to_boundary": 294,
     "cell_to_latlng": 294,
     "grid_disk": 188,
+    "icosahedron_faces": 294,
+    "index_digits": 294,
     "latlng_to_cell": 432,
     "pentagons": 192,
     "polygon_to_cells": 6,
@@ -10,6 +12,6 @@
   },
   "h3_py_version": "4.5.0",
   "libh3_version": "4.5.0",
-  "note": "Committed, curated ground-truth corpus for H3.NET.Native interop conformance tests. Angular values are DEGREES; cells are zero-padded 16-hex strings (ulong). Doubles are full precision. Regenerate with tools/gen-fixtures/gen_fixtures.py. The nightly CI sweep covers the large/exhaustive cases; this corpus is intentionally modest.",
+  "note": "Committed, curated ground-truth corpus for H3.NET.Native interop conformance tests. Angular values are DEGREES; cells are zero-padded 16-hex strings (ulong). Doubles are full precision. Regenerate with tools/gen-fixtures/gen_fixtures.py (core corpus) and tools/gen-fixtures/gen_inspection_fixtures.py (index_digits + icosahedron_faces; reuses the same sample_cells corpus). The nightly CI sweep covers the large/exhaustive cases; this corpus is intentionally modest.",
   "seed": 20260627
 }

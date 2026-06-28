@@ -65,6 +65,19 @@ internal static class FixtureLoader
         [property: JsonPropertyName("exterior")] IReadOnlyList<double[]> Exterior,
         [property: JsonPropertyName("holes")] IReadOnlyList<double[][]>? Holes);
 
+    /// <summary>One index_digits.ndjson record. Digits is the stored vector digits[1..res].</summary>
+    public sealed record IndexDigitsCase(
+        [property: JsonPropertyName("cell")] string Cell,
+        [property: JsonPropertyName("res")] int Res,
+        [property: JsonPropertyName("base_cell")] int BaseCell,
+        [property: JsonPropertyName("is_class_iii")] bool IsClassIii,
+        [property: JsonPropertyName("digits")] IReadOnlyList<int> Digits);
+
+    /// <summary>One icosahedron_faces.ndjson record. Faces are sorted ascending, each 0-19.</summary>
+    public sealed record IcosahedronFacesCase(
+        [property: JsonPropertyName("cell")] string Cell,
+        [property: JsonPropertyName("faces")] IReadOnlyList<int> Faces);
+
     // --- Loaders ---
 
     public static IEnumerable<LatLngToCellCase> LoadLatLngToCell() =>
@@ -81,6 +94,12 @@ internal static class FixtureLoader
 
     public static IEnumerable<PolygonToCellsCase> LoadPolygonToCells() =>
         LoadNdjson<PolygonToCellsCase>("polygon_to_cells.ndjson");
+
+    public static IEnumerable<IndexDigitsCase> LoadIndexDigits() =>
+        LoadNdjson<IndexDigitsCase>("index_digits.ndjson");
+
+    public static IEnumerable<IcosahedronFacesCase> LoadIcosahedronFaces() =>
+        LoadNdjson<IcosahedronFacesCase>("icosahedron_faces.ndjson");
 
     /// <summary>Reads res0_cells.csv: one 16-hex cell per line.</summary>
     public static IReadOnlyList<string> LoadRes0Cells()
