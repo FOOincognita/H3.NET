@@ -164,6 +164,29 @@ public sealed class LayoutGoldenTests
     }
 
     [Fact]
+    public void DirectedEdgeToBoundary_FillsSameCellBoundaryLayout_AsCellToBoundary()
+    {
+        // directedEdgeToBoundary reuses the EXACT CellBoundary [InlineArray(10)] struct +
+        // golden marshalling already pinned for cellToBoundary above (the 168-byte size
+        // and field-offset facts cover M3). This builds a real directed edge and asserts
+        // the vertices come back finite and in canonical degree ranges -- the same layout
+        // contract, exercised through the directed-edge code path.
+        var origin = H3Index.Parse("8928308280fffff"); // res-8 San Francisco hexagon.
+        var edge = origin.DirectedEdgeTo(origin.GetDirectedEdges()[0].Destination);
+
+        var boundary = edge.ToBoundary();
+
+        Assert.InRange(boundary.Count, 2, NativeLayout.MaxCellBoundaryVerts);
+        foreach (var v in boundary)
+        {
+            Assert.True(double.IsFinite(v.LatitudeDegrees), FormattableString.Invariant($"lat not finite: {v.LatitudeDegrees}"));
+            Assert.True(double.IsFinite(v.LongitudeDegrees), FormattableString.Invariant($"lng not finite: {v.LongitudeDegrees}"));
+            Assert.InRange(v.LatitudeDegrees, -90.0, 90.0);
+            Assert.InRange(v.LongitudeDegrees, -180.0, 180.0);
+        }
+    }
+
+    [Fact]
     public void Pentagon_Boundary_HasFiveVertices()
     {
         // 08009fffffffffff is a res-0 pentagon in the corpus (pentagons.csv).
