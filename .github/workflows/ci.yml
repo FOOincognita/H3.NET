@@ -136,7 +136,7 @@ jobs:
       - name: Test (net8.0)
         run: dotnet test H3.NET.slnx -c Release -f net8.0 --no-build
 
-      # coverage deferred to follow-up (MTP code-coverage extension) — see HANDOFF
+      # coverage deferred to follow-up (MTP code-coverage extension)
       # (coverlet.collector emits MTP0001 under Microsoft.Testing.Platform; collecting
       # it correctly would require a package/csproj change, which is out of scope here).
 

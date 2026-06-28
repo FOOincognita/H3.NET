@@ -17,7 +17,6 @@
 - [ ] Tests added or updated, and they pass on the affected TFMs (net10.0; net8.0)
 - [ ] Public members have XML documentation; lat/lng parameters documented in degrees
 - [ ] SPDX license headers present on new source files (Apache-2.0)
-- [ ] `HANDOFF.md` updated to reflect current scaffold/API progress
 - [ ] No direct push to `main` (changes go through this PR)
 
 ## Notes
