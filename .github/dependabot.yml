@@ -29,8 +29,23 @@ updates:
       - "dependencies"
       - "github-actions"
     groups:
+      # codeql-action ships init/analyze/upload-sarif as separate dependencies
+      # that MUST move in lockstep; a split major bump mixes v3+v4 and fails the
+      # Analyze step. Group all of them, majors included, into a single PR.
+      codeql-action:
+        applies-to: version-updates
+        patterns:
+          - "github/codeql-action*"
+        update-types:
+          - "major"
+          - "minor"
+          - "patch"
       github-actions:
         applies-to: version-updates
+        patterns:
+          - "*"
+        exclude-patterns:
+          - "github/codeql-action*"
         update-types:
           - "minor"
           - "patch"
