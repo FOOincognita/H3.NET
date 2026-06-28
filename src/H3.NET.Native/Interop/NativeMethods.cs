@@ -36,6 +36,43 @@ internal static unsafe partial class NativeMethods
     [LibraryImport("h3", EntryPoint = "gridDisk")]
     internal static partial H3ErrorCode GridDisk(ulong origin, int k, ulong* outCells);
 
+    // Parallel to maxGridDiskSize: gives 6*k cells for the hollow ring (1 at k=0).
+    [LibraryImport("h3", EntryPoint = "maxGridRingSize")]
+    internal static partial H3ErrorCode MaxGridRingSize(int k, out long size);
+
+    // Pentagon-SAFE wrapper: self-dispatches to gridRingUnsafe and falls back on
+    // distortion. out length must be >= maxGridRingSize(k); on pentagon holes some
+    // slots stay H3_NULL, so callers strip defensively. Order is not guaranteed.
+    [LibraryImport("h3", EntryPoint = "gridRing")]
+    internal static partial H3ErrorCode GridRing(ulong origin, int k, ulong* outCells);
+
+    // Size-half of the gridPathCells M4 pair. EXACT length (gridDistance + 1);
+    // propagates E_FAILED for far-apart / mismatched-resolution endpoints.
+    [LibraryImport("h3", EntryPoint = "gridPathCellsSize")]
+    internal static partial H3ErrorCode GridPathCellsSize(ulong start, ulong end, out long size);
+
+    // out length must be == gridPathCellsSize(start, end). Endpoint-inclusive:
+    // out[0] == start, out[^1] == end. No H3_NULL padding (exact size).
+    [LibraryImport("h3", EntryPoint = "gridPathCells")]
+    internal static partial H3ErrorCode GridPathCells(ulong start, ulong end, ulong* outCells);
+
+    [LibraryImport("h3", EntryPoint = "gridDistance")]
+    internal static partial H3ErrorCode GridDistance(ulong origin, ulong h3, out long distance);
+
+    // SAFE-dispatching wrapper. distances is int* (NOT int64). Both buffers sized to
+    // maxGridDiskSize(k): the cells buffer is the H3_NULL sentinel channel; distances
+    // carries no sentinel (origin's distance is legitimately 0).
+    [LibraryImport("h3", EntryPoint = "gridDiskDistances")]
+    internal static partial H3ErrorCode GridDiskDistances(ulong origin, int k, ulong* outCells, int* distances);
+
+    // mode is reserved (only 0 is defined); the public layer hides it and always passes 0.
+    [LibraryImport("h3", EntryPoint = "cellToLocalIj")]
+    internal static partial H3ErrorCode CellToLocalIj(ulong origin, ulong h3, uint mode, out NativeCoordIJ outIj);
+
+    // const CoordIJ* ij -> `in` blittable struct marshals as a pointer. mode reserved (pass 0).
+    [LibraryImport("h3", EntryPoint = "localIjToCell")]
+    internal static partial H3ErrorCode LocalIjToCell(ulong origin, in NativeCoordIJ ij, uint mode, out ulong outCell);
+
     // ---- Region (polygon) operations ---------------------------------------
 
     [LibraryImport("h3", EntryPoint = "maxPolygonToCellsSize")]

@@ -104,6 +104,38 @@ internal static class FixtureLoader
         [property: JsonPropertyName("input")] IReadOnlyList<string> Input,
         [property: JsonPropertyName("compacted")] IReadOnlyList<string> Compacted);
 
+    /// <summary>One grid_ring.ndjson record: the hollow ring at exactly distance k. Cells are a compact, unordered set.</summary>
+    public sealed record GridRingCase(
+        [property: JsonPropertyName("cell")] string Cell,
+        [property: JsonPropertyName("k")] int K,
+        [property: JsonPropertyName("cells")] IReadOnlyList<string> Cells);
+
+    /// <summary>One grid_path.ndjson record: the ORDERED, endpoint-inclusive path (path[0]==start, path[^1]==end).</summary>
+    public sealed record GridPathCase(
+        [property: JsonPropertyName("start")] string Start,
+        [property: JsonPropertyName("end")] string End,
+        [property: JsonPropertyName("path")] IReadOnlyList<string> Path);
+
+    /// <summary>One grid_distance.ndjson record: the grid distance between origin and other.</summary>
+    public sealed record GridDistanceCase(
+        [property: JsonPropertyName("origin")] string Origin,
+        [property: JsonPropertyName("other")] string Other,
+        [property: JsonPropertyName("distance")] long Distance);
+
+    /// <summary>One local_ij.ndjson record: the local IJ of target relative to origin (mode 0).</summary>
+    public sealed record LocalIjCase(
+        [property: JsonPropertyName("origin")] string Origin,
+        [property: JsonPropertyName("target")] string Target,
+        [property: JsonPropertyName("i")] int I,
+        [property: JsonPropertyName("j")] int J);
+
+    /// <summary>One grid_disk_distances.ndjson record: parallel (cell, distance) arrays for the disk at radius k.</summary>
+    public sealed record GridDiskDistancesCase(
+        [property: JsonPropertyName("cell")] string Cell,
+        [property: JsonPropertyName("k")] int K,
+        [property: JsonPropertyName("cells")] IReadOnlyList<string> Cells,
+        [property: JsonPropertyName("distances")] IReadOnlyList<int> Distances);
+
     // --- Loaders ---
 
     public static IEnumerable<LatLngToCellCase> LoadLatLngToCell() =>
@@ -135,6 +167,21 @@ internal static class FixtureLoader
 
     public static IEnumerable<CompactCase> LoadCompact() =>
         LoadNdjson<CompactCase>("compact.ndjson");
+
+    public static IEnumerable<GridRingCase> LoadGridRing() =>
+        LoadNdjson<GridRingCase>("grid_ring.ndjson");
+
+    public static IEnumerable<GridPathCase> LoadGridPath() =>
+        LoadNdjson<GridPathCase>("grid_path.ndjson");
+
+    public static IEnumerable<GridDistanceCase> LoadGridDistance() =>
+        LoadNdjson<GridDistanceCase>("grid_distance.ndjson");
+
+    public static IEnumerable<LocalIjCase> LoadLocalIj() =>
+        LoadNdjson<LocalIjCase>("local_ij.ndjson");
+
+    public static IEnumerable<GridDiskDistancesCase> LoadGridDiskDistances() =>
+        LoadNdjson<GridDiskDistancesCase>("grid_disk_distances.ndjson");
 
     /// <summary>Reads res0_cells.csv: one 16-hex cell per line.</summary>
     public static IReadOnlyList<string> LoadRes0Cells()

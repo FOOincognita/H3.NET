@@ -32,6 +32,24 @@ with the same pinned `h3` version reproduces byte-identical output.
 | `pentagons.csv` | `pentagon,res` header; pentagons across all resolutions. |
 | `manifest.json` | `h3_py_version`, `libh3_version`, `seed`, `generated_counts`, `note`. |
 
+### Supplementary generators (reuse the same `sample_cells()` corpus)
+
+Run after `gen_fixtures.py` (they import its helpers and write into the same data dir):
+
+```sh
+.venv/bin/python gen_inspection_fixtures.py     # index_digits + icosahedron_faces
+.venv/bin/python gen_hierarchy_fixtures.py      # hierarchy + child_pos + compact
+.venv/bin/python gen_grid_traversal_fixtures.py # grid_ring + grid_path + grid_distance + local_ij + grid_disk_distances
+```
+
+| File | Contents |
+| --- | --- |
+| `grid_ring.ndjson` | `{cell, k, cells}` hollow ring at exactly distance `k` (unordered set). |
+| `grid_path.ndjson` | `{start, end, path}` ORDERED, endpoint-inclusive line (`path[0]==start`, `path[-1]==end`). |
+| `grid_distance.ndjson` | `{origin, other, distance}` over the same pairs as `grid_path`. |
+| `local_ij.ndjson` | `{origin, target, i, j}` local IJ of `target` relative to `origin` (mode 0). |
+| `grid_disk_distances.ndjson` | `{cell, k, cells, distances}` parallel arrays; `distances[i]` is the grid distance of `cells[i]`. Derived from `grid_disk` via concentric set arithmetic (h3-py 4.5.0 has no `grid_disk_distances`). |
+
 ## Conventions
 
 - Angular values are **degrees** (matching the `H3.NET.Native` public surface).
