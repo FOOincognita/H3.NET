@@ -90,6 +90,44 @@ internal static unsafe partial class NativeMethods
     [LibraryImport("h3", EntryPoint = "getBaseCellNumber")]
     internal static partial int GetBaseCellNumber(ulong cell);
 
+    // isValidIndex is the broader cell-OR-edge-OR-vertex validity predicate; like
+    // isValidCell it never reports an error and never throws, so callers must NOT
+    // validate-first against it.
+    [LibraryImport("h3", EntryPoint = "isValidIndex")]
+    internal static partial int IsValidIndex(ulong cell);
+
+    // ---- Inspection / string conversion (H3Error channel) ------------------
+
+    // getIndexDigit only bit-extracts the stored digit; it validates 1 <= res <= 15
+    // (E_RES_DOMAIN) but never checks cell validity, so do not validate-first.
+    [LibraryImport("h3", EntryPoint = "getIndexDigit")]
+    internal static partial H3ErrorCode GetIndexDigit(ulong cell, int res, out int digit);
+
+    // constructCell reads digits[0..res-1]; the caller MUST pin a span of exactly
+    // res ints. Argument-domain errors: E_RES_DOMAIN, E_BASE_CELL_DOMAIN,
+    // E_DIGIT_DOMAIN, E_DELETED_DIGIT.
+    [LibraryImport("h3", EntryPoint = "constructCell")]
+    internal static partial H3ErrorCode ConstructCell(int res, int baseCellNumber, int* digits, out ulong outCell);
+
+    // Size-half of the getIcosahedronFaces M4 pair: 2 for hexagons, 5 for pentagons.
+    [LibraryImport("h3", EntryPoint = "maxFaceCount")]
+    internal static partial H3ErrorCode MaxFaceCount(ulong cell, out int count);
+
+    // out length must be >= maxFaceCount(cell); unused slots are INVALID_FACE (-1),
+    // NOT H3_NULL, because 0 is a valid icosahedron face.
+    [LibraryImport("h3", EntryPoint = "getIcosahedronFaces")]
+    internal static partial H3ErrorCode GetIcosahedronFaces(ulong cell, int* outFaces);
+
+    // sscanf("%016" PRIx64): any valid 16-hex string yields the identical ulong as the
+    // managed Parse fast path; an unparseable string returns E_FAILED.
+    [LibraryImport("h3", EntryPoint = "stringToH3", StringMarshalling = StringMarshalling.Utf8)]
+    internal static partial H3ErrorCode StringToH3(string str, out ulong outCell);
+
+    // sprintf("%" PRIx64): emits VARIABLE-length lowercase hex (no zero padding) into
+    // the caller's buffer; requires sz >= 17 or E_MEMORY_BOUNDS.
+    [LibraryImport("h3", EntryPoint = "h3ToString")]
+    internal static partial H3ErrorCode H3ToString(ulong cell, byte* str, nuint sz);
+
     // ---- Corpus helpers ----------------------------------------------------
 
     [LibraryImport("h3", EntryPoint = "res0CellCount")]
