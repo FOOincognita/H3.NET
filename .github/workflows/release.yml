@@ -64,7 +64,7 @@ jobs:
         run: bash build/build-native.sh "${{ matrix.rid }}"
 
       - name: Upload native artifact
-        uses: actions/upload-artifact@ea165f8d65b6e75b540449e92b4886f43607fa02 # v4
+        uses: actions/upload-artifact@043fb46d1a93c77aae656e7c1c64a875d1fc6a0a # v7.0.1
         with:
           name: native-${{ matrix.rid }}
           path: runtimes/${{ matrix.rid }}/native/libh3.*
@@ -107,7 +107,7 @@ jobs:
           path: runtimes/osx-arm64/native
 
       - name: Setup .NET 8 + 10
-        uses: actions/setup-dotnet@67a3573c9a986a3f9c594539f4ab511d57bb3ce9 # v4
+        uses: actions/setup-dotnet@26b0ec14cb23fa6904739307f278c14f94c95bf1 # v5.4.0
         with:
           dotnet-version: |
             8.0.x
@@ -137,7 +137,7 @@ jobs:
           subject-path: 'artifacts/feed/*.nupkg'
 
       - name: Upload release artifacts
-        uses: actions/upload-artifact@ea165f8d65b6e75b540449e92b4886f43607fa02 # v4
+        uses: actions/upload-artifact@043fb46d1a93c77aae656e7c1c64a875d1fc6a0a # v7.0.1
         with:
           name: release-artifacts
           path: |
@@ -165,7 +165,7 @@ jobs:
           path: artifacts
 
       - name: Setup .NET 10
-        uses: actions/setup-dotnet@67a3573c9a986a3f9c594539f4ab511d57bb3ce9 # v4
+        uses: actions/setup-dotnet@26b0ec14cb23fa6904739307f278c14f94c95bf1 # v5.4.0
         with:
           dotnet-version: 10.0.301
 
