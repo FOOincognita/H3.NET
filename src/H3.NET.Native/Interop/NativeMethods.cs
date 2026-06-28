@@ -128,6 +128,44 @@ internal static unsafe partial class NativeMethods
     [LibraryImport("h3", EntryPoint = "h3ToString")]
     internal static partial H3ErrorCode H3ToString(ulong cell, byte* str, nuint sz);
 
+    // ---- Hierarchy (parent/children/compact) -------------------------------
+
+    [LibraryImport("h3", EntryPoint = "cellToParent")]
+    internal static partial H3ErrorCode CellToParent(ulong cell, int parentRes, out ulong parent);
+
+    [LibraryImport("h3", EntryPoint = "cellToCenterChild")]
+    internal static partial H3ErrorCode CellToCenterChild(ulong cell, int childRes, out ulong child);
+
+    [LibraryImport("h3", EntryPoint = "cellToChildPos")]
+    internal static partial H3ErrorCode CellToChildPos(ulong child, int parentRes, out long pos);
+
+    [LibraryImport("h3", EntryPoint = "childPosToCell")]
+    internal static partial H3ErrorCode ChildPosToCell(long childPos, ulong parent, int childRes, out ulong child);
+
+    // Size-half of the cellToChildren M4 pair. Exact count; pentagon parents yield
+    // fewer than 7^delta children, so the tail of the fill stays H3_NULL.
+    [LibraryImport("h3", EntryPoint = "cellToChildrenSize")]
+    internal static partial H3ErrorCode CellToChildrenSize(ulong cell, int childRes, out long size);
+
+    // out length must be >= cellToChildrenSize(cell, childRes); unused slots are H3_NULL.
+    [LibraryImport("h3", EntryPoint = "cellToChildren")]
+    internal static partial H3ErrorCode CellToChildren(ulong cell, int childRes, ulong* outChildren);
+
+    // compactedSet must be sized to numHexes; it is filled front-to-back and the
+    // remaining trailing slots stay H3_NULL.
+    [LibraryImport("h3", EntryPoint = "compactCells")]
+    internal static partial H3ErrorCode CompactCells(ulong* h3Set, ulong* compactedSet, long numHexes);
+
+    // Size-half of the uncompactCells M4 pair. res must be >= the finest resolution
+    // present in the set.
+    [LibraryImport("h3", EntryPoint = "uncompactCellsSize")]
+    internal static partial H3ErrorCode UncompactCellsSize(ulong* compactedSet, long numCompacted, int res, out long size);
+
+    // outSet length must be >= uncompactCellsSize(set, numCompacted, res); unused
+    // slots are H3_NULL.
+    [LibraryImport("h3", EntryPoint = "uncompactCells")]
+    internal static partial H3ErrorCode UncompactCells(ulong* compactedSet, long numCompacted, ulong* outSet, long numOut, int res);
+
     // ---- Corpus helpers ----------------------------------------------------
 
     [LibraryImport("h3", EntryPoint = "res0CellCount")]
