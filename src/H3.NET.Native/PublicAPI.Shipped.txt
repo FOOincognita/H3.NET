@@ -1,0 +1,148 @@
+#nullable enable
+H3.NET.Native.ContainmentMode
+H3.NET.Native.ContainmentMode.Center = 0 -> H3.NET.Native.ContainmentMode
+H3.NET.Native.ContainmentMode.Full = 1 -> H3.NET.Native.ContainmentMode
+H3.NET.Native.ContainmentMode.Overlapping = 2 -> H3.NET.Native.ContainmentMode
+H3.NET.Native.ContainmentMode.OverlappingBBox = 3 -> H3.NET.Native.ContainmentMode
+H3.NET.Native.CoordIJ
+H3.NET.Native.CoordIJ.CoordIJ() -> void
+H3.NET.Native.CoordIJ.CoordIJ(int I, int J) -> void
+H3.NET.Native.CoordIJ.I.get -> int
+H3.NET.Native.CoordIJ.I.init -> void
+H3.NET.Native.CoordIJ.J.get -> int
+H3.NET.Native.CoordIJ.J.init -> void
+H3.NET.Native.GeoPolygon
+H3.NET.Native.GeoPolygon.Exterior.get -> System.Collections.Generic.IReadOnlyList<H3.NET.Native.LatLng>!
+H3.NET.Native.GeoPolygon.GeoPolygon(System.Collections.Generic.IReadOnlyList<H3.NET.Native.LatLng>! exterior, System.Collections.Generic.IReadOnlyList<System.Collections.Generic.IReadOnlyList<H3.NET.Native.LatLng>!>? holes = null) -> void
+H3.NET.Native.GeoPolygon.Holes.get -> System.Collections.Generic.IReadOnlyList<System.Collections.Generic.IReadOnlyList<H3.NET.Native.LatLng>!>!
+H3.NET.Native.H3DirectedEdge
+H3.NET.Native.H3DirectedEdge.Deconstruct(out H3.NET.Native.H3Index origin, out H3.NET.Native.H3Index destination) -> void
+H3.NET.Native.H3DirectedEdge.Destination.get -> H3.NET.Native.H3Index
+H3.NET.Native.H3DirectedEdge.EdgeLengthKm() -> double
+H3.NET.Native.H3DirectedEdge.EdgeLengthM() -> double
+H3.NET.Native.H3DirectedEdge.EdgeLengthRads() -> double
+H3.NET.Native.H3DirectedEdge.H3DirectedEdge() -> void
+H3.NET.Native.H3DirectedEdge.H3DirectedEdge(ulong Value) -> void
+H3.NET.Native.H3DirectedEdge.IsNull.get -> bool
+H3.NET.Native.H3DirectedEdge.IsValid() -> bool
+H3.NET.Native.H3DirectedEdge.Origin.get -> H3.NET.Native.H3Index
+H3.NET.Native.H3DirectedEdge.Reverse() -> H3.NET.Native.H3DirectedEdge
+H3.NET.Native.H3DirectedEdge.ToBoundary() -> System.Collections.Generic.IReadOnlyList<H3.NET.Native.LatLng>!
+H3.NET.Native.H3DirectedEdge.ToCells() -> (H3.NET.Native.H3Index Origin, H3.NET.Native.H3Index Destination)
+H3.NET.Native.H3DirectedEdge.Value.get -> ulong
+H3.NET.Native.H3DirectedEdge.Value.init -> void
+H3.NET.Native.H3DomainException
+H3.NET.Native.H3DomainException.H3DomainException() -> void
+H3.NET.Native.H3DomainException.H3DomainException(string! message) -> void
+H3.NET.Native.H3DomainException.H3DomainException(string! message, System.Exception! innerException) -> void
+H3.NET.Native.H3Exception
+H3.NET.Native.H3Exception.ErrorCode.get -> uint
+H3.NET.Native.H3Exception.H3Exception() -> void
+H3.NET.Native.H3Exception.H3Exception(string! message) -> void
+H3.NET.Native.H3Exception.H3Exception(string! message, System.Exception! innerException) -> void
+H3.NET.Native.H3Index
+H3.NET.Native.H3Index.BaseCellNumber.get -> int
+H3.NET.Native.H3Index.CellAreaKm2() -> double
+H3.NET.Native.H3Index.CellAreaM2() -> double
+H3.NET.Native.H3Index.CellAreaRads2() -> double
+H3.NET.Native.H3Index.CellToCenterChild(int childRes) -> H3.NET.Native.H3Index
+H3.NET.Native.H3Index.CellToChildPos(int parentRes) -> long
+H3.NET.Native.H3Index.CellToChildren(int childRes) -> H3.NET.Native.H3Index[]!
+H3.NET.Native.H3Index.CellToChildrenInto(int childRes, System.Span<H3.NET.Native.H3Index> destination) -> int
+H3.NET.Native.H3Index.CellToLocalIJ(H3.NET.Native.H3Index target) -> H3.NET.Native.CoordIJ
+H3.NET.Native.H3Index.CellToParent(int parentRes) -> H3.NET.Native.H3Index
+H3.NET.Native.H3Index.ChildPosToCell(long childPos, int childRes) -> H3.NET.Native.H3Index
+H3.NET.Native.H3Index.DirectedEdgeTo(H3.NET.Native.H3Index destination) -> H3.NET.Native.H3DirectedEdge
+H3.NET.Native.H3Index.GetBoundary() -> System.Collections.Generic.IReadOnlyList<H3.NET.Native.LatLng>!
+H3.NET.Native.H3Index.GetDirectedEdges() -> H3.NET.Native.H3DirectedEdge[]!
+H3.NET.Native.H3Index.GetDirectedEdgesInto(System.Span<H3.NET.Native.H3DirectedEdge> destination) -> int
+H3.NET.Native.H3Index.GetIcosahedronFaces() -> int[]!
+H3.NET.Native.H3Index.GetIcosahedronFacesInto(System.Span<int> destination) -> int
+H3.NET.Native.H3Index.GetIndexDigit(int resolution) -> int
+H3.NET.Native.H3Index.GetVertex(int vertexNum) -> H3.NET.Native.H3Vertex
+H3.NET.Native.H3Index.GetVertexes() -> H3.NET.Native.H3Vertex[]!
+H3.NET.Native.H3Index.GetVertexesInto(System.Span<H3.NET.Native.H3Vertex> destination) -> int
+H3.NET.Native.H3Index.GridDisk(int k) -> H3.NET.Native.H3Index[]!
+H3.NET.Native.H3Index.GridDiskDistances(int k) -> (H3.NET.Native.H3Index[]! Cells, int[]! Distances)
+H3.NET.Native.H3Index.GridDiskDistancesInto(int k, System.Span<H3.NET.Native.H3Index> cells, System.Span<int> distances) -> int
+H3.NET.Native.H3Index.GridDiskInto(int k, System.Span<H3.NET.Native.H3Index> destination) -> int
+H3.NET.Native.H3Index.GridDistance(H3.NET.Native.H3Index other) -> long
+H3.NET.Native.H3Index.GridPathCells(H3.NET.Native.H3Index destination) -> H3.NET.Native.H3Index[]!
+H3.NET.Native.H3Index.GridPathCellsInto(H3.NET.Native.H3Index destination, System.Span<H3.NET.Native.H3Index> result) -> int
+H3.NET.Native.H3Index.GridRing(int k) -> H3.NET.Native.H3Index[]!
+H3.NET.Native.H3Index.GridRingInto(int k, System.Span<H3.NET.Native.H3Index> destination) -> int
+H3.NET.Native.H3Index.H3Index() -> void
+H3.NET.Native.H3Index.H3Index(ulong Value) -> void
+H3.NET.Native.H3Index.IsNeighbor(H3.NET.Native.H3Index destination) -> bool
+H3.NET.Native.H3Index.IsNull.get -> bool
+H3.NET.Native.H3Index.IsPentagon.get -> bool
+H3.NET.Native.H3Index.IsResClassIII.get -> bool
+H3.NET.Native.H3Index.IsValid.get -> bool
+H3.NET.Native.H3Index.IsValidCell.get -> bool
+H3.NET.Native.H3Index.IsValidIndex.get -> bool
+H3.NET.Native.H3Index.LocalIJToCell(H3.NET.Native.CoordIJ ij) -> H3.NET.Native.H3Index
+H3.NET.Native.H3Index.Resolution.get -> int
+H3.NET.Native.H3Index.ToCanonicalString() -> string!
+H3.NET.Native.H3Index.ToLatLng() -> H3.NET.Native.LatLng
+H3.NET.Native.H3Index.Value.get -> ulong
+H3.NET.Native.H3Index.Value.init -> void
+H3.NET.Native.H3InvalidCellException
+H3.NET.Native.H3InvalidCellException.H3InvalidCellException() -> void
+H3.NET.Native.H3InvalidCellException.H3InvalidCellException(string! message) -> void
+H3.NET.Native.H3InvalidCellException.H3InvalidCellException(string! message, System.Exception! innerException) -> void
+H3.NET.Native.H3MemoryException
+H3.NET.Native.H3MemoryException.H3MemoryException() -> void
+H3.NET.Native.H3MemoryException.H3MemoryException(string! message) -> void
+H3.NET.Native.H3MemoryException.H3MemoryException(string! message, System.Exception! innerException) -> void
+H3.NET.Native.H3PentagonException
+H3.NET.Native.H3PentagonException.H3PentagonException() -> void
+H3.NET.Native.H3PentagonException.H3PentagonException(string! message) -> void
+H3.NET.Native.H3PentagonException.H3PentagonException(string! message, System.Exception! innerException) -> void
+H3.NET.Native.H3Polygon
+H3.NET.Native.H3Vertex
+H3.NET.Native.H3Vertex.H3Vertex() -> void
+H3.NET.Native.H3Vertex.H3Vertex(ulong Value) -> void
+H3.NET.Native.H3Vertex.IsNull.get -> bool
+H3.NET.Native.H3Vertex.IsValid() -> bool
+H3.NET.Native.H3Vertex.ToLatLng() -> H3.NET.Native.LatLng
+H3.NET.Native.H3Vertex.Value.get -> ulong
+H3.NET.Native.H3Vertex.Value.init -> void
+H3.NET.Native.LatLng
+H3.NET.Native.LatLng.LatitudeDegrees.get -> double
+H3.NET.Native.LatLng.LatitudeDegrees.init -> void
+H3.NET.Native.LatLng.LatLng() -> void
+H3.NET.Native.LatLng.LatLng(double LatitudeDegrees, double LongitudeDegrees) -> void
+H3.NET.Native.LatLng.LongitudeDegrees.get -> double
+H3.NET.Native.LatLng.LongitudeDegrees.init -> void
+H3.NET.Native.LatLng.Validate() -> void
+override H3.NET.Native.H3Index.ToString() -> string!
+static H3.NET.Native.H3DirectedEdge.IsValid(ulong value) -> bool
+static H3.NET.Native.H3DirectedEdge.Null.get -> H3.NET.Native.H3DirectedEdge
+static H3.NET.Native.H3Index.CompactCells(System.ReadOnlySpan<H3.NET.Native.H3Index> cells) -> H3.NET.Native.H3Index[]!
+static H3.NET.Native.H3Index.CompactCellsInto(System.ReadOnlySpan<H3.NET.Native.H3Index> cells, System.Span<H3.NET.Native.H3Index> destination) -> int
+static H3.NET.Native.H3Index.Construct(int resolution, int baseCellNumber, System.ReadOnlySpan<int> digits) -> H3.NET.Native.H3Index
+static H3.NET.Native.H3Index.FromLatLng(H3.NET.Native.LatLng latLng, int resolution) -> H3.NET.Native.H3Index
+static H3.NET.Native.H3Index.FromString(string! value) -> H3.NET.Native.H3Index
+static H3.NET.Native.H3Index.GetHexagonAreaAvgKm2(int resolution) -> double
+static H3.NET.Native.H3Index.GetHexagonAreaAvgM2(int resolution) -> double
+static H3.NET.Native.H3Index.GetHexagonEdgeLengthAvgKm(int resolution) -> double
+static H3.NET.Native.H3Index.GetHexagonEdgeLengthAvgM(int resolution) -> double
+static H3.NET.Native.H3Index.GetNumCells(int resolution) -> long
+static H3.NET.Native.H3Index.GetPentagons(int resolution) -> H3.NET.Native.H3Index[]!
+static H3.NET.Native.H3Index.GetPentagonsInto(int resolution, System.Span<H3.NET.Native.H3Index> destination) -> int
+static H3.NET.Native.H3Index.GetRes0Cells() -> H3.NET.Native.H3Index[]!
+static H3.NET.Native.H3Index.GetRes0CellsInto(System.Span<H3.NET.Native.H3Index> destination) -> int
+static H3.NET.Native.H3Index.Null.get -> H3.NET.Native.H3Index
+static H3.NET.Native.H3Index.Parse(string! value) -> H3.NET.Native.H3Index
+static H3.NET.Native.H3Index.TryFromString(string? value, out H3.NET.Native.H3Index result) -> bool
+static H3.NET.Native.H3Index.TryParse(string? value, out H3.NET.Native.H3Index result) -> bool
+static H3.NET.Native.H3Index.UncompactCells(System.ReadOnlySpan<H3.NET.Native.H3Index> cells, int res) -> H3.NET.Native.H3Index[]!
+static H3.NET.Native.H3Index.UncompactCellsInto(System.ReadOnlySpan<H3.NET.Native.H3Index> cells, int res, System.Span<H3.NET.Native.H3Index> destination) -> int
+static H3.NET.Native.H3Polygon.FromCells(System.Collections.Generic.IEnumerable<H3.NET.Native.H3Index>! cells) -> System.Collections.Generic.IReadOnlyList<H3.NET.Native.GeoPolygon!>!
+static H3.NET.Native.H3Polygon.ToCells(H3.NET.Native.GeoPolygon! polygon, int resolution) -> H3.NET.Native.H3Index[]!
+static H3.NET.Native.H3Polygon.ToCellsExperimental(H3.NET.Native.GeoPolygon! polygon, int resolution, H3.NET.Native.ContainmentMode mode) -> H3.NET.Native.H3Index[]!
+static H3.NET.Native.H3Vertex.IsValid(ulong value) -> bool
+static H3.NET.Native.H3Vertex.Null.get -> H3.NET.Native.H3Vertex
+static H3.NET.Native.LatLng.GreatCircleDistanceKm(H3.NET.Native.LatLng a, H3.NET.Native.LatLng b) -> double
+static H3.NET.Native.LatLng.GreatCircleDistanceM(H3.NET.Native.LatLng a, H3.NET.Native.LatLng b) -> double
+static H3.NET.Native.LatLng.GreatCircleDistanceRads(H3.NET.Native.LatLng a, H3.NET.Native.LatLng b) -> double

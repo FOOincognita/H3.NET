@@ -35,8 +35,12 @@ internal static class H3ErrorMarshaller
                 or H3ErrorCode.OptionInvalid
                 or H3ErrorCode.BaseCellDomain
                 or H3ErrorCode.DigitDomain
-                // DeletedDigit: constructCell rejects a pentagon K-axis (digit 1) argument
-                // naming a deleted sub-sequence — an argument-domain error, hence H3DomainException.
+                // DeletedDigit is mapped to H3DomainException (a deliberate KEEP decision):
+                // it is raised by constructCell-style argument-domain validation when a digit is
+                // invalid for the requested resolution, which is an argument-domain error. A
+                // structurally malformed or otherwise invalid index instead yields CellInvalid
+                // (mapped to H3InvalidCellException below), so the domain mapping is the
+                // semantically correct distinction between bad-argument and bad-index.
                 or H3ErrorCode.DeletedDigit
                 => new H3DomainException(code, message),
 
