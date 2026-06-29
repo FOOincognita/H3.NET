@@ -1429,8 +1429,124 @@ public readonly partial record struct H3Index(ulong Value)
 
     #endregion Directed edges
 
+    #region Vertices
+
+    /// <summary>
+    /// Returns one of the topological vertices of this cell.
+    /// </summary>
+    /// <param name="vertexNum">The vertex number (0-5 for hexagons, 0-4 for pentagons).</param>
+    /// <returns>The requested <see cref="H3Vertex"/>.</returns>
+    /// <exception cref="H3DomainException"><paramref name="vertexNum"/> is out of range for this cell.</exception>
+    /// <exception cref="H3InvalidCellException">This is not a valid H3 cell.</exception>
+    public H3Vertex GetVertex(int vertexNum)
+    {
+        // Native cellToVertex does NOT validate its origin: an invalid cell may return
+        // E_SUCCESS with a garbage vertex or E_FAILED (not E_CELL_INVALID), so guard the
+        // receiver here to honor the documented H3InvalidCellException, mirroring
+        // GetVertexes. vertexNum is left to native (E_DOMAIN) and is NOT pre-clamped.
+        EnsureValidCell();
+        H3ErrorMarshaller.ThrowIfError(NativeMethods.CellToVertex(Value, vertexNum, out ulong v));
+        return new H3Vertex(v);
+    }
+
+    /// <summary>
+    /// Returns the topological vertices of this cell.
+    /// </summary>
+    /// <returns>The vertices (6 for a hexagon, 5 for a pentagon). Order is not guaranteed.</returns>
+    /// <exception cref="H3InvalidCellException">This is not a valid H3 cell.</exception>
+    /// <exception cref="H3Exception">The native operation failed.</exception>
+    public unsafe H3Vertex[] GetVertexes()
+    {
+        // Native cellToVertexes does not validate its origin, so guard here to honor the
+        // documented H3InvalidCellException, mirroring GetDirectedEdges.
+        EnsureValidCell();
+
+        // Fixed-capacity 6 (M4): `stackalloc` is CLR zero-initialized, so the pentagon's
+        // single unwritten slot reads as H3_NULL(0) and the strip below is valid.
+        Span<ulong> buffer = stackalloc ulong[MaxVertexCount];
+        fixed (ulong* ptr = buffer)
+        {
+            H3ErrorMarshaller.ThrowIfError(NativeMethods.CellToVertexes(Value, ptr));
+        }
+
+        int count = 0;
+        for (int i = 0; i < MaxVertexCount; i++)
+        {
+            if (buffer[i] != 0)
+            {
+                count++;
+            }
+        }
+
+        var result = new H3Vertex[count];
+        int next = 0;
+        for (int i = 0; i < MaxVertexCount; i++)
+        {
+            if (buffer[i] != 0)
+            {
+                result[next++] = new H3Vertex(buffer[i]);
+            }
+        }
+
+        return result;
+    }
+
+    /// <summary>
+    /// Fills <paramref name="destination"/> with the topological vertices of this cell,
+    /// packing the non-null vertices to the front.
+    /// </summary>
+    /// <param name="destination">The destination span. Its length must be at least 6 (the per-cell maximum).</param>
+    /// <returns>The number of vertices written to the front of <paramref name="destination"/> (6 for a hexagon, 5 for a pentagon).</returns>
+    /// <exception cref="ArgumentOutOfRangeException"><paramref name="destination"/> is too small.</exception>
+    /// <exception cref="H3InvalidCellException">This is not a valid H3 cell.</exception>
+    /// <exception cref="H3Exception">The native operation failed.</exception>
+    public unsafe int GetVertexesInto(Span<H3Vertex> destination)
+    {
+        if (destination.Length < MaxVertexCount)
+        {
+            throw new ArgumentOutOfRangeException(
+                nameof(destination),
+                destination.Length,
+                $"Destination span must hold at least {MaxVertexCount} elements.");
+        }
+
+        // Native cellToVertexes does not validate its origin, so guard the receiver after
+        // the caller-arg check to honor the documented H3InvalidCellException, mirroring
+        // GetDirectedEdgesInto.
+        EnsureValidCell();
+
+        // Native cellToVertexes does NOT guarantee zero-padding the pentagon hole, and a
+        // caller-supplied span may carry stale data, so pre-clear before the fill + strip.
+        destination[..MaxVertexCount].Clear();
+
+        // Write directly into the caller's span: H3Vertex is blittable and layout-
+        // compatible with ulong, so the native fill needs no intermediate buffer.
+        fixed (H3Vertex* ptr = destination)
+        {
+            H3ErrorMarshaller.ThrowIfError(NativeMethods.CellToVertexes(Value, (ulong*)ptr));
+        }
+
+        // Compact the H3_NULL (0) padding holes in place. The write index never
+        // outruns the read index, so no live entry is clobbered.
+        int count = 0;
+        for (int i = 0; i < MaxVertexCount; i++)
+        {
+            if (destination[i].Value != 0)
+            {
+                destination[count++] = destination[i];
+            }
+        }
+
+        return count;
+    }
+
+    #endregion Vertices
+
     // Per-cell directed-edge capacity: 6 for a hexagon, 5 valid + 1 H3_NULL for a pentagon.
     private const int MaxEdgeCount = 6;
+
+    // Per-cell vertex capacity (NUM_HEX_VERTS): 6 for a hexagon, 5 valid + 1 H3_NULL for a pentagon.
+    private const int MaxVertexCount = 6;
 
     // Sentinel written by getIcosahedronFaces into unused slots; 0 is a valid face,
     // so the compaction passes strip -1, not H3_NULL.

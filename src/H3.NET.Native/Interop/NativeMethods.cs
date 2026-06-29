@@ -245,6 +245,32 @@ internal static unsafe partial class NativeMethods
     [LibraryImport("h3", EntryPoint = "reverseDirectedEdge")]
     internal static partial H3ErrorCode ReverseDirectedEdge(ulong edge, out ulong outEdge);
 
+    // ---- Vertices ----------------------------------------------------------
+
+    // M1 scalar by-ref + H3Error. Native validates ONLY vertexNum: an out-of-range
+    // vertexNum surfaces E_DOMAIN (so callers must NOT pre-clamp it). It does NOT
+    // validate the origin cell (no E_CELL_INVALID): an invalid origin may return
+    // E_SUCCESS with a garbage vertex or E_FAILED, so the public GetVertex wrapper
+    // must validate-first via EnsureValidCell, like CellToVertexes below.
+    [LibraryImport("h3", EntryPoint = "cellToVertex")]
+    internal static partial H3ErrorCode CellToVertex(ulong cell, int vertexNum, out ulong outVertex);
+
+    // Fixed-capacity 6 (M4 = NUM_HEX_VERTS); no size call. A hexagon yields 6 valid
+    // vertices; a pentagon yields 5 valid vertices plus one H3_NULL(0) slot, so
+    // callers strip the H3_NULL entries. Does NOT validate its origin.
+    [LibraryImport("h3", EntryPoint = "cellToVertexes")]
+    internal static partial H3ErrorCode CellToVertexes(ulong cell, ulong* outVertices);
+
+    // M2 reuse of the NativeLatLng out param; returns the VERTEX lat/lng (the upstream
+    // header comment is a copy-paste error). Invalid vertex surfaces E_VERTEX_INVALID.
+    [LibraryImport("h3", EntryPoint = "vertexToLatLng")]
+    internal static partial H3ErrorCode VertexToLatLng(ulong vertex, out NativeLatLng point);
+
+    // isValidVertex returns a bare C int (NOT H3Error) and never throws; it is the
+    // validity predicate for a vertex index, so callers must NOT validate-first.
+    [LibraryImport("h3", EntryPoint = "isValidVertex")]
+    internal static partial int IsValidVertex(ulong vertex);
+
     // ---- Corpus helpers ----------------------------------------------------
 
     [LibraryImport("h3", EntryPoint = "res0CellCount")]

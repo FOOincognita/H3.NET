@@ -157,6 +157,20 @@ internal static class FixtureLoader
         [property: JsonPropertyName("candidate")] string Candidate,
         [property: JsonPropertyName("are_neighbors")] bool AreNeighbors);
 
+    /// <summary>One vertex.ndjson record: an origin cell and every topological vertex it owns.</summary>
+    public sealed record VertexCase(
+        [property: JsonPropertyName("origin")] string Origin,
+        [property: JsonPropertyName("is_pentagon")] bool IsPentagon,
+        [property: JsonPropertyName("num_vertexes")] int NumVertexes,
+        [property: JsonPropertyName("vertexes")] IReadOnlyList<VertexDetail> Vertexes);
+
+    /// <summary>One vertex's full oracle: its vertexNum, the 16-hex vertex index, and its degrees lat/lng.</summary>
+    public sealed record VertexDetail(
+        [property: JsonPropertyName("vertex_num")] int VertexNum,
+        [property: JsonPropertyName("vertex")] string Vertex,
+        [property: JsonPropertyName("lat")] double Lat,
+        [property: JsonPropertyName("lng")] double Lng);
+
     // --- Loaders ---
 
     public static IEnumerable<LatLngToCellCase> LoadLatLngToCell() =>
@@ -209,6 +223,9 @@ internal static class FixtureLoader
 
     public static IEnumerable<NeighborCase> LoadNeighbor() =>
         LoadNdjson<NeighborCase>("neighbor.ndjson");
+
+    public static IEnumerable<VertexCase> LoadVertex() =>
+        LoadNdjson<VertexCase>("vertex.ndjson");
 
     /// <summary>Reads res0_cells.csv: one 16-hex cell per line.</summary>
     public static IReadOnlyList<string> LoadRes0Cells()
