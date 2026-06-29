@@ -1542,6 +1542,207 @@ public readonly partial record struct H3Index(ulong Value)
 
     #endregion Vertices
 
+    #region Measures
+
+    /// <summary>
+    /// Returns the area of this cell in steradians (square radians).
+    /// </summary>
+    /// <returns>The cell area in steradians.</returns>
+    /// <exception cref="H3InvalidCellException">This is not a valid H3 cell.</exception>
+    public double CellAreaRads2()
+    {
+        // Native cellAreaRads2 -> cellToBoundary -> _h3ToFaceIjk only rejects an
+        // out-of-range base cell (>= NUM_BASE_CELLS); it returns E_SUCCESS with a
+        // garbage area for most invalid cells (H3_NULL, wrong mode, deleted digits).
+        // Validate-first to honor the documented H3InvalidCellException.
+        EnsureValidCell();
+        H3ErrorMarshaller.ThrowIfError(NativeMethods.CellAreaRads2(Value, out double area));
+        return area;
+    }
+
+    /// <summary>
+    /// Returns the area of this cell in square kilometers.
+    /// </summary>
+    /// <returns>The cell area in square kilometers.</returns>
+    /// <exception cref="H3InvalidCellException">This is not a valid H3 cell.</exception>
+    public double CellAreaKm2()
+    {
+        // Native does not fully validate the cell (see CellAreaRads2); validate-first.
+        EnsureValidCell();
+        H3ErrorMarshaller.ThrowIfError(NativeMethods.CellAreaKm2(Value, out double area));
+        return area;
+    }
+
+    /// <summary>
+    /// Returns the area of this cell in square meters.
+    /// </summary>
+    /// <returns>The cell area in square meters.</returns>
+    /// <exception cref="H3InvalidCellException">This is not a valid H3 cell.</exception>
+    public double CellAreaM2()
+    {
+        // Native does not fully validate the cell (see CellAreaRads2); validate-first.
+        EnsureValidCell();
+        H3ErrorMarshaller.ThrowIfError(NativeMethods.CellAreaM2(Value, out double area));
+        return area;
+    }
+
+    /// <summary>
+    /// Returns the average area of a hexagonal cell at the given resolution, in square kilometers.
+    /// </summary>
+    /// <param name="resolution">The H3 resolution (0-15).</param>
+    /// <returns>The average hexagon area at <paramref name="resolution"/>, in square kilometers.</returns>
+    /// <exception cref="H3DomainException"><paramref name="resolution"/> is outside the range 0-15.</exception>
+    public static double GetHexagonAreaAvgKm2(int resolution)
+    {
+        H3ErrorMarshaller.ThrowIfError(NativeMethods.GetHexagonAreaAvgKm2(resolution, out double area));
+        return area;
+    }
+
+    /// <summary>
+    /// Returns the average area of a hexagonal cell at the given resolution, in square meters.
+    /// </summary>
+    /// <param name="resolution">The H3 resolution (0-15).</param>
+    /// <returns>The average hexagon area at <paramref name="resolution"/>, in square meters.</returns>
+    /// <exception cref="H3DomainException"><paramref name="resolution"/> is outside the range 0-15.</exception>
+    public static double GetHexagonAreaAvgM2(int resolution)
+    {
+        H3ErrorMarshaller.ThrowIfError(NativeMethods.GetHexagonAreaAvgM2(resolution, out double area));
+        return area;
+    }
+
+    /// <summary>
+    /// Returns the average edge length of a hexagonal cell at the given resolution, in kilometers.
+    /// </summary>
+    /// <param name="resolution">The H3 resolution (0-15).</param>
+    /// <returns>The average hexagon edge length at <paramref name="resolution"/>, in kilometers.</returns>
+    /// <exception cref="H3DomainException"><paramref name="resolution"/> is outside the range 0-15.</exception>
+    public static double GetHexagonEdgeLengthAvgKm(int resolution)
+    {
+        H3ErrorMarshaller.ThrowIfError(NativeMethods.GetHexagonEdgeLengthAvgKm(resolution, out double length));
+        return length;
+    }
+
+    /// <summary>
+    /// Returns the average edge length of a hexagonal cell at the given resolution, in meters.
+    /// </summary>
+    /// <param name="resolution">The H3 resolution (0-15).</param>
+    /// <returns>The average hexagon edge length at <paramref name="resolution"/>, in meters.</returns>
+    /// <exception cref="H3DomainException"><paramref name="resolution"/> is outside the range 0-15.</exception>
+    public static double GetHexagonEdgeLengthAvgM(int resolution)
+    {
+        H3ErrorMarshaller.ThrowIfError(NativeMethods.GetHexagonEdgeLengthAvgM(resolution, out double length));
+        return length;
+    }
+
+    /// <summary>
+    /// Returns the total number of unique H3 cells at the given resolution.
+    /// </summary>
+    /// <param name="resolution">The H3 resolution (0-15).</param>
+    /// <returns>The number of cells at <paramref name="resolution"/> (122 at resolution 0).</returns>
+    /// <exception cref="H3DomainException"><paramref name="resolution"/> is outside the range 0-15.</exception>
+    public static long GetNumCells(int resolution)
+    {
+        H3ErrorMarshaller.ThrowIfError(NativeMethods.GetNumCells(resolution, out long count));
+        return count;
+    }
+
+    /// <summary>
+    /// Returns all 122 resolution-0 base cells.
+    /// </summary>
+    /// <returns>The 122 resolution-0 cells. Order is not guaranteed.</returns>
+    /// <exception cref="H3Exception">The native operation failed.</exception>
+    public static unsafe H3Index[] GetRes0Cells()
+    {
+        // Constant count (122); every entry is valid, so there is no size-first call
+        // and no H3_NULL strip.
+        int count = Res0CellCount();
+        var result = new H3Index[count];
+        fixed (H3Index* ptr = result)
+        {
+            H3ErrorMarshaller.ThrowIfError(NativeMethods.GetRes0Cells((ulong*)ptr));
+        }
+
+        return result;
+    }
+
+    /// <summary>
+    /// Fills <paramref name="destination"/> with all 122 resolution-0 base cells.
+    /// </summary>
+    /// <param name="destination">The destination span. Its length must be at least 122.</param>
+    /// <returns>The number of cells written (always 122).</returns>
+    /// <exception cref="ArgumentException"><paramref name="destination"/> is smaller than 122.</exception>
+    /// <exception cref="H3Exception">The native operation failed.</exception>
+    public static unsafe int GetRes0CellsInto(Span<H3Index> destination)
+    {
+        int count = Res0CellCount();
+        if (destination.Length < count)
+        {
+            throw new ArgumentException(
+                $"Destination span must hold at least {count} elements.",
+                nameof(destination));
+        }
+
+        // Constant count; every entry is valid, so write straight through with no strip.
+        fixed (H3Index* ptr = destination)
+        {
+            H3ErrorMarshaller.ThrowIfError(NativeMethods.GetRes0Cells((ulong*)ptr));
+        }
+
+        return count;
+    }
+
+    /// <summary>
+    /// Returns the 12 pentagon cells at the given resolution.
+    /// </summary>
+    /// <param name="resolution">The H3 resolution (0-15).</param>
+    /// <returns>The 12 pentagons at <paramref name="resolution"/>. Order is not guaranteed.</returns>
+    /// <exception cref="H3DomainException"><paramref name="resolution"/> is outside the range 0-15.</exception>
+    /// <exception cref="H3Exception">The native operation failed.</exception>
+    public static unsafe H3Index[] GetPentagons(int resolution)
+    {
+        // Constant count (12); every entry is valid, so there is no size-first call
+        // and no H3_NULL strip. Native getPentagons validates the resolution.
+        int count = PentagonCount();
+        var result = new H3Index[count];
+        fixed (H3Index* ptr = result)
+        {
+            H3ErrorMarshaller.ThrowIfError(NativeMethods.GetPentagons(resolution, (ulong*)ptr));
+        }
+
+        return result;
+    }
+
+    /// <summary>
+    /// Fills <paramref name="destination"/> with the 12 pentagon cells at the given resolution.
+    /// </summary>
+    /// <param name="resolution">The H3 resolution (0-15).</param>
+    /// <param name="destination">The destination span. Its length must be at least 12.</param>
+    /// <returns>The number of pentagons written (always 12).</returns>
+    /// <exception cref="ArgumentException"><paramref name="destination"/> is smaller than 12.</exception>
+    /// <exception cref="H3DomainException"><paramref name="resolution"/> is outside the range 0-15.</exception>
+    /// <exception cref="H3Exception">The native operation failed.</exception>
+    public static unsafe int GetPentagonsInto(int resolution, Span<H3Index> destination)
+    {
+        // The length check MUST precede the native call: getPentagons does no size
+        // check and overruns a short buffer.
+        int count = PentagonCount();
+        if (destination.Length < count)
+        {
+            throw new ArgumentException(
+                $"Destination span must hold at least {count} elements.",
+                nameof(destination));
+        }
+
+        fixed (H3Index* ptr = destination)
+        {
+            H3ErrorMarshaller.ThrowIfError(NativeMethods.GetPentagons(resolution, (ulong*)ptr));
+        }
+
+        return count;
+    }
+
+    #endregion Measures
+
     // Per-cell directed-edge capacity: 6 for a hexagon, 5 valid + 1 H3_NULL for a pentagon.
     private const int MaxEdgeCount = 6;
 
@@ -1557,6 +1758,14 @@ public readonly partial record struct H3Index(ulong Value)
         H3ErrorMarshaller.ThrowIfError(NativeMethods.MaxFaceCount(Value, out int count));
         return count;
     }
+
+    // Constant 122: the number of resolution-0 base cells. The returned array length
+    // conveys the count to callers, so this stays internal.
+    internal static int Res0CellCount() => NativeMethods.Res0CellCount();
+
+    // Constant 12: the number of pentagons at any resolution. The returned array length
+    // conveys the count to callers, so this stays internal.
+    internal static int PentagonCount() => NativeMethods.PentagonCount();
 
     internal long CellToChildrenSize(int childRes)
     {

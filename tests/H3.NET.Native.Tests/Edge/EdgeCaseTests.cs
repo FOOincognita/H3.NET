@@ -142,4 +142,41 @@ public sealed class EdgeCaseTests
         // ToString is a pure formatter and does not validate; the sentinel renders as all zeros.
         Assert.Equal("0000000000000000", H3Index.Null.ToString());
     }
+
+    [Theory]
+    [InlineData(0x0UL)]                  // H3_NULL: in-range base cell, native returns garbage area.
+    [InlineData(0x1UL)]                  // Reserved/mode bits unset; native does not reject.
+    [InlineData(0x8528347300000000UL)]  // Wrong mode/digits, in-range base cell.
+    public void CellArea_OnInvalidCell_ThrowsInvalidCell(ulong rawCell)
+    {
+        // Native cellArea* only rejects an out-of-range base cell, so the managed
+        // validate-first guard supplies the documented H3InvalidCellException.
+        var cell = new H3Index(rawCell);
+        Assert.False(cell.IsValidCell);
+
+        Assert.Throws<H3InvalidCellException>(() => cell.CellAreaRads2());
+        Assert.Throws<H3InvalidCellException>(() => cell.CellAreaKm2());
+        Assert.Throws<H3InvalidCellException>(() => cell.CellAreaM2());
+    }
+
+    [Fact]
+    public void EdgeLength_OnInvalidEdge_ThrowsInvalidCell()
+    {
+        // A directed-edge-mode value whose origin is invalid: native directedEdgeToBoundary
+        // never calls isValidCell(origin), so the managed guard supplies the exception.
+        // Derive it by corrupting a real edge's origin digits while keeping edge mode + direction.
+        var origin = H3Index.Parse("8928308280fffff");
+        var edge = origin.GetDirectedEdges()[0];
+        Assert.True(edge.IsValid());
+
+        // Set a digit in the origin's unused (post-resolution) tail to 7, which fails
+        // isValidCell's _hasAny7/_hasDeletedSubsequence checks while keeping directed-edge
+        // mode and a parseable direction. Native directedEdgeToBoundary does not reject it.
+        var broken = new H3DirectedEdge(edge.Value | (0x7UL << 18));
+        Assert.False(broken.IsValid());
+
+        Assert.Throws<H3InvalidCellException>(() => broken.EdgeLengthRads());
+        Assert.Throws<H3InvalidCellException>(() => broken.EdgeLengthKm());
+        Assert.Throws<H3InvalidCellException>(() => broken.EdgeLengthM());
+    }
 }

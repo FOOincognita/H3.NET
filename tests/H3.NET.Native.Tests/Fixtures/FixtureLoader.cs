@@ -171,6 +171,47 @@ internal static class FixtureLoader
         [property: JsonPropertyName("lat")] double Lat,
         [property: JsonPropertyName("lng")] double Lng);
 
+    /// <summary>One cell_area.ndjson record: a cell and its area in rads^2 / km^2 / m^2.</summary>
+    public sealed record CellAreaCase(
+        [property: JsonPropertyName("cell")] string Cell,
+        [property: JsonPropertyName("rads2")] double Rads2,
+        [property: JsonPropertyName("km2")] double Km2,
+        [property: JsonPropertyName("m2")] double M2);
+
+    /// <summary>One edge_length.ndjson record: a directed edge and its length in rads / km / m.</summary>
+    public sealed record EdgeLengthCase(
+        [property: JsonPropertyName("edge")] string Edge,
+        [property: JsonPropertyName("rads")] double Rads,
+        [property: JsonPropertyName("km")] double Km,
+        [property: JsonPropertyName("m")] double M);
+
+    /// <summary>One hexagon_area_avg.ndjson record: a resolution and its average hexagon area in km^2 / m^2.</summary>
+    public sealed record HexagonAreaAvgCase(
+        [property: JsonPropertyName("res")] int Res,
+        [property: JsonPropertyName("km2")] double Km2,
+        [property: JsonPropertyName("m2")] double M2);
+
+    /// <summary>One hexagon_edge_length_avg.ndjson record: a resolution and its average hexagon edge length in km / m.</summary>
+    public sealed record HexagonEdgeLengthAvgCase(
+        [property: JsonPropertyName("res")] int Res,
+        [property: JsonPropertyName("km")] double Km,
+        [property: JsonPropertyName("m")] double M);
+
+    /// <summary>One num_cells.ndjson record: a resolution and its total cell count.</summary>
+    public sealed record NumCellsCase(
+        [property: JsonPropertyName("res")] int Res,
+        [property: JsonPropertyName("count")] long Count);
+
+    /// <summary>One great_circle_distance.ndjson record: a degree point pair and its distance in rads / km / m.</summary>
+    public sealed record GreatCircleDistanceCase(
+        [property: JsonPropertyName("a_lat")] double ALat,
+        [property: JsonPropertyName("a_lng")] double ALng,
+        [property: JsonPropertyName("b_lat")] double BLat,
+        [property: JsonPropertyName("b_lng")] double BLng,
+        [property: JsonPropertyName("rads")] double Rads,
+        [property: JsonPropertyName("km")] double Km,
+        [property: JsonPropertyName("m")] double M);
+
     // --- Loaders ---
 
     public static IEnumerable<LatLngToCellCase> LoadLatLngToCell() =>
@@ -226,6 +267,24 @@ internal static class FixtureLoader
 
     public static IEnumerable<VertexCase> LoadVertex() =>
         LoadNdjson<VertexCase>("vertex.ndjson");
+
+    public static IEnumerable<CellAreaCase> LoadCellArea() =>
+        LoadNdjson<CellAreaCase>("cell_area.ndjson");
+
+    public static IEnumerable<EdgeLengthCase> LoadEdgeLength() =>
+        LoadNdjson<EdgeLengthCase>("edge_length.ndjson");
+
+    public static IEnumerable<HexagonAreaAvgCase> LoadHexagonAreaAvg() =>
+        LoadNdjson<HexagonAreaAvgCase>("hexagon_area_avg.ndjson");
+
+    public static IEnumerable<HexagonEdgeLengthAvgCase> LoadHexagonEdgeLengthAvg() =>
+        LoadNdjson<HexagonEdgeLengthAvgCase>("hexagon_edge_length_avg.ndjson");
+
+    public static IEnumerable<NumCellsCase> LoadNumCells() =>
+        LoadNdjson<NumCellsCase>("num_cells.ndjson");
+
+    public static IEnumerable<GreatCircleDistanceCase> LoadGreatCircleDistance() =>
+        LoadNdjson<GreatCircleDistanceCase>("great_circle_distance.ndjson");
 
     /// <summary>Reads res0_cells.csv: one 16-hex cell per line.</summary>
     public static IReadOnlyList<string> LoadRes0Cells()

@@ -271,6 +271,72 @@ internal static unsafe partial class NativeMethods
     [LibraryImport("h3", EntryPoint = "isValidVertex")]
     internal static partial int IsValidVertex(ulong vertex);
 
+    // ---- Measures (area / length / distance / counts) ----------------------
+
+    // M1 scalar by-ref + H3Error. Native does NOT fully validate the cell: a
+    // malformed-but-in-range index returns E_SUCCESS with a garbage area rather than
+    // E_CELL_INVALID, so the public CellArea* methods validate-first via EnsureValidCell.
+    // Pentagons are valid.
+    [LibraryImport("h3", EntryPoint = "cellAreaRads2")]
+    internal static partial H3ErrorCode CellAreaRads2(ulong cell, out double area);
+
+    [LibraryImport("h3", EntryPoint = "cellAreaKm2")]
+    internal static partial H3ErrorCode CellAreaKm2(ulong cell, out double area);
+
+    [LibraryImport("h3", EntryPoint = "cellAreaM2")]
+    internal static partial H3ErrorCode CellAreaM2(ulong cell, out double area);
+
+    // M1 scalar by-ref + H3Error. Native validates the resolution: a res outside 0-15
+    // surfaces E_RES_DOMAIN. No rads2 average exists in the C API.
+    [LibraryImport("h3", EntryPoint = "getHexagonAreaAvgKm2")]
+    internal static partial H3ErrorCode GetHexagonAreaAvgKm2(int res, out double area);
+
+    [LibraryImport("h3", EntryPoint = "getHexagonAreaAvgM2")]
+    internal static partial H3ErrorCode GetHexagonAreaAvgM2(int res, out double area);
+
+    // M1 scalar by-ref + H3Error. Native validates the resolution (E_RES_DOMAIN). No
+    // rads average exists in the C API.
+    [LibraryImport("h3", EntryPoint = "getHexagonEdgeLengthAvgKm")]
+    internal static partial H3ErrorCode GetHexagonEdgeLengthAvgKm(int res, out double length);
+
+    [LibraryImport("h3", EntryPoint = "getHexagonEdgeLengthAvgM")]
+    internal static partial H3ErrorCode GetHexagonEdgeLengthAvgM(int res, out double length);
+
+    // int64_t* out -> long. Native validates the resolution (E_RES_DOMAIN).
+    [LibraryImport("h3", EntryPoint = "getNumCells")]
+    internal static partial H3ErrorCode GetNumCells(int res, out long count);
+
+    // M1 scalar by-ref + H3Error. Native does NOT fully validate the edge: a
+    // malformed-but-in-range value (including a valid cell value that is not an edge)
+    // can return E_SUCCESS with a garbage length rather than E_DIR_EDGE_INVALID, so the
+    // public EdgeLength* methods validate-first via EnsureValid.
+    [LibraryImport("h3", EntryPoint = "edgeLengthRads")]
+    internal static partial H3ErrorCode EdgeLengthRads(ulong edge, out double length);
+
+    [LibraryImport("h3", EntryPoint = "edgeLengthKm")]
+    internal static partial H3ErrorCode EdgeLengthKm(ulong edge, out double length);
+
+    [LibraryImport("h3", EntryPoint = "edgeLengthM")]
+    internal static partial H3ErrorCode EdgeLengthM(ulong edge, out double length);
+
+    // BARE double, NO H3Error: never throws from native. `in` marshals the const
+    // LatLng* pointer. The native LatLng is in RADIANS; callers stage degrees->radians.
+    [LibraryImport("h3", EntryPoint = "greatCircleDistanceRads")]
+    internal static partial double GreatCircleDistanceRads(in NativeLatLng a, in NativeLatLng b);
+
+    [LibraryImport("h3", EntryPoint = "greatCircleDistanceKm")]
+    internal static partial double GreatCircleDistanceKm(in NativeLatLng a, in NativeLatLng b);
+
+    [LibraryImport("h3", EntryPoint = "greatCircleDistanceM")]
+    internal static partial double GreatCircleDistanceM(in NativeLatLng a, in NativeLatLng b);
+
+    // BARE double, NO H3Error: never throws. Internal-only conversion helpers.
+    [LibraryImport("h3", EntryPoint = "degsToRads")]
+    internal static partial double DegsToRads(double degrees);
+
+    [LibraryImport("h3", EntryPoint = "radsToDegs")]
+    internal static partial double RadsToDegs(double radians);
+
     // ---- Corpus helpers ----------------------------------------------------
 
     [LibraryImport("h3", EntryPoint = "res0CellCount")]
