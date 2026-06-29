@@ -19,6 +19,12 @@ runtimes/**/native/*
 # Vendored H3 out-of-source build tree (submodule sources stay; build artifacts do not)
 external/h3/build/
 
+# --- DocFX docs output ---
+# Generated site and the API reference metadata DocFX emits from the C# projects
+# (metadata dest is docs/api). Regenerated on every build; never committed.
+_site/
+docs/api/
+
 # --- Python venv (build/codegen helper scripts) ---
 .venv/
 __pycache__/
