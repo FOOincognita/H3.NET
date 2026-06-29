@@ -3,12 +3,9 @@
 [![NuGet](https://img.shields.io/nuget/v/H3.NET.Native.svg)](https://www.nuget.org/packages/H3.NET.Native/)
 [![License: Apache 2.0](https://img.shields.io/badge/License-Apache_2.0-blue.svg)](LICENSE)
 [![CI](https://github.com/FOOincognita/H3.NET.Native/actions/workflows/ci.yml/badge.svg)](https://github.com/FOOincognita/H3.NET.Native/actions/workflows/ci.yml)
+[![Uber H3](https://img.shields.io/badge/Uber%20H3-v4.5.0-blueviolet)](https://github.com/uber/h3/releases/tag/v4.5.0)
 
 A thin, idiomatic P/Invoke binding over [Uber H3](https://h3geo.org) v4.5.0 for .NET 8 and .NET 10 (`net8.0` / `net10.0`). H3.NET.Native exposes the H3 hexagonal hierarchical geospatial indexing system through a clean, managed .NET API. The native `libh3` is built from a pinned upstream source revision and bundled directly in the NuGet package, so consumers need no C compiler, CMake, or other native toolchain to use it.
-
-## NuGet package id
-
-The published NuGet **PackageId is `H3.NET.Native`**. The shorter id `H3.NET` was already taken on nuget.org by an unrelated package, so the binding is distributed as `H3.NET.Native`. Use `H3.NET.Native` in all `dotnet add package` and `PackageReference` declarations.
 
 ## Status
 
@@ -55,16 +52,34 @@ The library follows [Semantic Versioning](https://semver.org). Versions are deri
 
 **Correctness** is validated against the reference implementation, not against other managed ports: the differential test corpus is generated from the official **Uber H3 C library** (via `h3-py` ≥ 4, pinned to the bundled v4.5.0), with **h3-go** available as a tiebreaker and a pure-C `valgrind` harness guarding native memory usage.
 
-**Performance** is measured with [BenchmarkDotNet](https://benchmarkdotnet.org). Consistent with the early-preview status, the benchmark project today wires a single comparison:
+**Performance** is measured with [BenchmarkDotNet](https://benchmarkdotnet.org). The benchmark project compares three implementations across the same workloads — point indexing (`latLngToCell`), `gridDisk`, and `polygonToCells`:
 
-- **[pocketken.H3](https://github.com/pocketken/H3.net)** — the managed (NetTopologySuite-based) port; answers the practical "how does this compare to the managed library many teams run today?" question. The pocketken side is currently a clearly-marked placeholder so the project compiles; its bodies must be replaced with the real pocketken.H3 calls before the numbers mean anything.
+- **Raw libh3 C** — direct P/Invoke into the bundled native `libh3` with no idiomatic layer; the floor that isolates this binding's own marshalling overhead. It is the per-category baseline for `latLngToCell` and `gridDisk`.
+- **H3.NET.Native** — this binding.
+- **[pocketken.H3](https://github.com/pocketken/H3.net)** — the fully managed (NetTopologySuite-based) port, the managed library many teams run today.
 
-Two further baselines are **planned** to place this binding on the full spectrum:
+`polygonToCells` has no raw baseline (its C entry takes a `GeoPolygon*` whose marshalling would just duplicate the binding), so the binding is the baseline there and pocketken is measured against it.
 
-- **Raw libh3 C** — direct P/Invoke into native libh3 with no idiomatic layer; the speed ceiling, isolating this library's own marshalling overhead.
-- **[H3.Standard](https://github.com/entrepreneur-interet-general/H3.Standard)** — the other native P/Invoke binding (v4.0.1); an apples-to-apples binding comparison.
+Run the full suite with:
 
-Benchmarks are informational, never gate CI, and their shapes may change while the binding is in preview.
+```sh
+dotnet run --project tests/H3.NET.Native.Benchmarks -c Release -- --filter '*'
+```
+
+Representative results (Apple M3 Pro, .NET 10, single warmed-up workloads; absolute timings vary by hardware):
+
+| Method | Category | Mean | Ratio | Allocated |
+| --- | --- | ---: | ---: | ---: |
+| raw libh3 latLngToCell | LatLngToCell | 180 ns | 1.00 | – |
+| H3.NET.Native FromLatLng | LatLngToCell | 183 ns | 1.01 | – |
+| pocketken.H3 FromLatLng | LatLngToCell | 230 ns | 1.28 | 376 B |
+| raw libh3 gridDisk | GridDisk | 938 ns | 1.00 | – |
+| H3.NET.Native GridDisk | GridDisk | 1,013 ns | 1.08 | 1,504 B |
+| pocketken.H3 GridDiskDistances | GridDisk | 1,587 ns | 1.69 | 6,576 B |
+| H3.NET.Native ToCells | PolygonToCells | 92.4 µs | 1.00 | 15,504 B |
+| pocketken.H3 Polyfill.Fill | PolygonToCells | 32.6 µs | 0.35 | 28,232 B |
+
+Benchmarks are informational, never gate CI (a tiny dry-run smoke runs there to keep them building and runnable), and their shapes may change while the binding is in preview.
 
 ## Links
 
