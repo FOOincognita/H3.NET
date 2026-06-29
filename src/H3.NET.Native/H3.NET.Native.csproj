@@ -12,6 +12,19 @@
   </ItemGroup>
 
   <!--
+    Public-API snapshot lock. Project-scoped (NOT a GlobalPackageReference) so the
+    PublicAPI.*.txt convention applies only to this binding and never leaks onto the
+    test/sample/benchmark projects. PrivateAssets=all plus an IncludeAssets list that
+    omits "compile" keeps it a dev-time analyzer: no runtime or transitive dependency.
+  -->
+  <ItemGroup>
+    <PackageReference Include="Microsoft.CodeAnalysis.PublicApiAnalyzers">
+      <PrivateAssets>all</PrivateAssets>
+      <IncludeAssets>runtime; build; native; contentfiles; analyzers</IncludeAssets>
+    </PackageReference>
+  </ItemGroup>
+
+  <!--
     Package metadata. Versioning, authorship, repository, license file packaging,
     and analyzers/MinVer are supplied by the repo-root Directory.Build.props and
     GlobalPackageReference; do not redefine those here.

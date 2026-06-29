@@ -2,7 +2,7 @@
 
 [![NuGet](https://img.shields.io/nuget/v/H3.NET.Native.svg)](https://www.nuget.org/packages/H3.NET.Native/)
 [![License: Apache 2.0](https://img.shields.io/badge/License-Apache_2.0-blue.svg)](LICENSE)
-<!-- CI build-status badge intentionally omitted until the CI workflow lands in a later PR. -->
+[![CI](https://github.com/FOOincognita/H3.NET.Native/actions/workflows/ci.yml/badge.svg)](https://github.com/FOOincognita/H3.NET.Native/actions/workflows/ci.yml)
 
 A thin, idiomatic P/Invoke binding over [Uber H3](https://h3geo.org) v4.5.0 for .NET 8 and .NET 10 (`net8.0` / `net10.0`). H3.NET.Native exposes the H3 hexagonal hierarchical geospatial indexing system through a clean, managed .NET API. The native `libh3` is built from a pinned upstream source revision and bundled directly in the NuGet package, so consumers need no C compiler, CMake, or other native toolchain to use it.
 
@@ -12,7 +12,7 @@ The published NuGet **PackageId is `H3.NET.Native`**. The shorter id `H3.NET` wa
 
 ## Status
 
-Early preview / scaffold in progress. The repository currently contains the project skeleton and an approximately five-function vertical slice that exercises the full native-build, packaging, and interop path end to end. The complete H3 API (roughly seventy functions) is being filled in incrementally over subsequent PRs. Treat the public surface as unstable until the first tagged release.
+First preview release on the `0.x` line. The full Uber H3 v4.5.0 public surface (roughly seventy functions across inspection, hierarchy, grid traversal, directed edges, vertices, measures/units, and regions) is implemented and validated. As a `0.x` preview the API is largely stable but may still receive minor refinements before `1.0`.
 
 ## Installation
 
@@ -29,11 +29,11 @@ The bundled native assets are delivered through NuGet's `runtimes/{rid}/native/`
 | Target frameworks | `net10.0`, `net8.0` |
 | Runtime identifiers | `linux-x64`, `linux-musl-x64`, `osx-arm64` |
 
-There is currently **no Windows support** and **no Native AOT requirement or support**; both are out of scope for the current scaffold and may be considered later.
+There is currently **no Windows support** and **no Native AOT requirement or support**; both are out of scope for this initial release and may be considered later.
 
 ## Quickstart
 
-The following snippet illustrates the **target** public API for the current vertical slice. All latitude and longitude values are in **degrees** (radians are internal only), matching `h3-py` and `h3-go`. Method names and shapes may change while the binding is in preview.
+The following snippet illustrates the public API. All latitude and longitude values are in **degrees** (radians are internal only), matching `h3-py` and `h3-go`. On the `0.x` line the API may still see minor refinements before `1.0`.
 
 ```csharp
 using H3.NET.Native;
@@ -68,7 +68,7 @@ Benchmarks are informational, never gate CI, and their shapes may change while t
 
 ## Links
 
-- API documentation: https://FOOincognita.github.io/H3.NET.Native/ (available once docs publish)
+- API documentation: https://FOOincognita.github.io/H3.NET.Native/
 - Uber H3: https://h3geo.org
 - [Contributing](CONTRIBUTING.md)
 - [Security policy](SECURITY.md)
