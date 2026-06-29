@@ -34,4 +34,4 @@ Console.WriteLine(cell.Resolution); // 9
 ```
 
 See [Getting started](articles/getting-started.md) for more, and the
-[API reference](api/H3.NET.Native.html) for the full type list.
+<xref:H3.NET.Native> API reference for the full type list.

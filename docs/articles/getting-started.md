@@ -42,4 +42,4 @@ Operations that can fail surface H3 status codes as typed exceptions derived fro
 
 ## Next steps
 
-Browse the [API reference](../api/H3.NET.Native.html) for the full set of types and members.
+Browse the <xref:H3.NET.Native> API reference for the full set of types and members.

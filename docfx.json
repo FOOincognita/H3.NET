@@ -9,7 +9,7 @@
           ]
         }
       ],
-      "dest": "api",
+      "dest": "docs/api",
       "outputFormat": "mref",
       "properties": {
         "TargetFramework": "net10.0"
@@ -24,18 +24,9 @@
       {
         "files": [
           "api/**.yml",
-          "api/**/toc.yml"
-        ]
-      },
-      {
-        "files": [
+          "api/**/toc.yml",
           "index.md",
-          "toc.yml"
-        ],
-        "src": "docs"
-      },
-      {
-        "files": [
+          "toc.yml",
           "articles/**.md",
           "articles/**/toc.yml"
         ],
