@@ -310,7 +310,8 @@ jobs:
 
       # ASan/LSan LD_PRELOAD gate deferred — needs a CLR suppressions file (follow-up)
 
-  # Warn-only: prove the benchmarks project compiles and runs a tiny job. Never gates.
+  # Warn-only: prove the benchmarks project builds and runs a tiny smoke (a dry
+  # BenchmarkDotNet job: one op per benchmark, no statistics). Never gates.
   benchmarks:
     name: benchmarks
     needs: native-build
@@ -336,3 +337,11 @@ jobs:
 
       - name: Build benchmarks
         run: dotnet build tests/H3.NET.Native.Benchmarks/H3.NET.Native.Benchmarks.csproj -c Release --no-restore
+
+      # Tiny smoke: --job dry runs a single op per benchmark (no warmup/statistics),
+      # so every benchmark and the real pocketken A/B actually execute fast and
+      # non-flaky. Warn-only via the job's continue-on-error; never gates CI.
+      - name: Run benchmarks smoke (dry job)
+        run: |
+          dotnet run --project tests/H3.NET.Native.Benchmarks/H3.NET.Native.Benchmarks.csproj \
+            -c Release --no-build -- --filter '*' --job dry

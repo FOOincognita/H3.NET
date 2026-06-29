@@ -25,6 +25,9 @@
   <ItemGroup>
     <PackageReference Include="BenchmarkDotNet" />
     <PackageReference Include="pocketken.H3" />
+    <!-- Direct reference: the pocketken polyfill benchmark constructs NTS geometry
+         (Polygon/Coordinate) itself, so NTS must be a first-class dependency. -->
+    <PackageReference Include="NetTopologySuite" />
   </ItemGroup>
 
   <!--

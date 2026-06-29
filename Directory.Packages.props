@@ -13,6 +13,9 @@
     <PackageVersion Include="CsCheck" Version="4.7.0" />
     <PackageVersion Include="BenchmarkDotNet" Version="0.15.8" />
     <PackageVersion Include="pocketken.H3" Version="4.0.0" />
+    <!-- Matches pocketken.H3 4.0.0's own NetTopologySuite dependency; the benchmarks
+         build pocketken's NTS-based polyfill input (Polygon) directly. -->
+    <PackageVersion Include="NetTopologySuite" Version="2.5.0" />
     <PackageVersion Include="coverlet.collector" Version="10.0.1" />
     <PackageVersion Include="Microsoft.CodeAnalysis.PublicApiAnalyzers" Version="3.3.4" />
   </ItemGroup>
