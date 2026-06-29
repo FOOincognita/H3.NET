@@ -63,4 +63,56 @@ public readonly record struct LatLng(double LatitudeDegrees, double LongitudeDeg
     /// <returns>The equivalent degrees-based <see cref="LatLng"/>.</returns>
     internal static LatLng FromNative(in NativeLatLng native) =>
         new(native.Lat * RadiansToDegrees, native.Lng * RadiansToDegrees);
+
+    /// <summary>
+    /// Returns the great-circle (haversine) distance between two coordinates in radians.
+    /// </summary>
+    /// <param name="a">The first coordinate, in degrees.</param>
+    /// <param name="b">The second coordinate, in degrees.</param>
+    /// <returns>The great-circle distance in radians.</returns>
+    public static double GreatCircleDistanceRads(LatLng a, LatLng b)
+    {
+        // Public LatLng is in degrees; the native struct is in radians. ToNative()
+        // stages the degrees->radians conversion before the call. Native returns the
+        // distance directly and never throws.
+        var na = a.ToNative();
+        var nb = b.ToNative();
+        return NativeMethods.GreatCircleDistanceRads(na, nb);
+    }
+
+    /// <summary>
+    /// Returns the great-circle (haversine) distance between two coordinates in kilometers.
+    /// </summary>
+    /// <param name="a">The first coordinate, in degrees.</param>
+    /// <param name="b">The second coordinate, in degrees.</param>
+    /// <returns>The great-circle distance in kilometers.</returns>
+    public static double GreatCircleDistanceKm(LatLng a, LatLng b)
+    {
+        var na = a.ToNative();
+        var nb = b.ToNative();
+        return NativeMethods.GreatCircleDistanceKm(na, nb);
+    }
+
+    /// <summary>
+    /// Returns the great-circle (haversine) distance between two coordinates in meters.
+    /// </summary>
+    /// <param name="a">The first coordinate, in degrees.</param>
+    /// <param name="b">The second coordinate, in degrees.</param>
+    /// <returns>The great-circle distance in meters.</returns>
+    public static double GreatCircleDistanceM(LatLng a, LatLng b)
+    {
+        var na = a.ToNative();
+        var nb = b.ToNative();
+        return NativeMethods.GreatCircleDistanceM(na, nb);
+    }
+
+    /// <summary>Converts an angle in degrees to radians via the native library.</summary>
+    /// <param name="degrees">The angle in degrees.</param>
+    /// <returns>The equivalent angle in radians.</returns>
+    internal static double DegsToRads(double degrees) => NativeMethods.DegsToRads(degrees);
+
+    /// <summary>Converts an angle in radians to degrees via the native library.</summary>
+    /// <param name="radians">The angle in radians.</param>
+    /// <returns>The equivalent angle in degrees.</returns>
+    internal static double RadsToDegs(double radians) => NativeMethods.RadsToDegs(radians);
 }

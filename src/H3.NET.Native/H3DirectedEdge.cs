@@ -117,6 +117,48 @@ public readonly record struct H3DirectedEdge(ulong Value)
     }
 
     /// <summary>
+    /// Returns the length of this directed edge in radians.
+    /// </summary>
+    /// <returns>The edge length in radians.</returns>
+    /// <exception cref="H3InvalidCellException">This is not a valid directed edge.</exception>
+    public double EdgeLengthRads()
+    {
+        // Native edgeLengthRads -> directedEdgeToBoundary validates the edge mode and
+        // direction but never calls isValidCell(origin), so a directed-edge-mode value
+        // with an in-range base cell but malformed origin digits returns E_SUCCESS with
+        // a garbage length. Validate-first to honor the documented exception.
+        EnsureValid();
+        H3ErrorMarshaller.ThrowIfError(NativeMethods.EdgeLengthRads(Value, out double length));
+        return length;
+    }
+
+    /// <summary>
+    /// Returns the length of this directed edge in kilometers.
+    /// </summary>
+    /// <returns>The edge length in kilometers.</returns>
+    /// <exception cref="H3InvalidCellException">This is not a valid directed edge.</exception>
+    public double EdgeLengthKm()
+    {
+        // Native does not fully validate the edge origin (see EdgeLengthRads); validate-first.
+        EnsureValid();
+        H3ErrorMarshaller.ThrowIfError(NativeMethods.EdgeLengthKm(Value, out double length));
+        return length;
+    }
+
+    /// <summary>
+    /// Returns the length of this directed edge in meters.
+    /// </summary>
+    /// <returns>The edge length in meters.</returns>
+    /// <exception cref="H3InvalidCellException">This is not a valid directed edge.</exception>
+    public double EdgeLengthM()
+    {
+        // Native does not fully validate the edge origin (see EdgeLengthRads); validate-first.
+        EnsureValid();
+        H3ErrorMarshaller.ThrowIfError(NativeMethods.EdgeLengthM(Value, out double length));
+        return length;
+    }
+
+    /// <summary>
     /// Deconstructs this directed edge into its origin and destination cells.
     /// </summary>
     /// <param name="origin">The origin <see cref="H3Index"/> cell.</param>
@@ -125,5 +167,15 @@ public readonly record struct H3DirectedEdge(ulong Value)
     public void Deconstruct(out H3Index origin, out H3Index destination)
     {
         (origin, destination) = ToCells();
+    }
+
+    private void EnsureValid()
+    {
+        if (!IsValid())
+        {
+            throw new H3InvalidCellException(
+                (uint)H3ErrorCode.DirEdgeInvalid,
+                $"0x{Value:x16} is not a valid H3 directed edge.");
+        }
     }
 }
