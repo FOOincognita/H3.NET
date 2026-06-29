@@ -38,6 +38,12 @@
         "resolved": "6.1.0",
         "contentHash": "dGyb6EBQ87AhyagcXslfDGL/A+xbNtRD23CBjXoKo82TvjHqF2BBz61B6EBx/S117KUMB1PEUpRLrHcu6UjOhg=="
       },
+      "NetTopologySuite": {
+        "type": "Direct",
+        "requested": "[2.5.0, )",
+        "resolved": "2.5.0",
+        "contentHash": "5/+2O2ADomEdUn09mlSigACdqvAf0m/pVPGtIPEPQWnyrVykYY0NlfXLIdkMgi41kvH9kNrPqYaFBTZtHYH7Xw=="
+      },
       "pocketken.H3": {
         "type": "Direct",
         "requested": "[4.0.0, )",
@@ -161,11 +167,6 @@
         "type": "Transitive",
         "resolved": "6.0.0",
         "contentHash": "9+PnzmQFfEFNR9J2aDTfJGGupShHjOuGw4VUv+JB044biSHrnmCIMD+mJHmb2H7YryrfBEXDurxQ47gJZdCKNQ=="
-      },
-      "NetTopologySuite": {
-        "type": "Transitive",
-        "resolved": "2.5.0",
-        "contentHash": "5/+2O2ADomEdUn09mlSigACdqvAf0m/pVPGtIPEPQWnyrVykYY0NlfXLIdkMgi41kvH9kNrPqYaFBTZtHYH7Xw=="
       },
       "Perfolizer": {
         "type": "Transitive",
