@@ -89,6 +89,23 @@ internal static unsafe partial class NativeMethods
     internal static partial H3ErrorCode PolygonToCells(
         NativeGeoPolygon* geoPolygon, int res, uint flags, ulong* outCells);
 
+    // Size-half of the experimental polygonToCells M4 pair. Unlike the stable sizer,
+    // flags carries a real ContainmentMode value; an out-of-range mode surfaces
+    // OptionInvalid. Stays INTERNAL: every official binding hides the experimental
+    // sizer and computes the buffer length on the caller's behalf.
+    [LibraryImport("h3", EntryPoint = "maxPolygonToCellsSizeExperimental")]
+    internal static partial H3ErrorCode MaxPolygonToCellsSizeExperimental(
+        NativeGeoPolygon* geoPolygon, int res, uint flags, out long size);
+
+    // Fill-half of the experimental polygonToCells M4 pair. Mirrors the stable fill
+    // but adds the explicit int64 size (caller buffer length) argument and honors the
+    // ContainmentMode passed in flags. out buffer length must be == size; unused slots
+    // are H3_NULL. C sig: polygonToCellsExperimental(const GeoPolygon*, int res,
+    // uint32_t flags, int64_t size, H3Index* out).
+    [LibraryImport("h3", EntryPoint = "polygonToCellsExperimental")]
+    internal static partial H3ErrorCode PolygonToCellsExperimental(
+        NativeGeoPolygon* geoPolygon, int res, uint flags, long size, ulong* outCells);
+
     // ---- Linked geo (multi-polygon) ----------------------------------------
 
     // Caller allocates and owns the head 'out' node; native fills it and heap-

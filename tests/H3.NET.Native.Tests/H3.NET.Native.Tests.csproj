@@ -20,8 +20,13 @@
       enabled (Directory.Build.props) because IDE0005 (remove unnecessary usings) only
       runs on build when GenerateDocumentationFile=true; we instead suppress the
       "missing XML comment" warning CS1591 for test code.
+
+      H3NET0001 is the [Experimental] diagnostic the binding emits at call sites of
+      the experimental region API (H3Polygon.ToCellsExperimental / ContainmentMode).
+      Tests are a legitimate consumer of that surface, so the diagnostic is suppressed
+      for the TEST project only (never in src, never in the sample app).
     -->
-    <NoWarn>$(NoWarn);CS1591</NoWarn>
+    <NoWarn>$(NoWarn);CS1591;H3NET0001</NoWarn>
   </PropertyGroup>
 
   <!-- CPM supplies versions; do NOT add Version attributes here. -->
