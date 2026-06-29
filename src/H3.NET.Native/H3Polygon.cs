@@ -2,6 +2,7 @@
 
 using System;
 using System.Collections.Generic;
+using System.Diagnostics.CodeAnalysis;
 using System.Runtime.InteropServices;
 using H3.NET.Native.Interop;
 
@@ -70,6 +71,64 @@ public static class H3Polygon
         }
     }
 
+    /// <summary>
+    /// Returns the set of H3 cells of the given resolution that satisfy the supplied
+    /// <paramref name="mode"/> containment predicate against <paramref name="polygon"/>.
+    /// </summary>
+    /// <param name="polygon">The region to fill, in degrees.</param>
+    /// <param name="resolution">The target H3 resolution (0-15).</param>
+    /// <param name="mode">The containment predicate selecting which cells are returned.</param>
+    /// <returns>The covering cells, with null padding slots removed. Order is not guaranteed.</returns>
+    /// <exception cref="ArgumentNullException"><paramref name="polygon"/> is <see langword="null"/>.</exception>
+    /// <exception cref="H3DomainException">
+    /// The resolution was outside 0-15, or <paramref name="mode"/> was an out-of-range cast
+    /// (for example <c>(ContainmentMode)99</c>), which the native library rejects with
+    /// <c>E_OPTION_INVALID</c>.
+    /// </exception>
+    /// <exception cref="H3Exception">The native operation otherwise failed.</exception>
+    /// <remarks>
+    /// This API is experimental and may change in any future minor H3 version. Unlike the
+    /// stable <see cref="ToCells(GeoPolygon, int)"/> (which always uses
+    /// <see cref="ContainmentMode.Center"/>), this overload honors every
+    /// <see cref="ContainmentMode"/>.
+    /// </remarks>
+    [Experimental("H3NET0001")]
+    public static unsafe H3Index[] ToCellsExperimental(GeoPolygon polygon, int resolution, ContainmentMode mode)
+    {
+        ArgumentNullException.ThrowIfNull(polygon);
+
+        // Validate-first resolution guard, identical to stable ToCells: route an
+        // out-of-range resolution through the marshaller for a deterministic
+        // H3DomainException (ErrorCode == 4) before any native call. An out-of-range
+        // mode is deliberately NOT validated here; the native sizer/fill reject it
+        // with E_OPTION_INVALID (ErrorCode == 15), also an H3DomainException.
+        if (resolution is < 0 or > 15)
+        {
+            H3ErrorMarshaller.ThrowIfError(H3ErrorCode.ResDomain);
+        }
+
+        int holeCount = polygon.Holes.Count;
+        var pins = new List<GCHandle>(2 + holeCount);
+        try
+        {
+            var geoPolygon = new NativeGeoPolygon
+            {
+                GeoLoop = PinLoop(polygon.Exterior, pins),
+                NumHoles = holeCount,
+                Holes = PinHoles(polygon.Holes, pins),
+            };
+
+            return FillCellsExperimental(&geoPolygon, resolution, mode);
+        }
+        finally
+        {
+            foreach (GCHandle pin in pins)
+            {
+                pin.Free();
+            }
+        }
+    }
+
     // Pins a single ring's radians vertices and returns a native loop pointing at
     // them. The pin is appended to <paramref name="pins"/> for the caller to free.
     private static unsafe NativeGeoLoop PinLoop(IReadOnlyList<LatLng> ring, List<GCHandle> pins)
@@ -124,6 +183,33 @@ public static class H3Polygon
         {
             H3ErrorMarshaller.ThrowIfError(
                 NativeMethods.PolygonToCells(geoPolygon, resolution, NoFlags, outCells));
+        }
+
+        return StripNull(buffer);
+    }
+
+    // Experimental size-then-fill, parallel to FillCells but threading the
+    // ContainmentMode through flags and passing the computed maxSize as the extra
+    // int64 size argument unique to the experimental fill. Both calls route through
+    // the marshaller, so a bad mode surfaces as H3DomainException (E_OPTION_INVALID).
+    // Must be invoked while every vertex array and the holes array remain pinned.
+    [Experimental("H3NET0001")]
+    private static unsafe H3Index[] FillCellsExperimental(
+        NativeGeoPolygon* geoPolygon, int resolution, ContainmentMode mode)
+    {
+        H3ErrorMarshaller.ThrowIfError(
+            NativeMethods.MaxPolygonToCellsSizeExperimental(geoPolygon, resolution, (uint)mode, out long maxSize));
+
+        if (maxSize <= 0)
+        {
+            return [];
+        }
+
+        var buffer = new ulong[maxSize];
+        fixed (ulong* outCells = buffer)
+        {
+            H3ErrorMarshaller.ThrowIfError(
+                NativeMethods.PolygonToCellsExperimental(geoPolygon, resolution, (uint)mode, maxSize, outCells));
         }
 
         return StripNull(buffer);

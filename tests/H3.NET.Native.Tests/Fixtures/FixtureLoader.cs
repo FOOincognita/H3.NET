@@ -65,6 +65,17 @@ internal static class FixtureLoader
         [property: JsonPropertyName("exterior")] IReadOnlyList<double[]> Exterior,
         [property: JsonPropertyName("holes")] IReadOnlyList<double[][]>? Holes);
 
+    /// <summary>
+    /// One polygon_to_cells_experimental.ndjson record: a polygon, resolution, the
+    /// numeric ContainmentMode ordinal (0=Center, 1=Full, 2=Overlapping,
+    /// 3=OverlappingBBox), and the oracle covering-cell set for that mode.
+    /// </summary>
+    public sealed record PolygonToCellsExperimentalCase(
+        [property: JsonPropertyName("polygon")] PolygonShape Polygon,
+        [property: JsonPropertyName("res")] int Res,
+        [property: JsonPropertyName("mode")] uint Mode,
+        [property: JsonPropertyName("cells")] IReadOnlyList<string> Cells);
+
     /// <summary>One index_digits.ndjson record. Digits is the stored vector digits[1..res].</summary>
     public sealed record IndexDigitsCase(
         [property: JsonPropertyName("cell")] string Cell,
@@ -228,6 +239,9 @@ internal static class FixtureLoader
 
     public static IEnumerable<PolygonToCellsCase> LoadPolygonToCells() =>
         LoadNdjson<PolygonToCellsCase>("polygon_to_cells.ndjson");
+
+    public static IEnumerable<PolygonToCellsExperimentalCase> LoadPolygonToCellsExperimental() =>
+        LoadNdjson<PolygonToCellsExperimentalCase>("polygon_to_cells_experimental.ndjson");
 
     public static IEnumerable<IndexDigitsCase> LoadIndexDigits() =>
         LoadNdjson<IndexDigitsCase>("index_digits.ndjson");
