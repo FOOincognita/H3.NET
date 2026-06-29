@@ -34,6 +34,17 @@ public static class H3Polygon
     {
         ArgumentNullException.ThrowIfNull(polygon);
 
+        // Validate-first resolution guard. Native maxPolygonToCellsSize already
+        // surfaces E_RES_DOMAIN (via its internal getPentagons call), but routing an
+        // out-of-range resolution through the marshaller here makes the failure
+        // deterministic and independent of H3 internal call ordering. It yields the
+        // identical H3DomainException (ErrorCode == 4) and native describeH3Error
+        // message as the native path, so the two are indistinguishable to a caller.
+        if (resolution is < 0 or > 15)
+        {
+            H3ErrorMarshaller.ThrowIfError(H3ErrorCode.ResDomain);
+        }
+
         // All vertex arrays and the holes array must stay pinned across BOTH native
         // calls (size then fill), so every pin is collected here and freed once in
         // the single finally below.
