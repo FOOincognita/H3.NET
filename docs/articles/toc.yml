@@ -1,2 +1,4 @@
 - name: Getting started
   href: getting-started.md
+- name: Benchmarks
+  href: benchmarks.md
