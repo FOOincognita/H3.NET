@@ -1,6 +1,7 @@
 // SPDX-License-Identifier: Apache-2.0
 
 using System;
+using System.Buffers;
 using System.Collections.Generic;
 using System.Diagnostics.CodeAnalysis;
 using System.Runtime.InteropServices;
@@ -178,14 +179,26 @@ public static class H3Polygon
             return [];
         }
 
-        var buffer = new ulong[maxSize];
-        fixed (ulong* outCells = buffer)
+        int size = checked((int)maxSize);
+        ulong[] buffer = ArrayPool<ulong>.Shared.Rent(size);
+        try
         {
-            H3ErrorMarshaller.ThrowIfError(
-                NativeMethods.PolygonToCells(geoPolygon, resolution, NoFlags, outCells));
-        }
+            // libh3 treats out[] as a sparse H3_NULL(0)-keyed hash table and assumes
+            // it starts zeroed; a rented buffer may carry dirty data, so clear the
+            // logical [0..size) window (the rental can be larger) before the fill.
+            Array.Clear(buffer, 0, size);
+            fixed (ulong* outCells = buffer)
+            {
+                H3ErrorMarshaller.ThrowIfError(
+                    NativeMethods.PolygonToCells(geoPolygon, resolution, NoFlags, outCells));
+            }
 
-        return StripNull(buffer);
+            return StripNull(buffer, size);
+        }
+        finally
+        {
+            ArrayPool<ulong>.Shared.Return(buffer);
+        }
     }
 
     // Experimental size-then-fill, parallel to FillCells but threading the
@@ -205,14 +218,27 @@ public static class H3Polygon
             return [];
         }
 
-        var buffer = new ulong[maxSize];
-        fixed (ulong* outCells = buffer)
+        int size = checked((int)maxSize);
+        ulong[] buffer = ArrayPool<ulong>.Shared.Rent(size);
+        try
         {
-            H3ErrorMarshaller.ThrowIfError(
-                NativeMethods.PolygonToCellsExperimental(geoPolygon, resolution, (uint)mode, maxSize, outCells));
-        }
+            // See FillCells: libh3's out[] is a sparse H3_NULL(0)-keyed hash table
+            // that assumes zeroed memory, so clear the logical [0..size) window (the
+            // rental can be larger) before the fill. The native size argument stays
+            // maxSize (the logical size), never buffer.Length of the rented array.
+            Array.Clear(buffer, 0, size);
+            fixed (ulong* outCells = buffer)
+            {
+                H3ErrorMarshaller.ThrowIfError(
+                    NativeMethods.PolygonToCellsExperimental(geoPolygon, resolution, (uint)mode, maxSize, outCells));
+            }
 
-        return StripNull(buffer);
+            return StripNull(buffer, size);
+        }
+        finally
+        {
+            ArrayPool<ulong>.Shared.Return(buffer);
+        }
     }
 
     /// <summary>
@@ -311,25 +337,26 @@ public static class H3Polygon
         return verts;
     }
 
-    private static H3Index[] StripNull(ulong[] buffer)
+    // Compacts the non-null cells of the [0..size) window to the front of buffer in a
+    // single pass, then copies them into a right-sized H3Index[]. Only [0..size) is
+    // ever read, so a rented buffer's dirty tail beyond size cannot leak into the
+    // result. libh3 packs cells sparsely with H3_NULL(0) padding, hence the filter.
+    private static H3Index[] StripNull(ulong[] buffer, int size)
     {
         int count = 0;
-        foreach (ulong value in buffer)
+        for (int i = 0; i < size; i++)
         {
+            ulong value = buffer[i];
             if (value != 0)
             {
-                count++;
+                buffer[count++] = value;
             }
         }
 
         var result = new H3Index[count];
-        int next = 0;
-        foreach (ulong value in buffer)
+        for (int i = 0; i < count; i++)
         {
-            if (value != 0)
-            {
-                result[next++] = new H3Index(value);
-            }
+            result[i] = new H3Index(buffer[i]);
         }
 
         return result;

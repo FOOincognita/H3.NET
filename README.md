@@ -50,7 +50,7 @@ The library follows [Semantic Versioning](https://semver.org). Versions are deri
 
 ## Correctness and benchmarks
 
-**Correctness** is validated against the reference implementation, not against other managed ports: the differential test corpus is generated from the official **Uber H3 C library** (via `h3-py` ≥ 4, pinned to the bundled v4.5.0), with **h3-go** available as a tiebreaker and a pure-C `valgrind` harness guarding native memory usage.
+**Correctness** is validated against the reference implementation, not against other managed ports: the differential test corpus is generated from the official **Uber H3 C library** (via `h3-py` ≥ 4, pinned to the bundled v4.5.0), with **h3-go** available as a tiebreaker and a pure-C `valgrind` harness guarding native memory usage. Because the binding calls that C code directly rather than reimplementing it, its outputs *are* the reference outputs; the corpus (tens of thousands of assertions per run, zero tolerated failures) confirms the marshalling layer preserves them across every supported platform. Each release also ships a [CycloneDX](https://cyclonedx.org) SBOM and a signed build-provenance attestation, and is published to nuget.org via OIDC trusted publishing (no long-lived API keys).
 
 **Performance** is measured with [BenchmarkDotNet](https://benchmarkdotnet.org). The benchmark project compares three implementations across the same workloads — point indexing (`latLngToCell`), `gridDisk`, and `polygonToCells`:
 
@@ -66,24 +66,33 @@ Run the full suite with:
 dotnet run --project tests/H3.NET.Native.Benchmarks -c Release -- --filter '*'
 ```
 
-Representative results (Apple M3 Pro, .NET 10, single warmed-up workloads; absolute timings vary by hardware):
+Representative results (Apple M3 Pro, .NET 10, BenchmarkDotNet 0.15.8; absolute timings vary by hardware, ratios are the stable signal):
 
 | Method | Category | Mean | Ratio | Allocated |
 | --- | --- | ---: | ---: | ---: |
-| raw libh3 latLngToCell | LatLngToCell | 180 ns | 1.00 | – |
-| H3.NET.Native FromLatLng | LatLngToCell | 183 ns | 1.01 | – |
-| pocketken.H3 FromLatLng | LatLngToCell | 230 ns | 1.28 | 376 B |
-| raw libh3 gridDisk | GridDisk | 938 ns | 1.00 | – |
-| H3.NET.Native GridDisk | GridDisk | 1,013 ns | 1.08 | 1,504 B |
-| pocketken.H3 GridDiskDistances | GridDisk | 1,587 ns | 1.69 | 6,576 B |
-| H3.NET.Native ToCells | PolygonToCells | 92.4 µs | 1.00 | 15,504 B |
-| pocketken.H3 Polyfill.Fill | PolygonToCells | 32.6 µs | 0.35 | 28,232 B |
+| raw libh3 latLngToCell | LatLngToCell | 195 ns | 1.00 | – |
+| H3.NET.Native FromLatLng | LatLngToCell | 196 ns | 1.01 | – |
+| pocketken.H3 FromLatLng | LatLngToCell | 243 ns | 1.25 | 376 B |
+| raw libh3 gridDisk | GridDisk | 1,025 ns | 1.00 | – |
+| H3.NET.Native GridDisk | GridDisk | 1,115 ns | 1.09 | 1,504 B |
+| pocketken.H3 GridDiskDistances | GridDisk | 1,709 ns | 1.67 | 6,576 B |
+| H3.NET.Native ToCells | PolygonToCells\* | 98.8 µs | 1.00 | 608 B |
+| pocketken.H3 Polyfill.Fill | PolygonToCells\* | 35.2 µs | 0.36 | 28,232 B |
+
+Indexing and traversal sit essentially on the raw-C floor (`latLngToCell` 1.01x, `gridDisk` 1.09x) with far less managed allocation than pocketken.H3 — and none at all on the indexing path.
+
+\* The `polygonToCells` row is a **small** polygon (a res-9, ~55-cell triangle), the one regime where the native binding loses: stable libh3 sizes its working buffer from the polygon's *bounding box*, not its cell count, so a small fill pays a fixed setup cost. That cost amortizes as the fill grows — **the native binding overtakes pocketken.H3 past ~650 output cells and leads by ~1.4–1.6x at scale**, while allocating ~19–46x less throughout the sweep:
+
+![polygonToCells time vs output cell count — H3.NET.Native overtakes pocketken.H3 past ~650 cells and leads 1.4-1.6x at scale](https://raw.githubusercontent.com/FOOincognita/H3.NET.Native/main/docs/articles/images/polygon-crossover.png)
+
+Full methodology, the resolution sweep, per-operation allocation charts, and the correctness/provenance detail: **[Benchmarks](https://FOOincognita.github.io/H3.NET.Native/articles/benchmarks.html)**.
 
 Benchmarks are informational, never gate CI (a tiny dry-run smoke runs there to keep them building and runnable), and their shapes may change while the binding is in preview.
 
 ## Links
 
 - API documentation: https://FOOincognita.github.io/H3.NET.Native/
+- [Benchmarks](https://FOOincognita.github.io/H3.NET.Native/articles/benchmarks.html)
 - Uber H3: https://h3geo.org
 - [Contributing](CONTRIBUTING.md)
 - [Security policy](SECURITY.md)
